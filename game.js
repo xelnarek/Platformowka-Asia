@@ -24,9 +24,9 @@
   var shake = 0;
   var saveData = loadSave();
   var player = createPlayer();
-  var art = { asia: null, jungle: null, cave: null, swamp: null };
+  var art = { asia: null, jungle: null, cave: null, swamp: null, bones: null, volcano: null };
   function preloadArt() {
-    var sources = { asia: './assets/asia-sprites.svg', jungle: './assets/jungle-bg.svg', cave: './assets/cave-bg.svg', swamp: './assets/swamp-bg.svg' };
+    var sources = { asia: './assets/asia-sprites.svg', jungle: './assets/jungle-bg.svg', cave: './assets/cave-bg.svg', swamp: './assets/swamp-bg.svg', bones: './assets/bones-bg.svg', volcano: './assets/volcano-bg.svg' };
     Object.keys(sources).forEach(function (key) {
       var image = new Image();
       image.onload = function () { art[key] = image; };
@@ -102,6 +102,33 @@
       secret: {x:1210,y:380,w:110,h:80,message:'BAGIENNA KRYJÓWKA! Znalazłaś coś rzadkiego.'},
       boss: {x:2960,hp:4,speed:1.0,attackStyle:'bubbleVolley'}, springPads: [{x:1840,w:70,theme:'mushroom'}],
       easter: {x:720,kind:'capybara',message:'KAPIBARSKA MAFIA: „Nic tu nie widziałaś.”'}, checkpoint: {x:1650,message:'Bezpieczna kępa zapisana. Możesz odetchnąć.'}
+    },
+    },
+    {
+      name: 'Szlak Zapomnianych Olbrzymów', world: 'Kanion Kości', subtitle: 'Wiatr wygrywa tu z rozsądkiem. Kości olbrzymów nie są dekoracją.',
+      width: 3600, theme: 'bones', symbol: '💀', regionLabel: 'SKAMIENIAŁE PUSTKOWIE', victory: 'Olbrzym poszedł w drzazgi!',
+      gaps: [[760,850],[1540,1635],[2350,2450],[3030,3115]], hazards: [{x:610,w:64,h:19},{x:1280,w:60,h:19},{x:1990,w:72,h:19},{x:2760,w:66,h:19}],
+      platforms: [[245,360,170,18],[475,292,155,18],[895,355,180,18],[1190,285,165,18],[1450,340,150,18],[1710,292,185,18],[2070,350,160,18],[2300,278,170,18],[2510,335,170,18],[2860,290,175,18],[3160,345,160,18]],
+      breakables: [{x:1060,y:420,w:52,h:46,secret:true},{x:2470,y:420,w:52,h:46}],
+      items: [[150,420,'amber'],[285,315,'amber'],[520,250,'bone'],[700,420,'amber'],[940,310,'amber'],[1120,420,'chili'],[1220,235,'amber'],[1390,420,'bone'],[1760,245,'amber'],[1900,420,'shield'],[2140,310,'amber'],[2390,230,'bone'],[2580,420,'amber'],[2810,250,'egg'],[2950,420,'bone'],[3220,305,'amber'],[3390,420,'amber'],[970,420,'weaponClub'],[2320,225,'weaponBoomerang']],
+      secretSpots: [{x:1320,y:442,rewards:['fruit','amber','chili']},{x:2660,y:442,rewards:['weaponBoomerang','bone','shield']}],
+      enemies: [{x:390,min:300,max:560,speed:1.25,type:'boneguard'},{x:1010,min:920,max:1150,speed:1.7,type:'roller'},{x:1480,min:1390,max:1530,speed:1.25,type:'pterosaur'},{x:1860,min:1730,max:1990,speed:1.35,type:'crawler'},{x:2220,min:2100,max:2320,speed:1.45,type:'boneguard'},{x:2700,min:2580,max:2860,speed:1.6,type:'pterosaur'},{x:2970,min:2910,max:3020,speed:1.1,type:'hopper'}],
+      secret: {x:1110,y:380,w:112,h:80,message:'KRYPTA OLBRZYMÓW! Ktoś tu kolekcjonował czaszki.'},
+      boss: {x:3210,hp:5,speed:0.85,attackStyle:'boneFan'}, springPads: [{x:1645,w:70,theme:'bone'},{x:2850,w:70,theme:'bone'}],
+      easter: {x:2700,kind:'bones',message:'ARCHEOLOGIA KAPIBARSKA: „To nie my zgubiliśmy te kości.”'}, checkpoint: {x:1830,message:'Obóz paleontologów zapisany. Nie dotykaj szkieletu.'}
+    },
+    {
+      name: 'Serce Wulkanu', world: 'Wulkan Wielkiego Kła', subtitle: 'Podłoga jest gorąca, przeciwnicy jeszcze gorętsi. Nie stój w miejscu.',
+      width: 3820, theme: 'volcano', symbol: '🌋', regionLabel: 'KUŹNIA POD ZIEMIĄ', victory: 'Wulkan dostał zadyszki!',
+      gaps: [[690,790],[1440,1540],[2190,2300],[2930,3035]], hazards: [{x:555,w:70,h:25},{x:1110,w:76,h:25},{x:1840,w:78,h:25},{x:2570,w:82,h:25},{x:3260,w:74,h:25}],
+      platforms: [[220,360,170,18],[445,290,150,18],[820,345,170,18],[1070,275,180,18],[1330,340,155,18],[1590,285,175,18],[1930,350,165,18],[2160,278,180,18],[2440,340,160,18],[2700,282,185,18],[3090,345,170,18],[3370,282,170,18]],
+      breakables: [{x:980,y:420,w:52,h:46,secret:true},{x:2790,y:420,w:52,h:46}],
+      items: [[140,420,'amber'],[270,315,'amber'],[480,245,'bone'],[845,300,'amber'],[1020,420,'shield'],[1160,225,'amber'],[1370,420,'bone'],[1640,235,'chili'],[1810,420,'amber'],[1980,305,'bone'],[2240,225,'amber'],[2470,420,'bone'],[2730,235,'egg'],[2880,420,'amber'],[3140,295,'bone'],[3390,235,'amber'],[3560,420,'amber'],[870,420,'weaponClub'],[2440,225,'weaponBoomerang']],
+      secretSpots: [{x:1260,y:442,rewards:['fruit','amber','shield']},{x:3010,y:442,rewards:['weaponClub','chili','bone']}],
+      enemies: [{x:380,min:300,max:540,speed:1.35,type:'roller'},{x:940,min:850,max:1050,speed:1.4,type:'magma'},{x:1280,min:1200,max:1400,speed:1.6,type:'pterosaur'},{x:1740,min:1610,max:1890,speed:1.3,type:'hopper'},{x:2110,min:2000,max:2180,speed:1.7,type:'roller'},{x:2510,min:2400,max:2690,speed:1.45,type:'magma'},{x:2900,min:2810,max:3000,speed:1.65,type:'pterosaur'},{x:3170,min:3090,max:3290,speed:1.4,type:'charger'}],
+      secret: {x:1030,y:380,w:115,h:80,message:'KIESZEŃ MAGMOWA! Wulkan ukrywał własny skarbiec.'},
+      boss: {x:3420,hp:6,speed:0.92,attackStyle:'emberRain'}, springPads: [{x:1550,w:72,theme:'mushroom'},{x:3040,w:72,theme:'mushroom'}],
+      easter: {x:2460,kind:'volcano',message:'KAPIBARSKI GRILL: „Mięso z lawy? Zdecydowanie za ostre.”'}, checkpoint: {x:1920,message:'Punkt kontrolny przy zastygłej lawie zapisany.'}
     }
   ];
 
@@ -278,9 +305,9 @@
   }
   function unlocked(index) { return index === 0 || saveData.completed.indexOf(index - 1) !== -1; }
   function renderMenuStats() {
-    $('menuComplete').textContent = saveData.completed.length + '/3';
+    $('menuComplete').textContent = saveData.completed.length + '/' + levelDefinitions.length;
     $('menuAmber').textContent = saveData.totalAmber;
-    $('menuEggs').textContent = saveData.eggs.length + '/3';
+    $('menuEggs').textContent = saveData.eggs.length + '/' + levelDefinitions.length;
   }
   function applyPreferences() {
     document.body.classList.toggle('controls-reversed', !!saveData.leftHanded);
@@ -301,7 +328,7 @@
       var card = document.createElement('button');
       card.className = 'level-card';
       card.disabled = !open;
-      var artClass = index === 1 ? 'cave' : (index === 2 ? 'swamp' : 'jungle');
+      var artClass = def.theme;
       var chapter = '0' + (index + 1);
       var statusText = done ? 'UKOŃCZONO' : (open ? 'DOSTĘPNY' : 'ZABLOKOWANY');
       var statusClass = done ? 'is-complete' : (open ? 'is-open' : 'is-locked');
@@ -314,7 +341,7 @@
           '<span class="level-number">' + chapter + '</span>' +
           '<span class="level-card-kicker">ROZDZIAŁ ' + chapter + '</span>' +
           '<span class="level-symbol" aria-hidden="true">' + def.symbol + '</span>' +
-          '<span class="level-art-caption">' + (index === 0 ? 'ZIELONE OSTĘPY' : (index === 1 ? 'KRYSZTAŁOWE GŁĘBINY' : 'MGLISTE ROZLEWISKA')) + '</span>' +
+          '<span class="level-art-caption">' + def.regionLabel + '</span>' +
         '</div>' +
         '<div class="level-card-copy">' +
           '<div class="level-card-meta"><span class="level-card-chapter">ETAP ' + chapter + '</span><span class="level-card-status ' + statusClass + '">' + statusText + '</span></div>' +
@@ -404,7 +431,7 @@
     if (player.eggs && saveData.eggs.indexOf(currentLevelIndex) === -1) saveData.eggs.push(currentLevelIndex);
     persist();
     $('resultEyebrow').textContent = 'POZIOM UKOŃCZONY';
-    $('resultTitle').textContent = ['Ale lądowanie!','Kryształowa robota!','Bagno pokonane!'][currentLevelIndex];
+    $('resultTitle').textContent = world.def.victory || ['Ale lądowanie!','Kryształowa robota!','Bagno pokonane!'][currentLevelIndex] || 'Kraina uratowana!';
     $('resultText').textContent = 'Asia dała radę. A dolina wciąż ma kilka sekretów…';
     $('resultAmber').textContent = player.amber;
     $('resultBones').textContent = player.bones;

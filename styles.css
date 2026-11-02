@@ -867,3 +867,10 @@ h1 em{margin-top:7px;color:#f3ce82;text-shadow:0 4px 0 rgba(120,72,40,.78),0 14p
 @media(prefers-reduced-motion:reduce){
   .game-tool-button,.control-button,.level-card,.feature-row span,.menu-achievements>div{transition:none!important}
 }
+
+/* TWO NEW PLAYABLE BIOMES — distinct map-card panoramas. */
+.level-art.bones{background-image:linear-gradient(180deg,rgba(27,32,36,.02),rgba(30,25,21,.62)),url('./assets/bones-bg.svg');--biome-accent:#f0dfb7}
+.level-art.volcano{background-image:linear-gradient(180deg,rgba(32,17,28,.02),rgba(22,14,19,.66)),url('./assets/volcano-bg.svg');--biome-accent:#ffbf7c}
+.level-card-bones .level-card-status.is-open,.level-card-volcano .level-card-status.is-open{color:#f3d9ab}
+.level-card-bones .level-card-action{color:#f0dfb7}
+.level-card-volcano .level-card-action{color:#ffad73}

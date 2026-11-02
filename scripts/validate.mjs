@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 const required = [
   'index.html', 'styles.css', 'game.js', 'sw.js', 'manifest.webmanifest',
   'assets/asia-sprites.svg', 'assets/title-art.svg', 'assets/intro-characters.svg',
-  'assets/jungle-bg.svg', 'assets/cave-bg.svg', 'assets/swamp-bg.svg'
+  'assets/jungle-bg.svg', 'assets/cave-bg.svg', 'assets/swamp-bg.svg', 'assets/bones-bg.svg', 'assets/volcano-bg.svg'
 ];
 const missing = required.filter((file) => !existsSync(file));
 if (missing.length) {
@@ -27,15 +27,15 @@ const checks = [
   ['Joystick pointer capture is released on touch end, cancel and pause', game.includes("['pointerup','pointercancel','lostpointercapture']") && game.includes('resetMoveJoystick(true)')],
   ['Settings panel is wired', ['settingsPanel','settingsSound','settingsHand','controlScale'].every((v) => html.includes('id="' + v + '"'))],
   ['Menu and game use local art assets', ['title-art.svg','asia-sprites.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => (html + game + css + sw).includes(v))],
-  ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','intro-characters.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
+  ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','intro-characters.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg','bones-bg.svg','volcano-bg.svg'].every((v) => sw.includes(v))],
   ['App is configured for landscape display', manifest.orientation === 'landscape'],
   ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
   ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')],
-  ['Each starter level has a checkpoint and safe respawn support', (game.match(/checkpoint: \{x:/g) || []).length === 3 && game.includes('world.checkpointX || 65')],
+  ['Each starter level has a checkpoint and safe respawn support', (game.match(/checkpoint: \{x:/g) || []).length === 5 && game.includes('world.checkpointX || 65')],
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
-  ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
+  ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 5 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v24")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v25")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("function playerAttackBox()") && game.includes("p.attackWeapon === 'club' ? 128 : 106") && game.includes("p.attackTimer = .24") && game.includes("p.attackTimer / .24")],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
@@ -84,7 +84,7 @@ const checks = [
   ['Responsive premium layout preserves mobile map cards and compact game HUD', css.includes('@media(max-width:520px)') && css.includes('grid-template-columns:112px minmax(0,1fr)') && css.includes('@media(orientation:landscape) and (max-height:620px)')],
   ['Reduced-motion preference disables added UI transitions', css.includes('@media(prefers-reduced-motion:reduce)') && css.includes('.level-card,.hero-illustration')],
   ['Premium player sprite sheet provides eight detailed animation poses at 96px per frame', readFileSync('assets/asia-sprites.svg', 'utf8').includes('width="768"') && readFileSync('assets/asia-sprites.svg', 'utf8').includes('id="armClub"') && game.includes('var drawW = 86, drawH = 94')],
-  ['All three world panoramas use extended 3400px parallax canvases and distinct art palettes', ['jungle','cave','swamp'].every((biome) => readFileSync('assets/' + biome + '-bg.svg', 'utf8').includes('width="3400"')) && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
+  ['All five world panoramas use extended 3400px parallax canvases and distinct art palettes', ['jungle','cave','swamp','bones','volcano'].every((biome) => readFileSync('assets/' + biome + '-bg.svg', 'utf8').includes('width="3400"')) && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
   ['Ground and platform materials receive biome-specific premium color grades', game.includes("palette = theme === 'cave'") && game.includes("theme === 'swamp' ? ['#dce2a0'") && game.includes("var topTint = theme === 'cave'")],
   ['Ground enemies receive contact shadows and crawlers have animated legs', game.includes("var shadowLift = e.type === 'bat'") && game.includes('var crawlPhase = world.time * 11 + e.bob')],
   ['Hidden cache spots are loaded per level and can be discovered with melee or stomp', game.includes('secretSpots: (def.secretSpots || []).map') && game.includes('function revealSecretSpot(spot)') && game.includes('world.secretSpots.forEach(function (spot)') && game.includes('saveData.cacheFinds')],

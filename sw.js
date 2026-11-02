@@ -1,6 +1,6 @@
 /* Offline shell cache. Bump CACHE_NAME when shipping a new release. */
-var CACHE_NAME = 'asia-epoka-v24';
-var APP_FILES = ['./', './index.html', './styles.css', './game.js', './manifest.webmanifest', './icon.svg', './assets/asia-sprites.svg', './assets/title-art.svg', './assets/intro-characters.svg', './assets/jungle-bg.svg', './assets/cave-bg.svg', './assets/swamp-bg.svg'];
+var CACHE_NAME = 'asia-epoka-v25';
+var APP_FILES = ['./', './index.html', './styles.css', './game.js', './manifest.webmanifest', './icon.svg', './assets/asia-sprites.svg', './assets/title-art.svg', './assets/intro-characters.svg', './assets/jungle-bg.svg', './assets/cave-bg.svg', './assets/swamp-bg.svg', './assets/bones-bg.svg', './assets/volcano-bg.svg'];
 
 self.addEventListener('install', function (event) {
   event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {

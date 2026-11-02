@@ -70,7 +70,7 @@ Każda kraina zawiera pięć poziomów eksploracyjnych i szósty poziom z bossem
 29. Serce wulkanu — finałowe przygotowanie.
 30. Wielki Kieł — finał kampanii i sekretne zakończenie.
 
-Powyższa lista jest planem docelowym. W repozytorium zaimplementowane są obecnie pierwsze trzy poziomy jako grywalny wycinek; pozostałe pozycje nie są jeszcze gotowe.
+Powyższa lista jest planem docelowym. W repozytorium dostępnych jest obecnie pięć grywalnych poziomów jako rozszerzony wycinek kampanii; dalsze pozycje pozostają planem rozwoju.
 
 ## Znajdźki i sekrety
 
@@ -81,7 +81,7 @@ Powyższa lista jest planem docelowym. W repozytorium zaimplementowane są obecn
 - **Ukryte przejścia:** wymagają obserwacji, miażdżenia lub znalezienia przełącznika.
 - **Easter eggi:** małe scenki, postacie i lokacje niezwiązane bezpośrednio z główną trasą.
 
-W aktualnym wycinku znajdują się trzy specjalne spotkania: dinozaur naśladowca, komnata 8-bit oraz kapibarska mafia. Odkrycia są zapisywane lokalnie.
+W aktualnym wycinku znajdują się pięć grywalnych etapów oraz spotkania specjalne: dinozaur naśladowca, komnata 8-bit, kapibarska mafia, archeologia kościana i kapibarski grill. Odkrycia są zapisywane lokalnie.
 
 ## Przeciwnicy i bossowie
 
