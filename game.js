@@ -220,7 +220,7 @@
     playTone(240, .08, 'sawtooth');
   }
   function updatePlayer(dt) {
-    var p = player, d = dt * 60, prevBottom = p.y + p.h;
+    var p = player, d = dt * 60, prevBottom = p.y + p.h, stompImpact = false;
     p.anim += dt * (Math.abs(p.vx) > .5 ? 9 : 2);
     p.invuln = Math.max(0, p.invuln - dt); p.dashCooldown = Math.max(0, p.dashCooldown - dt);
     p.dashTimer = Math.max(0, p.dashTimer - dt);
@@ -249,13 +249,13 @@
     world.def.platforms.forEach(function (pl) {
       var r = { x: pl[0], y: pl[1], w: pl[2], h: pl[3] };
       if (p.vy >= 0 && prevBottom <= r.y + 8 && p.y + p.h >= r.y && p.x + p.w > r.x + 5 && p.x < r.x + r.w - 5) {
-        p.y = r.y - p.h; p.vy = 0; p.grounded = true; p.stomping = false; p.primed = false;
+        p.y = r.y - p.h; p.vy = 0; p.grounded = true; stompImpact = p.stomping; p.stomping = false; p.primed = false;
       }
     });
     var centerX = p.x + p.w / 2;
     var inGap = world.def.gaps.some(function (g) { return centerX > g[0] && centerX < g[1]; });
-    if (!inGap && p.vy >= 0 && p.y + p.h >= FLOOR && prevBottom <= FLOOR + 12) {
-      p.y = FLOOR - p.h; p.vy = 0; p.grounded = true; p.stomping = false; p.primed = false;
+    if (!inGap && p.vy >= 0 && p.y + p.h >= FLOOR && p.y < FLOOR + 38) {
+      p.y = FLOOR - p.h; p.vy = 0; p.grounded = true; stompImpact = stompImpact || p.stomping; p.stomping = false; p.primed = false;
     }
     // Solid breakable rocks block horizontal movement until smashed or dashed through.
     world.breakables.forEach(function (b) {
@@ -275,7 +275,7 @@
       hurtPlayer(); p.y = 300; p.x = Math.max(40, p.x - 130); p.vy = -4;
     }
     if (p.invuln > 0 && Math.floor(p.invuln * 14) % 2 === 0) p.hurtFlash = .08; else p.hurtFlash = 0;
-    handleInteractions();
+    handleInteractions(stompImpact);
     cameraX = Math.max(0, Math.min(world.def.width - W, p.x - W * .36));
     if (p.x > world.def.width - 105 && !world.boss.alive) completeLevel();
   }
@@ -287,7 +287,7 @@
     world.items.push({ x: sx, y: sy, type: 'egg', id: 'secret-' + currentLevelIndex, taken: false, phase: 0 });
     burst(sx, sy, '#f7d478', 22, 1.4); showToast(world.def.secret.message); playTone(720, .24, 'triangle');
   }
-  function handleInteractions() {
+  function handleInteractions(stompImpact) {
     var p = player, box = { x: p.x, y: p.y, w: p.w, h: p.h };
     world.items.forEach(function (item) {
       if (item.taken) return;
@@ -305,7 +305,7 @@
       if (!e.alive) return;
       var ebox = { x: e.x - 3, y: (e.type === 'bat' ? FLOOR - 112 + Math.sin(world.time * 4 + e.bob) * 18 : FLOOR - 37), w: 43, h: 34 };
       if (rects(box, ebox)) {
-        if (p.stomping && p.vy > 0) {
+        if ((p.stomping && p.vy > 0) || stompImpact) {
           e.alive = false; p.stomping = false; p.vy = -8; p.amber += 2;
           burst(e.x + 18, ebox.y + 15, '#f4bd72', 15, 1.2); showToast('MIAŻDŻENIE! +2 bursztyny'); updateHUD(); playTone(210, .13, 'square');
         } else if (p.dashTimer > 0) {
@@ -317,7 +317,7 @@
     if (b.alive) {
       var bossBox = { x: b.x - 16, y: FLOOR - 84, w: 94, h: 84 };
       if (rects(box, bossBox)) {
-        if (p.stomping && p.vy > 0) {
+        if ((p.stomping && p.vy > 0) || stompImpact) {
           b.hp -= 1; b.hitFlash = .25; p.stomping = false; p.vy = -9; shake = 9; burst(b.x + 28, FLOOR - 52, '#f6d57b', 18, 1.5);
           showToast(b.hp > 0 ? 'DOBRE TRAFIENIE! Jeszcze trochę!' : 'BOSS POKONANY!'); playTone(95, .2, 'sawtooth');
           if (b.hp <= 0) { b.alive = false; burst(b.x + 30, FLOOR - 50, '#f8ce70', 28, 1.6); player.amber += 10; updateHUD(); }
@@ -328,7 +328,7 @@
         } else if (p.invuln <= 0) hurtPlayer();
       }
     }
-    if (p.stomping && p.grounded) {
+    if (stompImpact && p.grounded) {
       p.stomping = false; p.vy = -4; burst(p.x + p.w / 2, p.y + p.h, '#e8d29a', 16, 1.2); shake = 5; playTone(75, .22, 'triangle');
       world.enemies.forEach(function (e) {
         if (e.alive && Math.abs(e.x - p.x) < 112 && e.type !== 'bat') { e.stun = .9; e.x += (e.x < p.x ? -1 : 1) * 20; }
