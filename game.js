@@ -298,7 +298,7 @@
       if (b.broken) return;
       var box = { x: b.x, y: b.y, w: b.w, h: b.h };
       if (rects(p, box)) {
-        if (p.stomping || p.dashTimer > 0) {
+        if (p.stomping || stompImpact || p.dashTimer > 0) {
           b.broken = true; burst(b.x + 26, b.y + 20, '#c99a68', 14, 1.1);
           player.amber += 3; updateHUD(); showToast(b.secret ? 'PĘKNIĘTA ŚCIANA! Coś jest za nią…' : 'Skała rozbita! +3 bursztyny');
           if (b.secret) revealSecret();
