@@ -351,3 +351,62 @@ h1 em{color:#ffd47c;text-shadow:0 5px 0 #995b37,0 12px 24px rgba(0,0,0,.24)}
 }
 @media(max-width:430px){.game-tool-button{width:32px;height:32px}}
 @media(prefers-reduced-motion:reduce){.hero-illustration,.level-card,.button{transition:none}}
+
+
+/* VIRTUAL JOYSTICK — analogue horizontal movement with a clear neutral zone */
+.move-controls{display:flex;align-items:center;justify-content:flex-start;flex:0 0 auto;min-width:0}
+.virtual-joystick{
+  position:relative;width:112px;height:112px;flex:0 0 auto;display:block;
+  touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  transform:scale(var(--touch-scale,1));transform-origin:center;cursor:grab;outline:none
+}
+.virtual-joystick.active{cursor:grabbing}
+.joystick-ring{
+  position:absolute;inset:7px;border:2px solid rgba(242,231,188,.42);border-radius:50%;
+  background:radial-gradient(circle at 35% 27%,rgba(217,238,173,.2),rgba(35,75,49,.82) 66%,rgba(8,28,20,.94));
+  box-shadow:0 7px 20px rgba(0,0,0,.32),inset 0 2px 9px rgba(255,255,255,.13),inset 0 -8px 18px rgba(0,0,0,.28)
+}
+.joystick-ring:before{
+  content:"";position:absolute;left:13%;right:13%;top:50%;border-top:1px dashed rgba(255,239,194,.28)
+}
+.joystick-ring:after{
+  content:"";position:absolute;left:50%;top:17%;bottom:17%;border-left:1px solid rgba(255,239,194,.12)
+}
+.joystick-markers{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 10px;color:rgba(255,239,194,.74);font-size:15px;font-weight:1000;pointer-events:none
+}
+.joystick-knob{
+  position:absolute;left:50%;top:50%;width:47%;height:47%;border-radius:50%;
+  border:2px solid rgba(255,244,207,.68);
+  background:radial-gradient(circle at 34% 26%,#ffe9b2 0%,#edbe70 38%,#b87542 100%);
+  box-shadow:0 5px 12px rgba(0,0,0,.4),inset 0 2px 4px rgba(255,255,255,.4),inset 0 -4px 7px rgba(93,46,23,.24);
+  transform:translate(-50%,-50%);transition:background .1s,box-shadow .1s;pointer-events:none
+}
+.virtual-joystick.active .joystick-knob{
+  background:radial-gradient(circle at 34% 26%,#fff0c5 0%,#f1c66f 38%,#c27a43 100%);
+  box-shadow:0 7px 17px rgba(0,0,0,.45),0 0 18px rgba(246,204,115,.22),inset 0 2px 4px rgba(255,255,255,.4)
+}
+.joystick-caption{
+  position:absolute;left:50%;bottom:-2px;transform:translate(-50%,50%);
+  padding:3px 9px;border:1px solid rgba(245,226,171,.22);border-radius:20px;
+  background:rgba(8,27,18,.88);color:#f5dfaa;font-size:8px;font-weight:1000;letter-spacing:1.2px;
+  pointer-events:none
+}
+@media(orientation:landscape) and (max-height:620px){
+  .move-controls{align-items:flex-end}
+  .virtual-joystick{width:clamp(78px,10vw,108px);height:clamp(78px,10vw,108px)}
+  .joystick-ring{inset:5px}
+  .joystick-markers{padding:0 8px;font-size:12px}
+  .joystick-caption{font-size:7px;bottom:0}
+}
+@media(orientation:portrait) and (max-width:760px){
+  .virtual-joystick{width:clamp(88px,24vw,112px);height:clamp(88px,24vw,112px)}
+  .touch-controls{align-items:center}
+  .joystick-caption{bottom:0}
+}
+@media(max-width:430px){
+  .virtual-joystick{width:90px;height:90px}
+  .joystick-ring{inset:5px}
+  .joystick-markers{padding:0 7px;font-size:12px}
+}

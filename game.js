@@ -13,7 +13,8 @@
   var musicTimer = null, musicStep = 0;
   var active = false, paused = false, currentLevelIndex = 0;
   var keys = Object.create(null);
-  var input = { left: false, right: false };
+  var input = { horizontal: 0 };
+  var joystickPointerId = null;
   var world = null;
   var cameraX = 0;
   var idleTime = 0, idleEggFound = false;
@@ -307,8 +308,37 @@
     $('amberCount').textContent = player.amber;
     $('boneCount').textContent = player.bones;
   }
+  function resetMoveJoystick(releaseCapture) {
+    var pointerId = joystickPointerId;
+    joystickPointerId = null;
+    input.horizontal = 0;
+    var joystick = $('moveJoystick');
+    var knob = $('joystickKnob');
+    if (knob) knob.style.transform = 'translate(-50%, -50%)';
+    if (joystick) joystick.classList.remove('active');
+    if (releaseCapture && pointerId !== null && joystick && joystick.hasPointerCapture && joystick.hasPointerCapture(pointerId)) {
+      try { joystick.releasePointerCapture(pointerId); } catch (e) {}
+    }
+  }
+  function updateMoveJoystick(event) {
+    var joystick = $('moveJoystick');
+    var knob = $('joystickKnob');
+    if (!joystick || !knob) return;
+    var rect = joystick.getBoundingClientRect();
+    var maxTravel = Math.max(1, rect.width * .32);
+    var deltaX = event.clientX - (rect.left + rect.width / 2);
+    var visualX = Math.max(-maxTravel, Math.min(maxTravel, deltaX));
+    var normalized = visualX / maxTravel;
+    var deadzone = .13;
+    input.horizontal = Math.abs(normalized) <= deadzone
+      ? 0
+      : Math.sign(normalized) * ((Math.abs(normalized) - deadzone) / (1 - deadzone));
+    knob.style.transform = 'translate(calc(-50% + ' + visualX.toFixed(1) + 'px), -50%)';
+    joystick.classList.toggle('active', Math.abs(input.horizontal) > .01);
+    joystick.setAttribute('aria-label', input.horizontal < -.01 ? 'Joystick: w lewo' : input.horizontal > .01 ? 'Joystick: w prawo' : 'Joystick: pozycja neutralna');
+  }
   function releaseInputs() {
-    input.left = false; input.right = false;
+    resetMoveJoystick(true);
     Object.keys(keys).forEach(function (key) { keys[key] = false; });
     document.querySelectorAll('.control-button.active').forEach(function (button) { button.classList.remove('active'); });
   }
@@ -388,7 +418,8 @@
       p.stompTimer -= dt;
       if (p.stompTimer <= 0 && !p.grounded) { p.stomping = true; p.vy = 16; }
     }
-    var move = (input.right || keys.ArrowRight || keys.KeyD ? 1 : 0) - (input.left || keys.ArrowLeft || keys.KeyA ? 1 : 0);
+    var keyboardMove = (keys.ArrowRight || keys.KeyD ? 1 : 0) - (keys.ArrowLeft || keys.KeyA ? 1 : 0);
+    var move = Math.max(-1, Math.min(1, input.horizontal + keyboardMove));
     if (move) p.facing = move;
     if (p.dashTimer > 0) {
       p.vx = p.facing * 13;
@@ -961,11 +992,29 @@
     if(e.code==='Escape'){if(active&&!paused)pauseGame();else if(paused)resumeGame();}
   });
   document.addEventListener('keyup',function(e){keys[e.code]=false;});
-  document.querySelectorAll('[data-control]').forEach(function(button){
-    var key=button.getAttribute('data-control');
-    button.addEventListener('pointerdown',function(e){e.preventDefault();input[key]=true;button.classList.add('active');try{button.setPointerCapture(e.pointerId);}catch(err){}});
-    ['pointerup','pointercancel','lostpointercapture'].forEach(function(evt){button.addEventListener(evt,function(e){input[key]=false;button.classList.remove('active');});});
-  });
+  var moveJoystick = $('moveJoystick');
+  if (moveJoystick) {
+    moveJoystick.addEventListener('pointerdown', function (event) {
+      if (!active || paused || joystickPointerId !== null) return;
+      event.preventDefault();
+      joystickPointerId = event.pointerId;
+      moveJoystick.classList.add('active');
+      try { moveJoystick.setPointerCapture(event.pointerId); } catch (e) {}
+      updateMoveJoystick(event);
+    });
+    moveJoystick.addEventListener('pointermove', function (event) {
+      if (event.pointerId !== joystickPointerId) return;
+      event.preventDefault();
+      updateMoveJoystick(event);
+    });
+    ['pointerup','pointercancel','lostpointercapture'].forEach(function (eventName) {
+      moveJoystick.addEventListener(eventName, function (event) {
+        if (event.pointerId !== joystickPointerId) return;
+        resetMoveJoystick(false);
+      });
+    });
+    moveJoystick.addEventListener('contextmenu', function (event) { event.preventDefault(); });
+  }
   document.querySelectorAll('[data-action]').forEach(function(button){
     button.addEventListener('pointerdown',function(e){
       e.preventDefault();button.classList.add('active');try{button.setPointerCapture(e.pointerId);}catch(err){}
