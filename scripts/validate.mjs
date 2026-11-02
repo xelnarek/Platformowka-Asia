@@ -33,7 +33,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v20")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v21")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("var reach = p.attackWeapon === 'club' ? 128 : 106") && game.includes('p.attackTimer = .24') && game.includes('p.attackTimer / .24')],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
