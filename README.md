@@ -27,7 +27,9 @@ Na telefonie zalecana jest orientacja pozioma. Sterowanie dotykowe ma osobne prz
 - 3 grywalne poziomy pierwszego rozdziału: Dolina Paproci, Jaskinie Echa i Bagna Bąbelków.
 - Sekwencyjne odblokowywanie poziomów i mapa postępu.
 - Bursztyny, fragmenty skamielin i złote jajo na każdym poziomie.
-- Rozbijane skały, ukryte przejścia oraz trzy osobne easter eggi: dinozaur naśladowca, komnata 8-bit i kapibarska mafia.
+- Rozbijane skały, kolizje blokujące przenikanie oraz trzy osobne easter eggi: dinozaur naśladowca, komnata 8-bit i kapibarska mafia.
+- Punkty kontrolne i bezpieczny powrót po utracie wszystkich serc.
+- Kolce w trzech krainach — trzeba je przeskakiwać, a nie przebiegać przez nie.
 - Przeciwnicy patrolujący planszę oraz boss każdego poziomu.
 - Skok, taran i miażdżenie z falą uderzeniową.
 - Automatyczny zapis ukończonych poziomów, sekretów i odnalezionych easter eggów w localStorage.
