@@ -665,7 +665,7 @@
       boss.alive = false; player.amber += 10;
       for (var bossBone = 0; bossBone < 6; bossBone++) world.items.push({ x: boss.x + 8 + bossBone * 15, y: FLOOR - 34 - (bossBone % 2) * 18, type: 'bone', id: 'boss-bone-' + bossBone, taken: false, phase: bossBone * .65 });
       world.items.push({ x: boss.x + 45, y: FLOOR - 72, type: 'fruit', id: 'boss-feast', taken: false, phase: 1.7 });
-      showToast('BOSS POKONANY! +10 bursztynów • SKARBY BOSS'A');
+      showToast('BOSS POKONANY! +10 bursztynów • WIELKI ŁUP!');
       burst(boss.x + 30, FLOOR - 50, '#f8ce70', 28, 1.6); updateHUD(); playTone(95, .22, 'sawtooth');
     } else { showToast(source === 'melee' ? 'Cios dosięgnął bossa!' : 'DOBRE TRAFIENIE! Jeszcze trochę!'); playTone(125, .15, 'sawtooth'); }
   }
