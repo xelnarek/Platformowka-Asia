@@ -385,6 +385,19 @@
       showToast('Ups! Powrót do ostatniego bezpiecznego miejsca. -5 bursztynów.');
     } else showToast('Auć! Uważaj na kolce i zęby.');
   }
+  function respawnFromPit() {
+    if (player.invuln <= 0) player.hearts -= 1;
+    player.x = world.checkpointX || 65; player.y = FLOOR - player.h;
+    player.vx = 0; player.vy = 0; player.grounded = true;
+    player.stomping = false; player.primed = false; player.stompTimer = 0;
+    player.dashTimer = 0; player.attackTimer = 0;
+    player.invuln = 1.35; player.hurtFlash = .25; shake = 8;
+    if (player.hearts <= 0) {
+      player.hearts = 3; player.amber = Math.max(0, player.amber - 5);
+      showToast('Upadek! Powrót do punktu kontrolnego. -5 bursztynów.');
+    } else showToast('Upadek! Powrót do ostatniego punktu kontrolnego.');
+    playTone(130, .16, 'sawtooth'); updateHUD();
+  }
   function burst(x, y, color, count, power) {
     for (var i = 0; i < count; i++) {
       var a = Math.PI * 2 * i / count + Math.random() * .4;
@@ -499,7 +512,7 @@
       if (rects(p, spikeBox) && p.invuln <= 0) { hurtPlayer(); }
     });
     if (p.y > H + 90) {
-      hurtPlayer(); p.y = 300; p.x = Math.max(40, p.x - 130); p.vy = -4;
+      respawnFromPit();
     }
     if (p.invuln > 0 && Math.floor(p.invuln * 14) % 2 === 0) p.hurtFlash = .08; else p.hurtFlash = 0;
     handleInteractions(stompImpact);
@@ -1035,9 +1048,20 @@
       ctx.fillStyle = '#fff0ca'; ctx.font = '900 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(world.def.bossName, x + 31, y - 36); ctx.textAlign = 'left';
       if (b.windup > 0) {
         var warningPulse = .55 + Math.sin(world.time * 24) * .35;
-        ctx.save(); ctx.globalAlpha = warningPulse; ctx.fillStyle = '#f3a15e'; ctx.strokeStyle = '#5e3c2d'; ctx.lineWidth = 2;
+        var waveStart = x + (b.attackDir > 0 ? 88 : -24);
+        var waveLength = Math.max(90, Math.min(300, Math.abs(player.x + player.w / 2 - b.x)));
+        ctx.save(); ctx.globalAlpha = warningPulse * .85;
+        ctx.strokeStyle = '#f3a15e'; ctx.lineWidth = 4; ctx.setLineDash([12, 8]);
+        ctx.beginPath(); ctx.moveTo(waveStart, FLOOR - 10); ctx.lineTo(waveStart + b.attackDir * waveLength, FLOOR - 10); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = '#ffe0a3';
+        for (var warningMark = 0; warningMark < 3; warningMark++) {
+          var markX = waveStart + b.attackDir * (28 + warningMark * 22);
+          ctx.beginPath(); ctx.moveTo(markX, FLOOR - 17); ctx.lineTo(markX + b.attackDir * 8, FLOOR - 10); ctx.lineTo(markX, FLOOR - 3); ctx.stroke();
+        }
+        ctx.globalAlpha = warningPulse; ctx.fillStyle = '#f3a15e'; ctx.strokeStyle = '#5e3c2d'; ctx.lineWidth = 2;
         ctx.beginPath(); ctx.arc(x + 31, y - 48, 12, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#3e2d25'; ctx.font = '900 16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', x + 31, y - 42); ctx.restore();
+        ctx.fillStyle = '#3e2d25'; ctx.font = '900 16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', x + 31, y - 42);
+        ctx.restore();
       }
     }
   }

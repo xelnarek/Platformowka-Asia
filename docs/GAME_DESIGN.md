@@ -19,6 +19,8 @@ Asia: zwinna, odważna bohaterka o kreskówkowej, rozpoznawalnej sylwetce. Docel
 - **Skok:** podstawowy skok z czytelnym łukiem i przewidywalnym lądowaniem.
 - **Miażdżenie:** z powietrza szybkie zejście w dół, uderzenie, fala obszarowa, kruszenie wybranych obiektów.
 - **Taran:** krótki ruch poziomy z czasem odnowienia; rozbija słabe przeszkody i może przerwać atak.
+- **Atak:** patelnia do walki wręcz, ograniczona liczba mocnych uderzeń maczugą oraz kościany bumerang wracający do bohaterki po rzucie.
+- **Upadek w przepaść:** przywraca bohaterkę bezpośrednio do ostatniego aktywowanego punktu kontrolnego; stan ruchu zostaje wyzerowany, aby uniknąć ponownego wpadnięcia.
 - **Atak:** patelnia do walki wręcz, ograniczona liczba mocnych uderzeń maczugą oraz kościany bumerang wracający do bohaterki.
 - **Rozwój:** ulepszenia zasięgu fali, siły kruszenia i parametrów tarana. Ulepszenia nie mogą odbierać wyzwania.
 
@@ -83,7 +85,7 @@ W aktualnym wycinku znajdują się trzy specjalne spotkania: dinozaur naśladowc
 
 ## Przeciwnicy i bossowie
 
-Rodzaje przeciwników powinny różnić się ruchem i reakcją na umiejętności, a nie tylko kolorem. Przeciwnik naziemny może patrolować lub skakać; powietrzny wymusza obserwację i zmianę pozycji; ciężki przeciwnik wymaga przerwania osłony albo ataku z góry. Szarżujący wróg i boss zapowiadają atak czytelnym sygnałem, a falę bossa można ominąć skokiem.
+Rodzaje przeciwników powinny różnić się ruchem i reakcją na umiejętności, a nie tylko kolorem. Przeciwnik naziemny może patrolować lub skakać; powietrzny wymusza obserwację i zmianę pozycji; ciężki przeciwnik wymaga przerwania osłony albo ataku z góry. Szarżujący wróg i boss zapowiadają atak czytelnym sygnałem; ostrzeżenie bossa wskazuje również kierunek fali przy ziemi, którą można ominąć skokiem.
 
 Każdy boss:
 - ma własną sylwetkę i zestaw animacji,
