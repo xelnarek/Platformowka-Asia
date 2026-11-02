@@ -38,7 +38,7 @@
     {
       name: 'Pobudka pod paprocią', world: 'Dolina Paproci', subtitle: 'Witaj w dolinie. Uważaj na to, co chrupie w krzakach.',
       width: 2940, theme: 'jungle', symbol: '🌿', bossName: 'TRZASKACZ',
-      gaps: [[780, 865], [1580, 1660], [2260, 2350]],
+      gaps: [[780, 865], [1580, 1660], [2260, 2350]], hazards: [{x:620,w:60,h:18},{x:1800,w:68,h:18},{x:2470,w:56,h:18}],
       platforms: [[270,380,160,18],[510,326,145,18],[910,365,145,18],[1160,312,170,18],[1400,374,130,18],[1715,342,180,18],[1990,292,165,18],[2385,360,180,18],[2630,320,130,18]],
       breakables: [{x:1160,y:420,w:52,h:46,secret:true},{x:2050,y:420,w:52,h:46}],
       items: [[180,410,'amber'],[310,340,'amber'],[440,420,'amber'],[555,285,'amber'],[630,420,'bone'],[960,325,'amber'],[1070,420,'amber'],[1220,266,'amber'],[1300,420,'bone'],[1470,330,'amber'],[1750,295,'amber'],[1850,420,'amber'],[2035,245,'bone'],[2160,420,'amber'],[2430,315,'amber'],[2540,420,'egg'],[2720,420,'amber']],
@@ -50,7 +50,7 @@
     {
       name: 'Jaskinia Głupich Ech', world: 'Jaskinie Echa', subtitle: 'Kryształy świecą. Nietoperze nie pytają o zgodę.',
       width: 3150, theme: 'cave', symbol: '💎', bossName: 'KRÓL GŁAZÓW',
-      gaps: [[670,760],[1350,1450],[2100,2200]],
+      gaps: [[670,760],[1350,1450],[2100,2200]], hazards: [{x:580,w:58,h:18},{x:1600,w:72,h:18},{x:2530,w:62,h:18}],
       platforms: [[220,365,170,18],[455,300,145,18],[790,360,150,18],[1010,300,170,18],[1490,345,170,18],[1740,282,160,18],[2220,345,170,18],[2450,285,175,18],[2780,350,150,18]],
       breakables: [{x:920,y:420,w:52,h:46,secret:true},{x:1850,y:420,w:52,h:46}],
       items: [[150,420,'amber'],[270,320,'amber'],[520,260,'bone'],[610,420,'amber'],[840,320,'amber'],[1050,260,'amber'],[1150,420,'bone'],[1270,420,'amber'],[1530,305,'amber'],[1650,420,'amber'],[1780,240,'bone'],[1960,420,'amber'],[2290,305,'amber'],[2400,420,'amber'],[2500,245,'egg'],[2680,420,'bone'],[2890,420,'amber']],
@@ -62,7 +62,7 @@
     {
       name: 'Bagna Bąbelków', world: 'Bagna Bąbelków', subtitle: 'Nie ufaj bąbelkom. Szczególnie tym, które patrzą.',
       width: 3320, theme: 'swamp', symbol: '🍄', bossName: 'BŁOTNY BULGOT',
-      gaps: [[860,950],[1740,1830],[2500,2600]],
+      gaps: [[860,950],[1740,1830],[2500,2600]], hazards: [{x:700,w:64,h:18},{x:1990,w:72,h:18},{x:2790,w:60,h:18}],
       platforms: [[250,360,160,18],[500,300,150,18],[990,360,180,18],[1240,292,160,18],[1500,355,150,18],[1870,330,170,18],[2110,270,180,18],[2650,350,170,18],[2900,290,150,18]],
       breakables: [{x:1180,y:420,w:52,h:46,secret:true},{x:2290,y:420,w:52,h:46}],
       items: [[160,420,'amber'],[290,315,'amber'],[560,260,'bone'],[690,420,'amber'],[1040,315,'amber'],[1130,420,'bone'],[1280,250,'amber'],[1430,420,'amber'],[1570,310,'amber'],[1920,285,'amber'],[2050,420,'bone'],[2150,230,'amber'],[2390,420,'amber'],[2700,310,'amber'],[2840,420,'egg'],[3000,250,'bone'],[3150,420,'amber']],
@@ -309,6 +309,10 @@
         else if (rects(p, box)) { p.x = prevX; p.vx = 0; }
       }
     });
+    world.def.hazards.forEach(function (hazard) {
+      var spikeBox = { x: hazard.x, y: FLOOR - hazard.h, w: hazard.w, h: hazard.h };
+      if (rects(p, spikeBox) && p.invuln <= 0) { hurtPlayer(); }
+    });
     if (p.y > H + 90) {
       hurtPlayer(); p.y = 300; p.x = Math.max(40, p.x - 130); p.vy = -4;
     }
@@ -485,6 +489,21 @@
       }
     });
   }
+  function drawHazards() {
+    world.def.hazards.forEach(function (hazard) {
+      var x = hazard.x - cameraX;
+      if (x + hazard.w < -20 || x > W + 20) return;
+      ctx.fillStyle = '#384334'; ctx.fillRect(x, FLOOR - 5, hazard.w, 8);
+      var count = Math.max(3, Math.floor(hazard.w / 18));
+      for (var i = 0; i < count; i++) {
+        var sx = x + (i + .5) * hazard.w / count;
+        ctx.fillStyle = '#d5c9a6'; ctx.strokeStyle = '#665b47'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(sx - 9, FLOOR - 4); ctx.lineTo(sx, FLOOR - hazard.h); ctx.lineTo(sx + 9, FLOOR - 4); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,243,196,.4)'; ctx.beginPath(); ctx.moveTo(sx - 2, FLOOR - 8); ctx.lineTo(sx, FLOOR - hazard.h + 5); ctx.lineTo(sx + 2, FLOOR - 8); ctx.fill();
+      }
+    });
+  }
+
   function drawPlatforms() {
     world.def.platforms.forEach(function (p) {
       var x=p[0]-cameraX; if (x+p[2]<-20||x>W+20) return;
@@ -711,7 +730,7 @@
   function drawWorld() {
     ctx.save();
     if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
-    drawBackground(world.def);drawGround();drawPlatforms();drawCheckpoint();drawEasterProp();drawCollectibles();
+    drawBackground(world.def);drawGround();drawHazards();drawPlatforms();drawCheckpoint();drawEasterProp();drawCollectibles();
     world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayer();
     if(world.boss.alive && world.boss.x-cameraX<W-30){
       ctx.fillStyle='rgba(20,42,29,.58)';rounded(16,15,150,28,10,'rgba(20,42,29,.58)');
