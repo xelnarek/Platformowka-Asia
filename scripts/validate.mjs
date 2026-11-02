@@ -26,7 +26,9 @@ const checks = [
   ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
   ['App is configured for landscape display', manifest.orientation === 'landscape'],
   ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
-  ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')]
+  ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')],
+  ['Each starter level has a checkpoint and safe respawn support', (game.match(/checkpoint: \{x:/g) || []).length === 3 && game.includes('world.checkpointX || 65')],
+  ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')]
 ];
 
 let failed = false;
