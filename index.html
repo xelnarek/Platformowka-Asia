@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#142b24">
+  <meta name="description" content="Asia: Epoka Miażdżenia — mobilna platformówka przygodowa.">
+  <title>Asia: Epoka Miażdżenia</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <main id="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Asia: Epoka Miażdżenia">
+        <span class="brand-mark">A!</span>
+        <span><b>ASIA</b><small>EPOKA MIAŻDŻENIA</small></span>
+      </a>
+      <div class="top-meta"><span class="status-dot"></span><span>PRZYGODA OFFLINE</span></div>
+    </header>
+
+    <section id="menuScreen" class="screen menu-screen">
+      <div class="hero-copy">
+        <p class="eyebrow">WIELKA PRZYGODA • MAŁE EKRANY, WIELKIE EMOCJE</p>
+        <h1>EPoka <em>miażdżenia</em></h1>
+        <p class="intro">Dolina potrzebuje bohaterki. Dobrze, że Asia ma mocne argumenty… i jeszcze mocniejsze lądowanie.</p>
+        <div class="menu-actions">
+          <button id="continueButton" class="button button-primary">GRAJ TERAZ <span>▶</span></button>
+          <button id="mapButton" class="button button-secondary">WYBIERZ POZIOM</button>
+        </div>
+        <div class="feature-row">
+          <span>✦ 3 poziomy na start</span><span>✦ sekrety i skarby</span><span>✦ zapis na urządzeniu</span>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="Ilustracja bohaterki i prehistorycznego świata">
+        <div class="sun"></div><div class="hero-leaf leaf-a"></div><div class="hero-leaf leaf-b"></div>
+        <div class="hero-stone stone-a"></div><div class="hero-stone stone-b"></div>
+        <div class="hero-asia"><span class="hair"></span><span class="face"></span><span class="body"></span><span class="arm"></span><span class="leg leg-a"></span><span class="leg leg-b"></span><span class="boot"></span></div>
+        <div class="hero-dino">✦</div>
+        <div class="hero-caption">GOTOWA NA PRZYGODĘ?</div>
+      </div>
+      <div class="menu-footer"><span>WERSJA 0.1 • PIERWSZY ROZDZIAŁ</span><button id="howButton" class="text-button">JAK GRAĆ?</button></div>
+    </section>
+
+    <section id="mapScreen" class="screen map-screen hidden">
+      <div class="section-heading"><div><p class="eyebrow">WYBIERZ SWOJĄ TRASĘ</p><h2>Mapa przygody</h2></div><button class="icon-button" data-back="menu" aria-label="Wróć">✕</button></div>
+      <div id="levelCards" class="level-grid"></div>
+      <div class="map-progress"><div class="progress-copy"><span>POSTĘP ROZDZIAŁU</span><b id="progressText">0 / 3 ukończone</b></div><div class="progress-track"><i id="progressFill"></i></div></div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen hidden">
+      <div class="game-topbar">
+        <button class="icon-button game-menu-button" id="pauseButton" aria-label="Pauza">Ⅱ</button>
+        <div class="level-label"><small id="worldLabel">DOLINA PAPROCI</small><b id="levelLabel">01 • Pobudka pod paprocią</b></div>
+        <div class="game-stats"><span>♥ <b id="hearts">3</b></span><span>✦ <b id="amberCount">0</b></span><span>🦴 <b id="boneCount">0</b></span></div>
+      </div>
+      <div class="game-stage">
+        <canvas id="gameCanvas" width="960" height="540" aria-label="Pole gry"></canvas>
+        <div id="toast" class="toast" role="status"></div>
+        <div id="orientationHint" class="orientation-hint">Obróć telefon poziomo, aby wygodniej grać.</div>
+        <div id="pausePanel" class="overlay-panel hidden">
+          <p class="eyebrow">CHWILA ODDECHU</p><h2>Przerwa na jagody</h2><p>Postęp poziomu zapisuje się automatycznie.</p>
+          <button id="resumeButton" class="button button-primary">WRACAM DO GRY</button>
+          <button id="pauseMapButton" class="button button-secondary">MAPA POZIOMÓW</button>
+        </div>
+        <div id="resultPanel" class="overlay-panel hidden">
+          <p class="eyebrow" id="resultEyebrow">POZIOM UKOŃCZONY</p><h2 id="resultTitle">Ale lądowanie!</h2><p id="resultText">Udało się!</p>
+          <div class="result-stats"><span>Bursztyny <b id="resultAmber">0</b></span><span>Skamieliny <b id="resultBones">0</b></span><span>Sekrety <b id="resultSecrets">0</b></span></div>
+          <button id="nextButton" class="button button-primary">DALEJ</button>
+          <button id="resultMapButton" class="button button-secondary">WRÓĆ DO MAPY</button>
+        </div>
+      </div>
+      <div class="touch-controls" aria-label="Sterowanie dotykowe">
+        <div class="move-controls"><button class="control-button direction" data-control="left" aria-label="W lewo">◀</button><button class="control-button direction" data-control="right" aria-label="W prawo">▶</button></div>
+        <div class="action-controls"><button class="control-button action-smash" data-action="smash" aria-label="Miażdżenie"><span>▼</span><small>MIAŻDŻ</small></button><button class="control-button action-jump" data-action="jump" aria-label="Skok"><span>↑</span><small>SKOK</small></button><button class="control-button action-dash" data-action="dash" aria-label="Szarża"><span>»</span><small>TARAN</small></button></div>
+      </div>
+      <div class="game-bottom"><span>DOTKNIJ I PRZYTRZYMAJ • MOŻESZ TEŻ UŻYĆ KLAWIATURY</span><button id="soundButton" class="text-button">DŹWIĘK: WŁ.</button></div>
+    </section>
+
+    <section id="howPanel" class="help-panel hidden">
+      <div class="help-card"><button id="closeHelp" class="icon-button close-help" aria-label="Zamknij">✕</button><p class="eyebrow">KRÓTKA INSTRUKCJA</p><h2>Jak grać?</h2>
+        <div class="help-grid"><div><b>◀ ▶ RUCH</b><p>Przytrzymaj kierunek, aby iść lub biec.</p></div><div><b>↑ SKOK</b><p>Przeskakuj szczeliny, pułapki i przeciwników.</p></div><div><b>▼ MIAŻDŻENIE</b><p>W powietrzu uderz w ziemię. Rozbijaj kruche skały i ogłuszaj wrogów.</p></div><div><b>» TARAN</b><p>Krótka szarża. Używaj do szybkiego przemieszczania i rozbijania słabych przeszkód.</p></div></div>
+        <p class="help-note">Zbieraj bursztyny i skamieliny. Szukaj pękniętych ścian, podejrzanych miejsc i ukrytych przełączników. Nie wszystko, co wygląda jak dekoracja, jest dekoracją.</p>
+      </div>
+    </section>
+  </main>
+  <script src="./game.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('./sw.js').catch(function () {}); });
+    }
+  </script>
+</body>
+</html>
