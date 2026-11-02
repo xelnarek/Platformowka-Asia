@@ -28,7 +28,8 @@ const checks = [
   ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
   ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')],
   ['Each starter level has a checkpoint and safe respawn support', (game.match(/checkpoint: \{x:/g) || []).length === 3 && game.includes('world.checkpointX || 65')],
-  ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')]
+  ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
+  ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')]
 ];
 
 let failed = false;
