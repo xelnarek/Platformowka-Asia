@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="540" viewBox="0 0 1920 540">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#81b79c"/><stop offset=".6" stop-color="#c7cb81"/><stop offset="1" stop-color="#71986a"/></linearGradient>
+ <linearGradient id="water" x2="0" y2="1"><stop stop-color="#6aa58b"/><stop offset="1" stop-color="#294e42"/></linearGradient>
+ <linearGradient id="mush" x2="0" y2="1"><stop stop-color="#f2bd79"/><stop offset="1" stop-color="#b75d52"/></linearGradient>
+ <radialGradient id="mist"><stop stop-color="#e4ebac" stop-opacity=".5"/><stop offset="1" stop-color="#e4ebac" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1920" height="540" fill="url(#sky)"/>
+<ellipse cx="460" cy="250" rx="360" ry="160" fill="url(#mist)"/><ellipse cx="1500" cy="255" rx="410" ry="170" fill="url(#mist)"/>
+<path d="M0 325q190-80 360 0t340-4q170-72 340 0t350-4q220-85 530 8v215H0Z" fill="#527c55" opacity=".6"/>
+<!-- oversized mushrooms -->
+<g stroke="#6f5942" stroke-width="7" stroke-linejoin="round">
+ <path d="M280 382q-17-122 27-170 37-32 71 3 35 54 15 169z" fill="#e7d39a"/><path d="M190 225q15-117 152-125 128 4 163 123-147 65-315 2Z" fill="url(#mush)"/>
+ <path d="M870 390q-12-104 25-150 36-29 65 1 29 46 17 149z" fill="#e6d19a"/><path d="M787 246q15-105 138-112 119 5 146 112-140 56-284 0Z" fill="#d98e63"/>
+ <path d="M1450 383q-14-127 30-170 37-31 70 3 32 50 15 167z" fill="#e6d19a"/><path d="M1363 220q13-112 154-125 123 8 150 127-155 60-304-2Z" fill="#d8795c"/>
+</g>
+<g fill="#ffe9bd" opacity=".9"><ellipse cx="316" cy="179" rx="23" ry="12"/><ellipse cx="401" cy="143" rx="17" ry="9"/><ellipse cx="899" cy="199" rx="19" ry="10"/><ellipse cx="1483" cy="167" rx="25" ry="12"/></g>
+<path d="M0 398q180-53 340 5t320-3q210-62 390 1t350-2q220-73 520 9v132H0Z" fill="url(#water)"/>
+<g fill="none" stroke="#a9d1a1" stroke-width="5" opacity=".6"><path d="M80 451q70-16 132 0t122-2M615 482q70-16 132 0t122-2M1190 443q70-16 132 0t122-2M1620 491q70-16 132 0t122-2"/></g>
+<!-- giant swamp plants -->
+<g fill="#477d50" stroke="#315d43" stroke-width="6"><path d="M90 453q-56-112-19-181 66 55 46 159zM110 452q-3-145 77-183 29 91-60 197zM1730 450q-68-100-34-184 74 54 63 169zM1785 450q2-132 83-174 25 89-66 189z"/></g>
+<g fill="#e2d78b" opacity=".75"><circle cx="530" cy="380" r="7"/><circle cx="545" cy="390" r="5"/><circle cx="1135" cy="405" r="6"/><circle cx="1152" cy="396" r="4"/><circle cx="1650" cy="382" r="5"/></g>
+</svg>
