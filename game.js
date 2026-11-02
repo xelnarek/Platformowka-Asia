@@ -288,6 +288,7 @@
     if (world.secretFound) return;
     world.secretFound = true; player.secrets += 1;
     if (saveData.secrets.indexOf(currentLevelIndex) === -1) saveData.secrets.push(currentLevelIndex);
+    persist();
     var sx = world.def.secret.x + 38, sy = world.def.secret.y - 28;
     world.items.push({ x: sx, y: sy, type: 'egg', id: 'secret-' + currentLevelIndex, taken: false, phase: 0 });
     burst(sx, sy, '#f7d478', 22, 1.4); showToast(world.def.secret.message); playTone(720, .24, 'triangle');
@@ -302,7 +303,7 @@
         item.taken = true;
         if (item.type === 'amber') { p.amber += 1; burst(item.x, item.y, '#ffd66c', 8, .8); showToast('+1 bursztyn'); playTone(620, .07, 'sine'); }
         if (item.type === 'bone') { p.bones += 1; burst(item.x, item.y, '#eee4bd', 9, .8); showToast('Fragment skamieliny!'); playTone(760, .09, 'sine'); }
-        if (item.type === 'egg') { p.eggs += 1; burst(item.x, item.y, '#fff1a5', 18, 1.2); showToast('ZŁOTE JAJO! Rzadki skarb.'); playTone(880, .2, 'triangle'); }
+        if (item.type === 'egg') { p.eggs += 1; if (saveData.eggs.indexOf(currentLevelIndex) === -1) saveData.eggs.push(currentLevelIndex); persist(); burst(item.x, item.y, '#fff1a5', 18, 1.2); showToast('ZŁOTE JAJO! Rzadki skarb.'); playTone(880, .2, 'triangle'); }
         updateHUD();
       }
     });
@@ -512,6 +513,9 @@
       ctx.beginPath(); ctx.arc(x + 31, FLOOR - 39, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#201f1b'; rounded(x + 19, FLOOR - 44, 26, 9, 4, '#242522');
       ctx.fillStyle = '#fff0c9'; ctx.fillRect(x + 24, FLOOR - 42, 5, 2); ctx.fillRect(x + 35, FLOOR - 42, 5, 2);
+      ctx.fillStyle = '#8d6143'; ctx.beginPath(); ctx.ellipse(x - 23, FLOOR - 15, 17, 13, 0, 0, Math.PI * 2); ctx.ellipse(x + 48, FLOOR - 14, 18, 14, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#a8754f'; ctx.beginPath(); ctx.arc(x - 12, FLOOR - 28, 11, 0, Math.PI * 2); ctx.arc(x + 58, FLOOR - 29, 11, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#242522'; rounded(x - 21, FLOOR - 31, 19, 7, 3, '#242522'); rounded(x + 48, FLOOR - 33, 19, 7, 3, '#242522');
     }
     if (!world.easterFound) {
       ctx.fillStyle = 'rgba(255,235,171,.75)'; ctx.font = '900 10px Nunito'; ctx.textAlign = 'center'; ctx.fillText('?', x + 10, FLOOR - 91); ctx.textAlign = 'left';
