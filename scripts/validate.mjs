@@ -76,7 +76,11 @@ const checks = [
   ['Enemy hit effects are placed at the matching collision box', game.includes("hitBox.x + hitBox.w / 2, hitBox.y + hitBox.h / 2") && game.includes("meleeHitBox.x + meleeHitBox.w / 2")],
   ['Hopper jump has a warning, movement burst and shared render/collision trajectory', game.includes("e.hopWindup = .3") && game.includes("e.hopTimer = .72") && game.includes("var baseY = FLOOR - 39") && game.includes("var y = enemyRenderY(e)")],
   ['Bosses transition once into a clearly marked second phase at half health', game.includes("boss.phase === 1 && boss.hp > 0 && boss.hp <= Math.ceil(bossMaxHp / 2)") && game.includes("boss.phase = 2; boss.speed *= 1.18") && game.includes("FAZA II • FURIA")],
-  ['Boss phase two increases pressure without shortening attack warnings', game.includes("boss.phase === 2 ? .78 : 1") && game.includes("boss.phase === 2 ? 5.35 : 4.9") && game.includes("boss.windup = boss.attackStyle === 'shockwave' ? .68 : .82")]
+  ['Boss phase two increases pressure without shortening attack warnings', game.includes("boss.phase === 2 ? .78 : 1") && game.includes("boss.phase === 2 ? 5.35 : 4.9") && game.includes("boss.windup = boss.attackStyle === 'shockwave' ? .68 : .82")],
+  ['Level cards expose chapter, biome, availability, objective and boss metadata', game.includes('level-card-meta') && game.includes('level-card-status') && game.includes('level-card-boss') && game.includes("card.setAttribute('aria-label'")],
+  ['Premium UI system styles menu, map cards, settings and gameplay HUD', css.includes('PREMIUM VISUAL SYSTEM v20') && css.includes('.hero-art:after') && css.includes('.level-card-status.is-complete') && css.includes('.game-stats span') && css.includes('.settings-row')],
+  ['Responsive premium layout preserves mobile map cards and compact game HUD', css.includes('@media(max-width:520px)') && css.includes('grid-template-columns:112px minmax(0,1fr)') && css.includes('@media(orientation:landscape) and (max-height:620px)')],
+  ['Reduced-motion preference disables added UI transitions', css.includes('@media(prefers-reduced-motion:reduce)') && css.includes('.level-card,.hero-illustration')]
 ];
 
 let failed = false;

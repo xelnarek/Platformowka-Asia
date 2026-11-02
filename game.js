@@ -295,8 +295,26 @@
       card.className = 'level-card';
       card.disabled = !open;
       var artClass = index === 1 ? 'cave' : (index === 2 ? 'swamp' : 'jungle');
-      card.innerHTML = '<div class="level-art ' + artClass + '"><span class="level-number">0' + (index + 1) + '</span><span class="level-symbol">' + def.symbol + '</span></div>' +
-        '<div class="level-card-copy"><strong>' + def.world + '</strong><small>' + def.name + '</small><em>' + (done ? '✓ UKOŃCZONO' : (open ? 'ZAGRAJ  →' : '🔒 ZABLOKOWANE')) + '</em></div>';
+      var chapter = '0' + (index + 1);
+      var statusText = done ? 'UKOŃCZONO' : (open ? 'DOSTĘPNY' : 'ZABLOKOWANY');
+      var statusClass = done ? 'is-complete' : (open ? 'is-open' : 'is-locked');
+      card.className = 'level-card level-card-' + artClass + (done ? ' is-complete' : '') + (!open ? ' is-locked' : '');
+      card.setAttribute('data-level', String(index + 1));
+      card.setAttribute('aria-label', 'Rozdział ' + chapter + ': ' + def.world + '. ' + def.name + '. ' + statusText + '.');
+      card.title = open ? 'Rozpocznij: ' + def.world : 'Ukończ poprzedni etap, aby odblokować';
+      card.innerHTML =
+        '<div class="level-art ' + artClass + '">' +
+          '<span class="level-number">' + chapter + '</span>' +
+          '<span class="level-card-kicker">ROZDZIAŁ ' + chapter + '</span>' +
+          '<span class="level-symbol" aria-hidden="true">' + def.symbol + '</span>' +
+          '<span class="level-art-caption">' + (index === 0 ? 'ZIELONE OSTĘPY' : (index === 1 ? 'KRYSZTAŁOWE GŁĘBINY' : 'MGLISTE ROZLEWISKA')) + '</span>' +
+        '</div>' +
+        '<div class="level-card-copy">' +
+          '<div class="level-card-meta"><span class="level-card-chapter">ETAP ' + chapter + '</span><span class="level-card-status ' + statusClass + '">' + statusText + '</span></div>' +
+          '<strong>' + def.world + '</strong><small>' + def.name + '</small>' +
+          '<p>' + def.subtitle + '</p>' +
+          '<div class="level-card-footer"><span class="level-card-boss">STRAŻNIK <b>' + def.bossName + '</b></span><span class="level-card-action" aria-hidden="true">' + (open ? '↗' : '⌑') + '</span></div>' +
+        '</div>';
       card.addEventListener('click', function () { startLevel(index); });
       host.appendChild(card);
     });

@@ -153,3 +153,12 @@ Postęp jest przechowywany w `localStorage` na urządzeniu. Prototyp nie wysyła
 - Hopper otrzymuje własny cykl: przygotowanie, wyskok z ruchem poziomym i powrót do patrolu. Wskaźnik przygotowania jest widoczny, a hitbox używa tej samej wysokości co rysowana postać.
 - Faza druga bossów rozpoczyna się przy połowie zdrowia. Zmiana jest jednorazowa, wyraźnie sygnalizowana i zwiększa tempo kolejnych ataków oraz prędkość pocisków, nie skracając czasu ostrzeżenia.
 - Aura oraz podpis FAZA II pomagają rozpoznać zmianę zachowania bossa.
+
+
+## Aktualizacja interfejsu i oprawy — v20
+
+- Menu główne otrzymuje bardziej uporządkowaną hierarchię: czytelny tytuł, wyraźne akcje, spokojniejsze statystyki profilu oraz spójne obramowania i światło.
+- Karty rozdziałów pokazują numer rozdziału, biom, nazwę etapu, krótki opis, status dostępności i strażnika. Stan ukończenia, dostępności i blokady jest rozróżniony tekstem oraz stylem.
+- HUD rozgrywki i kontrolki korzystają z jednego systemu powierzchni, obramowań i kontrastu; ustawienia i panele pauzy są stylistycznie spójne z menu.
+- Układ mapy, menu i HUD ma osobne punkty dostosowania na telefonach, wąskich ekranach oraz w poziomym trybie gry. Zachowano istniejące zachowanie kontrolek, zapis postępu i silnik Canvas 2D.
+- Zmieniono nazwę pamięci podręcznej Service Workera na v20, aby przeglądarka pobrała nowy interfejs po wdrożeniu.
