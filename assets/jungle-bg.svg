@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="540" viewBox="0 0 1920 540">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#7ec89b"/><stop offset=".7" stop-color="#d9d890"/><stop offset="1" stop-color="#a8c16e"/></linearGradient>
+ <linearGradient id="far" x2="0" y2="1"><stop stop-color="#9bbd78"/><stop offset="1" stop-color="#527e55"/></linearGradient>
+ <linearGradient id="land" x2="0" y2="1"><stop stop-color="#6ea25d"/><stop offset="1" stop-color="#254f3b"/></linearGradient>
+ <linearGradient id="fall" x2="0" y2="1"><stop stop-color="#ecffe0"/><stop offset="1" stop-color="#4baf9a"/></linearGradient>
+ <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="5" cy="9" r="1.2" fill="#eff6b2" opacity=".35"/></pattern>
+</defs>
+<rect width="1920" height="540" fill="url(#sky)"/>
+<circle cx="1390" cy="90" r="47" fill="#fff0b4" opacity=".8"/><circle cx="1390" cy="90" r="83" fill="#fff0b4" opacity=".2"/>
+<path d="M0 310L120 168l95 87 133-153 123 172 128-121 115 140 119-164 114 156 137-120 130 118 117-142 145 146 130-91v240H0Z" fill="url(#far)" opacity=".72"/>
+<path d="M0 354q170-130 315-10t280-16q160-107 310 5t290-9q170-88 310 1t415-24v239H0Z" fill="url(#land)"/>
+<!-- distant ruins -->
+<g fill="#8f8660" stroke="#5f6549" stroke-width="8" opacity=".78"><path d="M250 269h260v18H250zM286 175h190v17H286zM306 190h18v91h-18zM434 190h18v91h-18zM271 270l-30 35h310l-31-35" /><path d="M1040 302h230v16h-230zM1070 221h160v15h-160zM1093 237h17v65h-17zM1190 237h17v65h-17z"/></g>
+<path d="M376 288q-22 48-3 110h67q19-60-4-110" fill="url(#fall)" opacity=".86"/>
+<path d="M398 300q-7 44 5 85" stroke="#fff" stroke-width="6" opacity=".6" fill="none"/>
+<path d="M0 434q130-68 270-5t270-8q190-93 340 5t320-8q190-70 350 8t370-15v129H0Z" fill="#315f43"/>
+<path d="M0 484q220-65 410-3t410-4q220-68 400 4t390-8v67H0Z" fill="#204b38"/>
+<!-- ferns and palms -->
+<g stroke-linecap="round" fill="none">
+ <g stroke="#296b49" stroke-width="10"><path d="M80 500Q100 353 33 267M80 435Q25 357 10 360M85 420Q143 343 176 340M94 380Q42 295 68 245M95 355Q150 260 215 255"/>
+ <path d="M1820 500Q1814 337 1891 250M1820 420Q1748 328 1706 336M1825 393Q1896 319 1915 302M1820 360Q1764 266 1735 236"/>
+ <path d="M1450 505Q1440 392 1500 330M1450 445Q1396 375 1350 380M1450 417Q1510 353 1550 348"/></g>
+ <g stroke="#9cbd69" stroke-width="4"><path d="M80 435L10 360M83 415l93-75M91 380l-23-135M95 355l120-100M1820 420l-114-84M1825 393l90-91M1820 360l-85-124"/></g>
+</g>
+<g fill="#f2d58b" opacity=".8"><circle cx="610" cy="212" r="4"/><circle cx="630" cy="190" r="3"/><circle cx="890" cy="236" r="4"/><circle cx="1610" cy="205" r="3"/></g>
+<rect width="1920" height="540" fill="url(#dots)" opacity=".5"/>
+</svg>
