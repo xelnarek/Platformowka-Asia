@@ -1,4 +1,4 @@
-name: Build and deploy Asia platformer to GitHub Pages
+name: Build, validate and deploy Asia platformer to GitHub Pages
 
 on:
   push:
@@ -15,18 +15,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    name: Validate game files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+      - name: Check JavaScript syntax
+        run: |
+          node --check game.js
+          node --check sw.js
+          node --check scripts/validate.mjs
+      - name: Validate mobile controls, assets and offline shell
+        run: node scripts/validate.mjs
+
   deploy:
+    name: Publish GitHub Pages
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static game
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: .
       - name: Publish game
