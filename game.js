@@ -30,7 +30,8 @@
       items: [[180,410,'amber'],[310,340,'amber'],[440,420,'amber'],[555,285,'amber'],[630,420,'bone'],[960,325,'amber'],[1070,420,'amber'],[1220,266,'amber'],[1300,420,'bone'],[1470,330,'amber'],[1750,295,'amber'],[1850,420,'amber'],[2035,245,'bone'],[2160,420,'amber'],[2430,315,'amber'],[2540,420,'egg'],[2720,420,'amber']],
       enemies: [{x:420,min:370,max:560,speed:1.05,type:'crawler'},{x:980,min:900,max:1110,speed:1.2,type:'hopper'},{x:1470,min:1370,max:1540,speed:1.05,type:'crawler'},{x:1870,min:1730,max:1980,speed:1.4,type:'hopper'},{x:2330,min:2180,max:2450,speed:1.2,type:'crawler'}],
       secret: {x:1185,y:380,w:115,h:80,message:'TAJNE PRZEJŚCIE! W ścianie była dziura.'},
-      boss: {x:2570,hp:3,speed:0.75}
+      boss: {x:2570,hp:3,speed:0.75},
+      easter: {x:710,kind:'peek',message:'DINOZAUR NAŚLADOWCA: „Też umiesz tak stać?”'}
     },
     {
       name: 'Jaskinia Głupich Ech', world: 'Jaskinie Echa', subtitle: 'Kryształy świecą. Nietoperze nie pytają o zgodę.',
@@ -41,7 +42,8 @@
       items: [[150,420,'amber'],[270,320,'amber'],[520,260,'bone'],[610,420,'amber'],[840,320,'amber'],[1050,260,'amber'],[1150,420,'bone'],[1270,420,'amber'],[1530,305,'amber'],[1650,420,'amber'],[1780,240,'bone'],[1960,420,'amber'],[2290,305,'amber'],[2400,420,'amber'],[2500,245,'egg'],[2680,420,'bone'],[2890,420,'amber']],
       enemies: [{x:390,min:300,max:570,speed:1.25,type:'bat'},{x:850,min:790,max:980,speed:1.4,type:'crawler'},{x:1220,min:1100,max:1320,speed:1.3,type:'bat'},{x:1650,min:1510,max:1870,speed:1.5,type:'crawler'},{x:2310,min:2220,max:2520,speed:1.35,type:'bat'}],
       secret: {x:950,y:380,w:110,h:80,message:'KOMNATA KRYSZTAŁÓW! Sekret odkryty.'},
-      boss: {x:2790,hp:4,speed:0.9}
+      boss: {x:2790,hp:4,speed:0.9},
+      easter: {x:2040,kind:'retro',message:'TAJNA KOMNATA 8-BIT! +5 bursztynów'}
     },
     {
       name: 'Bagna Bąbelków', world: 'Bagna Bąbelków', subtitle: 'Nie ufaj bąbelkom. Szczególnie tym, które patrzą.',
@@ -52,7 +54,8 @@
       items: [[160,420,'amber'],[290,315,'amber'],[560,260,'bone'],[690,420,'amber'],[1040,315,'amber'],[1130,420,'bone'],[1280,250,'amber'],[1430,420,'amber'],[1570,310,'amber'],[1920,285,'amber'],[2050,420,'bone'],[2150,230,'amber'],[2390,420,'amber'],[2700,310,'amber'],[2840,420,'egg'],[3000,250,'bone'],[3150,420,'amber']],
       enemies: [{x:390,min:280,max:570,speed:1.4,type:'hopper'},{x:1100,min:990,max:1320,speed:1.5,type:'crawler'},{x:1550,min:1450,max:1700,speed:1.35,type:'hopper'},{x:2040,min:1900,max:2300,speed:1.6,type:'crawler'},{x:2700,min:2640,max:2960,speed:1.4,type:'hopper'}],
       secret: {x:1210,y:380,w:110,h:80,message:'BAGIENNA KRYJÓWKA! Znalazłaś coś rzadkiego.'},
-      boss: {x:2960,hp:4,speed:1.0}
+      boss: {x:2960,hp:4,speed:1.0},
+      easter: {x:720,kind:'capybara',message:'KAPIBARSKA MAFIA: „Nic tu nie widziałaś.”'}
     }
   ];
 
@@ -66,10 +69,11 @@
         totalBones: Number(parsed.totalBones) || 0,
         secrets: Array.isArray(parsed.secrets) ? parsed.secrets : [],
         eggs: Array.isArray(parsed.eggs) ? parsed.eggs : [],
+        easterEggs: Array.isArray(parsed.easterEggs) ? parsed.easterEggs : [],
         sound: parsed.sound !== false
       };
     } catch (e) {
-      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], eggs: [], sound: true };
+      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], eggs: [], easterEggs: [], sound: true };
     }
   }
   function persist() {
@@ -89,6 +93,7 @@
       breakables: def.breakables.map(function (b) { return Object.assign({}, b, { broken: false }); }),
       boss: Object.assign({}, def.boss, { origin: def.boss.x, dir: -1, alive: true, hitFlash: 0, attack: 0 }),
       secretFound: saveData.secrets.indexOf(index) >= 0,
+      easterFound: saveData.easterEggs.indexOf(index) >= 0, easterTimer: 0,
       gateOpen: false, time: 0, finished: false
     };
   }
@@ -351,6 +356,17 @@
       if (boss.x < boss.origin - 70 || boss.x > boss.origin + 70) boss.dir *= -1;
       boss.hitFlash = Math.max(0, boss.hitFlash - dt);
     }
+    if (world.def.easter && !world.easterFound) {
+      if (Math.abs(player.x - world.def.easter.x) < 48 && player.grounded && Math.abs(player.vx) < .65) {
+        world.easterTimer += dt;
+        if (world.easterTimer > 1.15) {
+          world.easterFound = true; player.secrets += 1; player.amber += 5;
+          if (saveData.easterEggs.indexOf(currentLevelIndex) === -1) saveData.easterEggs.push(currentLevelIndex);
+          persist(); updateHUD(); burst(world.def.easter.x + 18, FLOOR - 48, '#f6d77b', 20, 1.3);
+          showToast(world.def.easter.message); playTone(790, .22, 'triangle');
+        }
+      } else world.easterTimer = Math.max(0, world.easterTimer - dt * 1.5);
+    }
     particles.forEach(function (p) { p.x += p.vx * dt * 60; p.y += p.vy * dt * 60; p.vy += .12 * dt * 60; p.life -= dt; });
     particles = particles.filter(function (p) { return p.life > 0; });
     if (Math.abs(player.vx) < .25 && player.grounded && !input.left && !input.right) {
@@ -474,6 +490,35 @@
     if(e.stun>0){ctx.fillStyle='#fff0a3';ctx.font='bold 16px Nunito';ctx.fillText('✦',8,-8);}
     ctx.restore();
   }
+  function drawEasterProp() {
+    var easter = world.def.easter;
+    if (!easter) return;
+    var x = easter.x - cameraX;
+    if (x < -90 || x > W + 90) return;
+    ctx.save();
+    if (easter.kind === 'peek') {
+      ctx.fillStyle = '#477d49'; ctx.beginPath(); ctx.ellipse(x + 15, FLOOR - 8, 38, 18, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#4e743e'; ctx.beginPath(); ctx.arc(x + 18, FLOOR - 40, 22, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#fff0c9'; ctx.beginPath(); ctx.arc(x + 10, FLOOR - 44, 5, 0, Math.PI * 2); ctx.arc(x + 27, FLOOR - 44, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#273b2b'; ctx.beginPath(); ctx.arc(x + 11, FLOOR - 44, 2, 0, Math.PI * 2); ctx.arc(x + 28, FLOOR - 44, 2, 0, Math.PI * 2); ctx.fill();
+    } else if (easter.kind === 'retro') {
+      rounded(x - 20, FLOOR - 76, 52, 68, 8, '#342e50', '#b4a1d2');
+      rounded(x - 13, FLOOR - 68, 38, 34, 4, '#5bdbb1', '#e8d49b');
+      ctx.fillStyle = '#302c48'; ctx.font = '900 12px monospace'; ctx.textAlign = 'center'; ctx.fillText('8-BIT', x + 6, FLOOR - 47); ctx.textAlign = 'left';
+      ctx.fillStyle = '#f0d27c'; ctx.beginPath(); ctx.arc(x + 4, FLOOR - 18, 4, 0, Math.PI * 2); ctx.fill();
+    } else if (easter.kind === 'capybara') {
+      ctx.fillStyle = '#a8754f'; ctx.strokeStyle = '#533c2c'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.ellipse(x + 8, FLOOR - 24, 31, 23, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x + 31, FLOOR - 39, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#201f1b'; rounded(x + 19, FLOOR - 44, 26, 9, 4, '#242522');
+      ctx.fillStyle = '#fff0c9'; ctx.fillRect(x + 24, FLOOR - 42, 5, 2); ctx.fillRect(x + 35, FLOOR - 42, 5, 2);
+    }
+    if (!world.easterFound) {
+      ctx.fillStyle = 'rgba(255,235,171,.75)'; ctx.font = '900 10px Nunito'; ctx.textAlign = 'center'; ctx.fillText('?', x + 10, FLOOR - 91); ctx.textAlign = 'left';
+    }
+    ctx.restore();
+  }
+
   function drawBoss() {
     var b=world.boss;if(!b.alive)return;
     var x=b.x-cameraX,y=FLOOR-80;
@@ -527,7 +572,7 @@
   function drawWorld() {
     ctx.save();
     if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
-    drawBackground(world.def);drawGround();drawPlatforms();drawCollectibles();
+    drawBackground(world.def);drawGround();drawPlatforms();drawEasterProp();drawCollectibles();
     world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayer();
     if(world.boss.alive && world.boss.x-cameraX<W-30){
       ctx.fillStyle='rgba(20,42,29,.58)';rounded(16,15,150,28,10,'rgba(20,42,29,.58)');
