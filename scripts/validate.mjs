@@ -26,7 +26,7 @@ const checks = [
   ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
   ['App is configured for landscape display', manifest.orientation === 'landscape'],
   ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
-  ['Ground-pound impact breaks cracked rocks', /p\\.stomping \\|\\| stompImpact \\|\\| p\\.dashTimer/.test(game)]
+  ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')]
 ];
 
 let failed = false;
