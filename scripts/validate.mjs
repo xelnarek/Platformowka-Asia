@@ -20,6 +20,7 @@ const manifest = JSON.parse(readFileSync('manifest.webmanifest', 'utf8'));
 const checks = [
   ['HTML loads the game engine', html.includes('src="./game.js"')],
   ['Menu has animated atmospheric layers and clear adventure actions', html.includes('hero-motes') && html.includes('RUSZAJ W PRZYGODĘ') && css.includes('@keyframes menuArtworkDrift') && css.includes('@keyframes menuFireflyFloat')],
+  ['Game HUD and touch controls have responsive hierarchy and tactile states', css.includes('.game-topbar .level-label{') && css.includes('.game-topbar .game-stats{') && css.includes('.control-button:active,.control-button.active') && css.includes('.joystick-ring{')],
   ['HTML loads the stylesheet', html.includes('href="./styles.css"')],
   ['Touch controls include a virtual joystick and all action buttons', html.includes('id="moveJoystick"') && html.includes('id="joystickKnob"') && ['jump','smash','dash'].every((v) => html.includes('data-action="' + v + '"'))],
   ['Joystick drives analogue horizontal movement with keyboard fallback', game.includes('var input = { horizontal: 0 }') && game.includes('Math.sign(normalized)') && game.includes('input.horizontal + keyboardMove')],
@@ -34,7 +35,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v23")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v24")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("function playerAttackBox()") && game.includes("p.attackWeapon === 'club' ? 128 : 106") && game.includes("p.attackTimer = .24") && game.includes("p.attackTimer / .24")],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],

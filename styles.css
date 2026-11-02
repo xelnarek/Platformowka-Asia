@@ -817,3 +817,53 @@ h1 em{margin-top:7px;color:#f3ce82;text-shadow:0 4px 0 rgba(120,72,40,.78),0 14p
   .intro-world-art,.intro-characters,.intro-sunwash,.intro-light,.intro-fog,.intro-ground-burst,.intro-comet,.intro-fireflies i,.intro-frame,.intro-frame h2 span,.intro-frame h2 em,.intro-frame h2 strong,.intro-subtitle,.intro-stamp,.intro-progress i,.hero-copy,.hero-copy h1,.hero-art .hero-illustration,.hero-motes i,.hero-spark,.menu-actions .button-primary:before,.level-card{animation:none!important;transition:none!important}
   .intro-world-art{transform:none!important}.intro-characters{opacity:1;transform:none!important}
 }
+
+/* PLAY INTERFACE PASS v24 — tighter game HUD hierarchy and tactile controls. */
+.game-topbar .level-label{padding:7px 11px;border:1px solid rgba(242,228,183,.2);border-radius:12px;background:linear-gradient(135deg,rgba(10,34,23,.74),rgba(19,46,32,.48));box-shadow:0 7px 19px rgba(0,0,0,.17),inset 0 1px rgba(255,255,255,.1);backdrop-filter:blur(12px) saturate(145%);-webkit-backdrop-filter:blur(12px) saturate(145%);flex:1 1 auto;min-width:0}
+.game-topbar .level-label small{color:#d2e59e;font-size:8px;letter-spacing:1.5px}
+.game-topbar .level-label b{color:#fff4d8;font-size:12px;letter-spacing:.25px}
+.game-topbar .game-stats{align-items:center;gap:clamp(6px,.9vw,13px);padding:7px 10px;border:1px solid rgba(242,228,183,.2);border-radius:12px;background:linear-gradient(135deg,rgba(10,34,23,.78),rgba(19,46,32,.5));box-shadow:0 7px 19px rgba(0,0,0,.17),inset 0 1px rgba(255,255,255,.1);backdrop-filter:blur(12px) saturate(145%);-webkit-backdrop-filter:blur(12px) saturate(145%);flex:0 1 auto;min-width:0}
+.game-topbar .game-stats>span{display:inline-flex;align-items:center;gap:4px;line-height:1.2}
+.game-topbar .game-stats b{font-variant-numeric:tabular-nums;color:#fff6df}
+.game-topbar .weapon-status{margin-left:1px;border-radius:8px;background:linear-gradient(140deg,rgba(104,72,34,.46),rgba(38,42,28,.74));color:#ffe5ab}
+.game-topbar .game-menu-button{border-color:rgba(255,230,173,.38);background:linear-gradient(145deg,rgba(226,192,116,.18),rgba(8,29,19,.8));box-shadow:0 6px 17px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.12)}
+.game-tools{gap:6px}
+.game-tool-button{transition:transform .16s,filter .16s,border-color .16s,background .16s}
+.game-tool-button:hover{filter:brightness(1.18);border-color:rgba(255,232,177,.68);background:rgba(22,54,35,.92)}
+.touch-controls{position:relative;z-index:3}
+.control-button{position:relative;isolation:isolate;overflow:hidden;border-color:rgba(255,242,201,.38);box-shadow:0 6px 0 rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.24),0 10px 23px rgba(0,0,0,.18);transition:transform .12s,filter .12s,box-shadow .12s}
+.control-button:after{content:"";position:absolute;z-index:-1;inset:1px 1px 54%;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent);pointer-events:none}
+.control-button:active,.control-button.active{transform:translateY(3px) scale(.97);filter:brightness(1.12);box-shadow:0 2px 0 rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.23)}
+.action-attack{border-color:rgba(255,248,224,.75);box-shadow:0 6px 0 #4c554d,inset 0 1px rgba(255,255,255,.68),0 0 24px rgba(255,235,180,.12)}
+.action-jump{box-shadow:0 6px 0 #9b6338,inset 0 1px rgba(255,255,255,.44),0 0 24px rgba(255,211,123,.16)}
+.action-smash{box-shadow:0 6px 0 #713d31,inset 0 1px rgba(255,255,255,.25),0 0 20px rgba(224,126,86,.12)}
+.action-dash{box-shadow:0 6px 0 #36583a,inset 0 1px rgba(255,255,255,.28),0 0 20px rgba(163,205,127,.12)}
+.virtual-joystick{filter:drop-shadow(0 8px 14px rgba(0,0,0,.22))}
+.joystick-ring{border-color:rgba(255,239,193,.55);background:radial-gradient(circle at 34% 24%,rgba(238,248,198,.25),rgba(38,78,49,.86) 62%,rgba(7,25,18,.97));box-shadow:0 9px 24px rgba(0,0,0,.35),inset 0 2px 10px rgba(255,255,255,.16),inset 0 -9px 19px rgba(0,0,0,.32)}
+.joystick-knob{border-color:rgba(255,248,218,.82);box-shadow:0 6px 15px rgba(0,0,0,.42),inset 0 2px 5px rgba(255,255,255,.48),inset 0 -4px 7px rgba(93,46,23,.24)}
+.joystick-caption{border-color:rgba(255,229,171,.34);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.game-bottom{padding-top:7px;border-top:1px solid rgba(236,226,188,.1)}
+.toast{border-radius:13px;padding:11px 17px;font-size:clamp(10px,1.15vw,13px);letter-spacing:.35px;box-shadow:0 16px 38px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.11)}
+.overlay-panel{background:radial-gradient(ellipse at 50% 22%,rgba(115,151,83,.14),transparent 45%),linear-gradient(145deg,rgba(5,22,15,.88),rgba(14,37,25,.87))}
+.overlay-panel .eyebrow{padding:7px 11px;border:1px solid rgba(220,229,167,.2);border-radius:30px;background:rgba(11,34,22,.55)}
+.overlay-panel .button{min-height:45px;border-radius:12px}
+.help-card{border-color:rgba(245,231,180,.36);box-shadow:0 28px 90px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.1)}
+.map-progress{box-shadow:0 14px 30px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.08)}
+.progress-track i{box-shadow:0 0 14px rgba(201,222,137,.24)}
+@media(max-width:760px){
+  .game-topbar .level-label{padding:5px 7px;border-radius:9px}
+  .game-topbar .level-label small{font-size:7px}
+  .game-topbar .level-label b{font-size:10px}
+  .game-topbar .game-stats{gap:5px;padding:5px 7px;border-radius:9px;font-size:9px}
+  .game-topbar .weapon-status{max-width:68px;padding:3px 4px;font-size:6px}
+  .game-tool-button{box-shadow:0 4px 12px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.12)}
+  .game-bottom{padding-top:5px}
+}
+@media(orientation:landscape) and (max-height:620px){
+  .game-topbar .level-label{padding:4px 7px}
+  .game-topbar .game-stats{padding:4px 7px}
+  .touch-controls{filter:drop-shadow(0 5px 12px rgba(0,0,0,.12))}
+}
+@media(prefers-reduced-motion:reduce){
+  .game-tool-button,.control-button,.level-card,.feature-row span,.menu-achievements>div{transition:none!important}
+}
