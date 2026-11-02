@@ -39,8 +39,10 @@ jobs:
     steps:
       - name: Check out main
         uses: actions/checkout@v6
-      - name: Configure Pages
+      - name: Configure and enable Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Upload static game
         uses: actions/upload-pages-artifact@v4
         with:
