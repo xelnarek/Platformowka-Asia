@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 
 const required = [
   'index.html', 'styles.css', 'game.js', 'sw.js', 'manifest.webmanifest',
-  'assets/asia-sprites.svg', 'assets/title-art.svg',
+  'assets/asia-sprites.svg', 'assets/title-art.svg', 'assets/intro-characters.svg',
   'assets/jungle-bg.svg', 'assets/cave-bg.svg', 'assets/swamp-bg.svg'
 ];
 const missing = required.filter((file) => !existsSync(file));
@@ -19,13 +19,14 @@ const manifest = JSON.parse(readFileSync('manifest.webmanifest', 'utf8'));
 
 const checks = [
   ['HTML loads the game engine', html.includes('src="./game.js"')],
+  ['Menu has animated atmospheric layers and clear adventure actions', html.includes('hero-motes') && html.includes('RUSZAJ W PRZYGODĘ') && css.includes('@keyframes menuArtworkDrift') && css.includes('@keyframes menuFireflyFloat')],
   ['HTML loads the stylesheet', html.includes('href="./styles.css"')],
   ['Touch controls include a virtual joystick and all action buttons', html.includes('id="moveJoystick"') && html.includes('id="joystickKnob"') && ['jump','smash','dash'].every((v) => html.includes('data-action="' + v + '"'))],
   ['Joystick drives analogue horizontal movement with keyboard fallback', game.includes('var input = { horizontal: 0 }') && game.includes('Math.sign(normalized)') && game.includes('input.horizontal + keyboardMove')],
   ['Joystick pointer capture is released on touch end, cancel and pause', game.includes("['pointerup','pointercancel','lostpointercapture']") && game.includes('resetMoveJoystick(true)')],
   ['Settings panel is wired', ['settingsPanel','settingsSound','settingsHand','controlScale'].every((v) => html.includes('id="' + v + '"'))],
   ['Menu and game use local art assets', ['title-art.svg','asia-sprites.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => (html + game + css + sw).includes(v))],
-  ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
+  ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','intro-characters.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
   ['App is configured for landscape display', manifest.orientation === 'landscape'],
   ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
   ['Ground-pound impact breaks cracked rocks', game.includes('p.stomping || stompImpact || p.dashTimer > 0')],
@@ -33,7 +34,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v22")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v23")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("function playerAttackBox()") && game.includes("p.attackWeapon === 'club' ? 128 : 106") && game.includes("p.attackTimer = .24") && game.includes("p.attackTimer / .24")],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
@@ -57,7 +58,7 @@ const checks = [
   ['Music sequencer starts and stops with gameplay state', game.includes('function startMusic()') && game.includes('function stopMusic()') && game.includes('startMusic();') && game.includes('stopMusic();')],
   ['Fullscreen and audio controls are available in the gameplay HUD', html.includes('id="fullscreenButton"') && html.includes('id="soundButton"') && game.includes("addEventListener('click',toggleFullscreen)")],
   ['Fullscreen changes clear stale joystick pointer capture and refresh the viewport', game.includes('releaseInputs(); lastTime = performance.now();') && game.includes("visualViewport.addEventListener('resize'") && css.includes('.move-controls,.virtual-joystick{pointer-events:auto!important}')],
-  ['Cinematic intro is present, skippable and auto-dismisses', html.includes('id="introSequence"') && html.includes('id="skipIntro"') && game.includes('function finishIntroSequence()') && game.includes('introTimer = window.setTimeout(finishIntroSequence') && css.includes('@keyframes introWorldDrift')],
+  ['Cinematic intro is present, skippable and auto-dismisses', html.includes('id="introSequence"') && html.includes('id="skipIntro"') && html.includes('intro-characters.svg') && html.includes('intro-comet') && game.includes('function finishIntroSequence()') && game.includes('reducedIntroMotion ? 950 : 7800') && css.includes('@keyframes introCharacterArrival') && css.includes('@keyframes introImpact')],
   ['Canvas receives biome atmosphere, textured ground and detailed platform materials', game.includes('function drawAtmosphere(def)') && game.includes('function drawGroundDetails()') && game.includes('var face = ctx.createLinearGradient')],
   ['Camera shake is smoothly phase-based instead of random per frame', game.includes('var shakePhase = world.time * 48') && game.includes('Math.cos(shakePhase * 1.27)')],
   ['Landscape play mode expands the frame to the full viewport', css.includes('#gameStage{') && css.includes('height:100svh') && css.includes('aspect-ratio:auto')],

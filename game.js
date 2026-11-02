@@ -1947,12 +1947,12 @@
   var introSkip = $('skipIntro');
   if (introElement) {
     if (introSkip) introSkip.addEventListener('click', finishIntroSequence);
-    introElement.addEventListener('pointerdown',function(event){
-      if (event.target && event.target.closest && event.target.closest('#skipIntro')) return;
-      finishIntroSequence();
+    document.addEventListener('keydown',function(event){
+      if (!introElement || introElement.classList.contains('is-leaving')) return;
+      if (event.key === 'Escape' || event.key === 'Enter') finishIntroSequence();
     });
     var reducedIntroMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    introTimer = window.setTimeout(finishIntroSequence, reducedIntroMotion ? 950 : 5600);
+    introTimer = window.setTimeout(finishIntroSequence, reducedIntroMotion ? 950 : 7800);
   }
   preloadArt(); applyPreferences();
   if ('ResizeObserver' in window) {

@@ -98,7 +98,7 @@ Każdy boss:
 
 ## Intro i oprawa wizualna
 
-Start gry zawiera krótkie, pomijalne intro z lokalną ilustracją, animacją kamery, światłem i stopniowym pojawianiem się tytułu. Efekty respektują ustawienie ograniczenia animacji i nie blokują wejścia do gry dłużej niż kilka sekund.
+Start gry zawiera pomijalny, około 7,8-sekundowy prolog z osobnymi warstwami panoramy, przezroczystą sylwetką Asi i dinozaura, wejściem postaci, smugą komety, świetlikami, uderzeniową falą i sekwencyjnym wejściem tytułu. Nie jest to pojedynczy nieruchomy obraz: scena wykorzystuje lokalne wektorowe zasoby i animacje CSS bez bibliotek zewnętrznych. Prolog można pominąć przyciskiem lub klawiszem Escape/Enter; dotknięcie tła nie zamyka go przypadkowo. Przy `prefers-reduced-motion` efekty są wyciszane, a prolog skraca się do około sekundy. Menu główne dostaje subtelny ruch ilustracji, świetliki, wejście treści, refleks na głównym przycisku oraz animowane pojawianie się kart krain.
 
 Warstwy atmosfery, parallaxu, materiałów platform, poświat znajdziek i detali biomów są renderowane bez zewnętrznych bibliotek. Pozostajemy przy lekkim silniku Canvas 2D, dopóki migracja do większego frameworka nie przyniesie mierzalnej korzyści bez pogorszenia trybu offline i płynności.
 

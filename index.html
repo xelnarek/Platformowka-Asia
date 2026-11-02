@@ -26,24 +26,26 @@
 
     <section id="menuScreen" class="screen menu-screen">
       <div class="hero-copy">
-        <p class="eyebrow">WIELKA PRZYGODA • MAŁE EKRANY, WIELKIE EMOCJE</p>
+        <p class="eyebrow">PREHISTORIA NIE JEST GOTOWA NA ASIĘ</p>
         <h1>EPOKA <em>miażdżenia</em></h1>
-        <p class="intro">Dolina potrzebuje bohaterki. Dobrze, że Asia ma mocne argumenty… i jeszcze mocniejsze lądowanie.</p>
+        <p class="intro">Trzy krainy, sekrety pod stopami i bossowie, którzy szybko pożałują spotkania z patelnią. Prehistoria właśnie dostała nowy problem.</p>
         <div class="menu-actions">
-          <button id="continueButton" class="button button-primary">GRAJ TERAZ <span>▶</span></button>
+          <button id="continueButton" class="button button-primary">RUSZAJ W PRZYGODĘ <span>▶</span></button>
           <button id="mapButton" class="button button-secondary">WYBIERZ POZIOM</button>
         </div>
         <div class="feature-row">
-          <span>✦ 3 grywalne poziomy</span><span>✦ ukryte skarby</span><span>✦ działa offline</span>
+          <span>✦ 3 grywalne krainy</span><span>✦ sekrety i skarby</span><span>✦ bossowie z charakterem</span>
         </div>
         <div class="menu-achievements"><div><b id="menuComplete">0/3</b><small>UKOŃCZONE</small></div><div><b id="menuAmber">0</b><small>BURSZTYNY</small></div><div><b id="menuEggs">0/3</b><small>ZŁOTE JAJA</small></div></div>
       </div>
       <div class="hero-art" aria-label="Asia w prehistorycznej Dolinie Paproci">
         <img class="hero-illustration" src="./assets/title-art.svg" alt="Ilustracja Asi i małego dinozaura w zielonej prehistorycznej dolinie">
         <div class="hero-art-shade"></div>
-        <div class="hero-caption"><span class="caption-mark">✦</span> GOTOWA NA PRZYGODĘ? <span class="caption-mark">✦</span></div>
+        <div class="hero-motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="hero-spark hero-spark-one" aria-hidden="true"></div><div class="hero-spark hero-spark-two" aria-hidden="true"></div>
+        <div class="hero-caption"><span class="caption-mark">✦</span> OFICJALNIE: MISJA RATUNKOWA. PRAKTYCZNIE: MIAŻDŻENIE. <span class="caption-mark">✦</span></div>
       </div>
-      <div class="menu-footer"><span>WERSJA 0.2 • DOLINA PAPROCI</span><button id="howButton" class="text-button">JAK GRAĆ?</button></div>
+      <div class="menu-footer"><span>WERSJA 0.3 • PROLOG PRZYGODY</span><button id="howButton" class="text-button">JAK GRAĆ?</button></div>
     </section>
 
     <section id="mapScreen" class="screen map-screen hidden">
@@ -109,20 +111,27 @@
       </div>
     </section>
   </main>
-  <div id="introSequence" class="cinematic-intro" role="dialog" aria-modal="true" aria-label="Intro gry ASIA: Epoka Miażdżenia">
-    <div class="intro-world">
-      <img class="intro-world-art" src="./assets/title-art.svg" alt="">
+  <div id="introSequence" class="cinematic-intro" role="dialog" aria-modal="true" aria-label="Prolog gry ASIA: Epoka Miażdżenia" tabindex="-1">
+    <div class="intro-world" aria-hidden="true">
+      <img class="intro-world-art" src="./assets/jungle-bg.svg" alt="">
+      <div class="intro-sunwash"></div>
       <div class="intro-light"></div>
       <div class="intro-fog"></div>
+      <img class="intro-characters" src="./assets/intro-characters.svg" alt="">
+      <div class="intro-ground-burst"></div>
+      <div class="intro-comet"></div>
+      <div class="intro-fireflies"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="intro-vignette"></div>
     </div>
     <div class="intro-frame">
-      <p class="intro-kicker"><span>✦</span> OPOWIEŚĆ ZACZYNA SIĘ TERAZ <span>✦</span></p>
+      <p class="intro-kicker"><span>✦</span> LEGENDA, KTÓREJ NIE BYŁO W PODRĘCZNIKACH <span>✦</span></p>
       <h2><span>ASIA</span><em>EPOKA</em><strong>MIAŻDŻENIA</strong></h2>
-      <p class="intro-subtitle">Gdy pradawny świat budzi się do życia, jedna patelnia może zmienić bieg historii.</p>
+      <p class="intro-subtitle">Prehistoria miała swoje zasady. Asia ma patelnię. Reszta to już historia.</p>
+      <div class="intro-stamp">JEDNA PATELNIA. ZERO DYSKUSJI.</div>
       <div class="intro-progress"><i></i></div>
-      <div class="intro-footer"><small>DOLINA PAPROCI • JASKINIE ECHA • BAGNA BĄBELKÓW</small><button id="skipIntro" type="button">POMIŃ INTRO <span>↗</span></button></div>
+      <div class="intro-footer"><small>TRZY KRAINY • TRZECH STRAŻNIKÓW • JEDNA BARDZO ZŁA DECYZJA</small><button id="skipIntro" type="button">POMIŃ TEN CHAOS <span>↗</span></button></div>
     </div>
-    <div class="intro-corner">WERSJA PRZYGODOWA • 01</div>
+    <div class="intro-corner">PROLOG / 0001</div>
   </div>
   <script src="./game.js" defer></script>
   <script>

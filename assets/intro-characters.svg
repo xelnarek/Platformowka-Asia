@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="580" viewBox="400 100 520 580">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#9bd4ac"/><stop offset=".52" stop-color="#f5d28b"/><stop offset="1" stop-color="#d08b59"/></linearGradient>
+ <linearGradient id="hill" x2="0" y2="1"><stop stop-color="#659c63"/><stop offset="1" stop-color="#244c3c"/></linearGradient>
+ <linearGradient id="water" x2="0" y2="1"><stop stop-color="#b7ead2"/><stop offset="1" stop-color="#4ca9a0"/></linearGradient>
+ <linearGradient id="cloth" x2="0" y2="1"><stop stop-color="#62b59a"/><stop offset="1" stop-color="#286b62"/></linearGradient>
+ <linearGradient id="skin" x2="0" y2="1"><stop stop-color="#ffd5a1"/><stop offset="1" stop-color="#cb8963"/></linearGradient>
+ <linearGradient id="hair" x2="0" y2="1"><stop stop-color="#805038"/><stop offset="1" stop-color="#33231e"/></linearGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="13"/></filter>
+ <pattern id="grain" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="5" cy="8" r="1" fill="#fff" opacity=".16"/><circle cx="18" cy="20" r="1" fill="#173b2d" opacity=".08"/></pattern>
+</defs>
+<!-- Asia shadow -->
+<ellipse cx="565" cy="657" rx="113" ry="28" fill="#153b2e" opacity=".36" filter="url(#shadow)"/>
+<!-- Asia, dynamic hero pose -->
+<g stroke-linejoin="round" stroke-linecap="round">
+ <!-- hair back / braid -->
+ <path d="M510 205q-54 35-44 122l-18 77q-7 35 29 49 29-28 23-68l36-86z" fill="url(#hair)" stroke="#30221d" stroke-width="7"/>
+ <path d="M468 366q-25 29-4 55l-14 29q28 23 49-12l-9-35" fill="#503126" stroke="#30221d" stroke-width="6"/>
+ <!-- rear leg -->
+ <path d="M537 487q-6 70-44 120l-8 34q30 15 54-6l50-90 3-57" fill="#64794c" stroke="#3d4834" stroke-width="8"/>
+ <path d="M483 624q-34 3-46 20-7 15 15 21l76-3q20-13-4-32z" fill="#795038" stroke="#4d3829" stroke-width="7"/>
+ <!-- body -->
+ <path d="M505 323q22-21 77-2 43 20 42 76l-23 113q-54 36-123-1l-7-104q-3-57 34-82" fill="url(#cloth)" stroke="#24594f" stroke-width="9"/>
+ <path d="M511 407q47 26 103 0l-5 27q-51 22-93-1z" fill="#dfad61" stroke="#765339" stroke-width="5"/>
+ <path d="M529 339l42 25 42-22" fill="none" stroke="#b9e0bd" stroke-width="7" opacity=".7"/>
+ <!-- front leg -->
+ <path d="M562 484q29 49 39 95l35 33q-3 24-31 28l-60-30q-21-45-39-84l5-48" fill="#738650" stroke="#3d4834" stroke-width="8"/>
+ <path d="M604 615q43 0 56 20 6 20-22 25l-75-9q-13-20 12-35z" fill="#795038" stroke="#4d3829" stroke-width="7"/>
+ <!-- arms -->
+ <path d="M502 353q-42-10-65 25l-27 44q-10 20 12 30 18 0 30-21l48-39" fill="url(#skin)" stroke="#8e5a42" stroke-width="8"/>
+ <path d="M578 350q37-24 66 1l38 34q17 17 0 34-18 9-34-10l-51-27" fill="url(#skin)" stroke="#8e5a42" stroke-width="8"/>
+ <!-- stone club -->
+ <path d="M682 395l46-115" stroke="#704d36" stroke-width="15"/><path d="M710 286q-13-39 20-62 38-14 57 16 13 38-20 59-43 10-57-13Z" fill="#9c9169" stroke="#625e47" stroke-width="8"/>
+ <path d="M724 248l28-17m-19 48 36-20" stroke="#c8bd8a" stroke-width="6"/>
+ <!-- neck -->
+ <path d="M544 300l-1 32q26 25 51 0l-4-37" fill="url(#skin)" stroke="#8e5a42" stroke-width="6"/>
+ <!-- head -->
+ <path d="M498 218q6-72 81-69 74 3 81 74l-11 67q-16 46-66 48-66 0-84-53z" fill="url(#skin)" stroke="#8e5a42" stroke-width="8"/>
+ <!-- front hair -->
+ <path d="M492 241q-11-103 84-111 81-3 95 74l-26 29q-18-45-55-46-44 28-91 24z" fill="url(#hair)" stroke="#30221d" stroke-width="8"/>
+ <path d="M504 207q-10 49 3 102-36-6-37-52-3-34 34-50M647 199q36 59 9 132-5 14-18 17l1-89" fill="#4b2e24" stroke="#30221d" stroke-width="7"/>
+ <!-- hair tie -->
+ <path d="M527 145l28-18 22 17-23 17z" fill="#e5ba68" stroke="#7d5736" stroke-width="5"/>
+ <!-- face -->
+ <path d="M533 229q14-20 34-9m31 2q18-15 32 4" fill="none" stroke="#643e31" stroke-width="7"/>
+ <ellipse cx="551" cy="247" rx="5" ry="8" fill="#38251f"/><ellipse cx="615" cy="247" rx="5" ry="8" fill="#38251f"/>
+ <path d="M580 253l-4 20 10 3" fill="none" stroke="#a76650" stroke-width="4"/>
+ <path d="M569 286q18 13 37-2" fill="none" stroke="#a35048" stroke-width="5"/>
+ <path d="M566 290q22 24 45 0" fill="#f5e7d3" opacity=".8"/>
+ <!-- earrings / necklace -->
+ <circle cx="653" cy="280" r="8" fill="#e8c36d" stroke="#875d39" stroke-width="4"/>
+ <path d="M541 326q29 31 64 0" fill="none" stroke="#e6c36f" stroke-width="6"/>
+ <!-- scarf -->
+ <path d="M537 318q36 18 65-3l30 20q-32 31-79 22z" fill="#e77e5e" stroke="#8e4e3c" stroke-width="6"/>
+ <path d="M606 334q61 7 76 41-33 6-65-11" fill="#e77e5e" stroke="#8e4e3c" stroke-width="6"/>
+</g>
+<!-- cheeky little dino -->
+<g transform="translate(760 500)" stroke-linejoin="round">
+ <ellipse cx="40" cy="87" rx="67" ry="12" fill="#193f30" opacity=".3"/>
+ <path d="M-10 57q-6-54 40-61 55 2 62 53l-12 39H5z" fill="#e58a59" stroke="#864c38" stroke-width="8"/>
+ <path d="M68 66q50 9 74-19" fill="none" stroke="#e58a59" stroke-width="17" stroke-linecap="round"/>
+ <path d="M9 6l-6-23 25 12 13-23 13 29" fill="#e58a59" stroke="#864c38" stroke-width="7"/>
+ <ellipse cx="49" cy="31" rx="24" ry="19" fill="#f0aa70" stroke="#864c38" stroke-width="6"/>
+ <ellipse cx="57" cy="28" rx="5" ry="7" fill="#fff3d5"/><circle cx="59" cy="28" r="2.5" fill="#3b2c23"/>
+ <path d="M58 47q13 8 21-2" fill="none" stroke="#8c4e3b" stroke-width="4"/>
+ <path d="M15 83l-5 17m48-17 8 17" stroke="#764633" stroke-width="9" stroke-linecap="round"/>
+</g>
+</svg>
