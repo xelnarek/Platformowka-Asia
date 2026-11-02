@@ -45,7 +45,7 @@
       enemies: [{x:420,min:370,max:560,speed:1.05,type:'crawler'},{x:980,min:900,max:1110,speed:1.2,type:'hopper'},{x:1470,min:1370,max:1540,speed:1.05,type:'crawler'},{x:1870,min:1730,max:1980,speed:1.4,type:'hopper'},{x:2330,min:2180,max:2450,speed:1.2,type:'crawler'}],
       secret: {x:1185,y:380,w:115,h:80,message:'TAJNE PRZEJŚCIE! W ścianie była dziura.'},
       boss: {x:2570,hp:3,speed:0.75},
-      easter: {x:710,kind:'peek',message:'DINOZAUR NAŚLADOWCA: „Też umiesz tak stać?”'}
+      easter: {x:710,kind:'peek',message:'DINOZAUR NAŚLADOWCA: „Też umiesz tak stać?”'}, checkpoint: {x:1480,message:'PUNKT ODPoczynku zapisany!'}
     },
     {
       name: 'Jaskinia Głupich Ech', world: 'Jaskinie Echa', subtitle: 'Kryształy świecą. Nietoperze nie pytają o zgodę.',
@@ -57,7 +57,7 @@
       enemies: [{x:390,min:300,max:570,speed:1.25,type:'bat'},{x:850,min:790,max:980,speed:1.4,type:'crawler'},{x:1220,min:1100,max:1320,speed:1.3,type:'bat'},{x:1650,min:1510,max:1870,speed:1.5,type:'crawler'},{x:2310,min:2220,max:2520,speed:1.35,type:'bat'}],
       secret: {x:950,y:380,w:110,h:80,message:'KOMNATA KRYSZTAŁÓW! Sekret odkryty.'},
       boss: {x:2790,hp:4,speed:0.9},
-      easter: {x:2040,kind:'retro',message:'TAJNA KOMNATA 8-BIT! +5 bursztynów'}
+      easter: {x:2040,kind:'retro',message:'TAJNA KOMNATA 8-BIT! +5 bursztynów'}, checkpoint: {x:1580,message:'Kryształowy punkt kontrolny aktywny.'}
     },
     {
       name: 'Bagna Bąbelków', world: 'Bagna Bąbelków', subtitle: 'Nie ufaj bąbelkom. Szczególnie tym, które patrzą.',
@@ -69,7 +69,7 @@
       enemies: [{x:390,min:280,max:570,speed:1.4,type:'hopper'},{x:1100,min:990,max:1320,speed:1.5,type:'crawler'},{x:1550,min:1450,max:1700,speed:1.35,type:'hopper'},{x:2040,min:1900,max:2300,speed:1.6,type:'crawler'},{x:2700,min:2640,max:2960,speed:1.4,type:'hopper'}],
       secret: {x:1210,y:380,w:110,h:80,message:'BAGIENNA KRYJÓWKA! Znalazłaś coś rzadkiego.'},
       boss: {x:2960,hp:4,speed:1.0},
-      easter: {x:720,kind:'capybara',message:'KAPIBARSKA MAFIA: „Nic tu nie widziałaś.”'}
+      easter: {x:720,kind:'capybara',message:'KAPIBARSKA MAFIA: „Nic tu nie widziałaś.”'}, checkpoint: {x:1650,message:'Bezpieczna kępa zapisana. Możesz odetchnąć.'}
     }
   ];
 
@@ -109,6 +109,7 @@
       breakables: def.breakables.map(function (b) { return Object.assign({}, b, { broken: false }); }),
       boss: Object.assign({}, def.boss, { origin: def.boss.x, dir: -1, alive: true, hitFlash: 0, attack: 0 }),
       secretFound: saveData.secrets.indexOf(index) >= 0,
+      checkpointX: 65, checkpointReached: false,
       easterFound: saveData.easterEggs.indexOf(index) >= 0, easterTimer: 0,
       gateOpen: false, time: 0, finished: false
     };
@@ -221,7 +222,7 @@
     player.hearts -= 1; player.invuln = 1.25; player.vy = -7; player.vx = -player.facing * 4;
     player.hurtFlash = .25; shake = 8; playTone(130, .16, 'sawtooth'); updateHUD();
     if (player.hearts <= 0) {
-      player.hearts = 3; player.x = Math.max(65, player.x - 190); player.y = 340; player.vx = 0; player.vy = 0;
+      player.hearts = 3; player.x = world.checkpointX || 65; player.y = FLOOR - player.h; player.vx = 0; player.vy = 0; player.grounded = true;
       player.amber = Math.max(0, player.amber - 5); updateHUD();
       showToast('Ups! Powrót do ostatniego bezpiecznego miejsca. -5 bursztynów.');
     } else showToast('Auć! Uważaj na kolce i zęby.');
@@ -312,6 +313,11 @@
     }
     if (p.invuln > 0 && Math.floor(p.invuln * 14) % 2 === 0) p.hurtFlash = .08; else p.hurtFlash = 0;
     handleInteractions(stompImpact);
+    if (world.def.checkpoint && !world.checkpointReached && p.x >= world.def.checkpoint.x) {
+      world.checkpointReached = true; world.checkpointX = world.def.checkpoint.x;
+      burst(world.checkpointX + 18, FLOOR - 48, '#f4d78b', 14, 1.1);
+      showToast(world.def.checkpoint.message); playTone(540, .16, 'triangle');
+    }
     cameraX = Math.max(0, Math.min(world.def.width - W, p.x - W * .36));
     if (p.x > world.def.width - 105 && !world.boss.alive) completeLevel();
   }
@@ -563,6 +569,21 @@
     ctx.restore();
   }
 
+  function drawCheckpoint() {
+    var cp = world.def.checkpoint;
+    if (!cp) return;
+    var x = cp.x - cameraX;
+    if (x < -60 || x > W + 60) return;
+    ctx.save();
+    ctx.fillStyle = 'rgba(18,38,27,.22)'; ctx.beginPath(); ctx.ellipse(x + 15, FLOOR - 3, 30, 6, 0, 0, Math.PI * 2); ctx.fill();
+    rounded(x - 5, FLOOR - 46, 12, 45, 5, '#806347', '#4c3c2e');
+    ctx.fillStyle = world.checkpointReached ? '#bde28a' : '#d5b47a';
+    ctx.beginPath(); ctx.moveTo(x + 1, FLOOR - 63); ctx.lineTo(x + 24, FLOOR - 48); ctx.lineTo(x + 1, FLOOR - 33); ctx.lineTo(x - 10, FLOOR - 48); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#f8e9b7'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x + 1, FLOOR - 58); ctx.lineTo(x + 1, FLOOR - 38); ctx.moveTo(x - 7, FLOOR - 48); ctx.lineTo(x + 10, FLOOR - 48); ctx.stroke();
+    if (world.checkpointReached) { ctx.globalAlpha = .22 + Math.sin(world.time * 4) * .08; ctx.fillStyle = '#c5ed93'; ctx.beginPath(); ctx.arc(x + 2, FLOOR - 48, 29, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+
   function drawEasterProp() {
     var easter = world.def.easter;
     if (!easter) return;
@@ -689,7 +710,7 @@
   function drawWorld() {
     ctx.save();
     if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
-    drawBackground(world.def);drawGround();drawPlatforms();drawEasterProp();drawCollectibles();
+    drawBackground(world.def);drawGround();drawPlatforms();drawCheckpoint();drawEasterProp();drawCollectibles();
     world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayer();
     if(world.boss.alive && world.boss.x-cameraX<W-30){
       ctx.fillStyle='rgba(20,42,29,.58)';rounded(16,15,150,28,10,'rgba(20,42,29,.58)');
