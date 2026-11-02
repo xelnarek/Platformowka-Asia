@@ -94,10 +94,18 @@ Każdy boss:
 - reaguje na trafienia i zmianę fazy,
 - pozostawia nagrodę i otwiera wyjście.
 
+## Intro i oprawa wizualna
+
+Start gry zawiera krótkie, pomijalne intro z lokalną ilustracją, animacją kamery, światłem i stopniowym pojawianiem się tytułu. Efekty respektują ustawienie ograniczenia animacji i nie blokują wejścia do gry dłużej niż kilka sekund.
+
+Warstwy atmosfery, parallaxu, materiałów platform, poświat znajdziek i detali biomów są renderowane bez zewnętrznych bibliotek. Pozostajemy przy lekkim silniku Canvas 2D, dopóki migracja do większego frameworka nie przyniesie mierzalnej korzyści bez pogorszenia trybu offline i płynności.
+
 ## Mobile UX
 
 - Docelowa orientacja: pozioma.
 - Duże przyciski kierunkowe i akcji; możliwa regulacja ich rozmiaru i przezroczystości.
+- Po wejściu/wyjściu z pełnego ekranu kontrolki dotykowe resetują przechwycony wskaźnik, a rozmiar canvasu i układ sterowania przeliczają się ponownie.
+- Podstawowy atak ma czytelny, szerszy zasięg; hitbox i animacja zamachu muszą mieć tę samą długość.
 - Lewa/prawa ręka: docelowo alternatywne rozmieszczenie kontrolek.
 - Pauza jednym dotknięciem; po powrocie z aplikacji gra nie rusza bez zgody.
 - HUD pokazuje tylko serca, bursztyny i skamieliny; reszta informacji jest kontekstowa.

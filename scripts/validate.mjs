@@ -33,8 +33,10 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v14")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v15")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
+  ['Primary melee range and active hit window are extended and match the swing animation', game.includes("var reach = p.attackWeapon === 'club' ? 128 : 106") && game.includes('p.attackTimer = .24') && game.includes('p.attackTimer / .24')],
+  ['Facing direction stays normalized when the analogue joystick is barely moved', game.includes('if (move) p.facing = move > 0 ? 1 : -1;')],
   ['Player starts with an unlimited pan and pickups grant finite-use weapons', game.includes("weapon: 'pan', weaponAmmo: 0") && game.includes("item.type === 'weaponClub'") && game.includes("item.type === 'weaponBoomerang'")],
   ['Club and boomerang attacks resolve enemy and boss damage', game.includes('function damageEnemy(') && game.includes('function damageBoss(') && game.includes('world.playerProjectiles')],
   ['Bone boomerang returns to the moving player and is removed when caught', game.includes('returning: false') && game.includes('Math.abs(shot.x - shot.originX) >= 270') && game.includes('targetX = player.x + player.w / 2') && game.includes('shot.returning ||')],
@@ -49,6 +51,9 @@ const checks = [
   ['Canvas renders at a capped high-DPI backing resolution', game.includes('var dprLimit = memory > 0 && memory <= 4 ? 1.6 : 2.2') && game.includes('ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0)')],
   ['Music sequencer starts and stops with gameplay state', game.includes('function startMusic()') && game.includes('function stopMusic()') && game.includes('startMusic();') && game.includes('stopMusic();')],
   ['Fullscreen and audio controls are available in the gameplay HUD', html.includes('id="fullscreenButton"') && html.includes('id="soundButton"') && game.includes("addEventListener('click',toggleFullscreen)")],
+  ['Fullscreen changes clear stale joystick pointer capture and refresh the viewport', game.includes('releaseInputs(); lastTime = performance.now();') && game.includes("visualViewport.addEventListener('resize'") && css.includes('.move-controls,.virtual-joystick{pointer-events:auto!important}')],
+  ['Cinematic intro is present, skippable and auto-dismisses', html.includes('id="introSequence"') && html.includes('id="skipIntro"') && game.includes('function finishIntroSequence()') && game.includes('introTimer = window.setTimeout(finishIntroSequence') && css.includes('@keyframes introWorldDrift')],
+  ['Canvas receives biome atmosphere, textured ground and detailed platform materials', game.includes('function drawAtmosphere(def)') && game.includes('function drawGroundDetails()') && game.includes('var material = ctx.createLinearGradient')],
   ['Landscape play mode expands the frame to the full viewport', css.includes('#gameStage{') && css.includes('height:100svh') && css.includes('aspect-ratio:auto')],
   ['Color grading and player grounding visuals are rendered', game.includes('function drawColorGrade()') && game.includes('function drawPlayerShadow()')]
 ];
