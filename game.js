@@ -45,7 +45,7 @@
       enemies: [{x:420,min:370,max:560,speed:1.05,type:'crawler'},{x:980,min:900,max:1110,speed:1.2,type:'hopper'},{x:1470,min:1370,max:1540,speed:1.05,type:'crawler'},{x:1870,min:1730,max:1980,speed:1.4,type:'hopper'},{x:2330,min:2180,max:2450,speed:1.2,type:'crawler'}],
       secret: {x:1185,y:380,w:115,h:80,message:'TAJNE PRZEJŚCIE! W ścianie była dziura.'},
       boss: {x:2570,hp:3,speed:0.75},
-      easter: {x:710,kind:'peek',message:'DINOZAUR NAŚLADOWCA: „Też umiesz tak stać?”'}, checkpoint: {x:1480,message:'PUNKT ODPoczynku zapisany!'}
+      easter: {x:710,kind:'peek',message:'DINOZAUR NAŚLADOWCA: „Też umiesz tak stać?”'}, checkpoint: {x:1480,message:'Punkt kontrolny zapisany!'}
     },
     {
       name: 'Jaskinia Głupich Ech', world: 'Jaskinie Echa', subtitle: 'Kryształy świecą. Nietoperze nie pytają o zgodę.',
@@ -257,7 +257,7 @@
     playTone(240, .08, 'sawtooth'); haptic(12);
   }
   function updatePlayer(dt) {
-    var p = player, d = dt * 60, prevBottom = p.y + p.h, stompImpact = false;
+    var p = player, d = dt * 60, prevBottom = p.y + p.h, prevX = p.x, stompImpact = false;
     p.anim += dt * (Math.abs(p.vx) > .5 ? 9 : 2);
     p.invuln = Math.max(0, p.invuln - dt); p.dashCooldown = Math.max(0, p.dashCooldown - dt);
     p.dashTimer = Math.max(0, p.dashTimer - dt);
@@ -304,8 +304,9 @@
           player.amber += 3; updateHUD(); showToast(b.secret ? 'PĘKNIĘTA ŚCIANA! Coś jest za nią…' : 'Skała rozbita! +3 bursztyny');
           if (b.secret) revealSecret();
           playTone(110, .16, 'square'); shake = 5;
-        } else if (p.vx > 0 && p.x + p.w - b.x < 14) { p.x = b.x - p.w; p.vx = 0; }
-        else if (p.vx < 0 && b.x + b.w - p.x < 14) { p.x = b.x + b.w; p.vx = 0; }
+        } else if (prevX + p.w <= b.x + 8 && p.x + p.w > b.x) { p.x = b.x - p.w; p.vx = 0; }
+        else if (prevX >= b.x + b.w - 8 && p.x < b.x + b.w) { p.x = b.x + b.w; p.vx = 0; }
+        else if (rects(p, box)) { p.x = prevX; p.vx = 0; }
       }
     });
     if (p.y > H + 90) {
