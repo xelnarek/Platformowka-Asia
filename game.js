@@ -14,6 +14,7 @@
   var active = false, paused = false, currentLevelIndex = 0;
   var keys = Object.create(null);
   var input = { horizontal: 0 };
+  var attackHeld = false, attackPointerId = null;
   var joystickPointerId = null;
   var world = null;
   var cameraX = 0;
@@ -70,6 +71,7 @@
       platforms: [[270,380,160,18],[510,326,145,18],[910,365,145,18],[1160,312,170,18],[1400,374,130,18],[1715,342,180,18],[1990,292,165,18],[2385,360,180,18],[2630,320,130,18]],
       breakables: [{x:1160,y:420,w:52,h:46,secret:true},{x:2050,y:420,w:52,h:46}],
       items: [[180,410,'amber'],[310,340,'amber'],[440,420,'amber'],[555,285,'amber'],[630,420,'bone'],[960,325,'amber'],[1070,420,'amber'],[1220,266,'amber'],[1300,420,'bone'],[1470,330,'amber'],[1750,295,'amber'],[1850,420,'amber'],[2035,245,'bone'],[2160,420,'amber'],[2430,315,'amber'],[2540,420,'egg'],[2720,420,'amber'],[1080,420,'weaponClub'],[2010,245,'weaponBoomerang']],
+      secretSpots: [{x:1370,y:442,rewards:['fruit','amber','bone']},{x:2140,y:442,rewards:['weaponClub','amber','bone']}],
       enemies: [{x:420,min:370,max:560,speed:1.05,type:'crawler'},{x:980,min:900,max:1110,speed:1.2,type:'hopper'},{x:1470,min:1370,max:1540,speed:1.05,type:'crawler'},{x:1870,min:1730,max:1980,speed:1.4,type:'hopper'},{x:2330,min:2180,max:2450,speed:1.2,type:'crawler'},{x:1320,min:1260,max:1400,speed:1.35,type:'charger'}],
       secret: {x:1185,y:380,w:115,h:80,message:'TAJNE PRZEJŚCIE! W ścianie była dziura.'},
       boss: {x:2570,hp:3,speed:0.75,attackStyle:'shockwave'}, springPads: [{x:1510,w:66,theme:'fern'}],
@@ -82,6 +84,7 @@
       platforms: [[220,365,170,18],[455,300,145,18],[790,360,150,18],[1010,300,170,18],[1490,345,170,18],[1740,282,160,18],[2220,345,170,18],[2450,285,175,18],[2780,350,150,18]],
       breakables: [{x:920,y:420,w:52,h:46,secret:true},{x:1850,y:420,w:52,h:46}],
       items: [[150,420,'amber'],[270,320,'amber'],[520,260,'bone'],[610,420,'amber'],[840,320,'amber'],[1050,260,'amber'],[1150,420,'bone'],[1270,420,'amber'],[1530,305,'amber'],[1650,420,'amber'],[1780,240,'bone'],[1960,420,'amber'],[2290,305,'amber'],[2400,420,'amber'],[2500,245,'egg'],[2680,420,'bone'],[2890,420,'amber'],[700,420,'weaponClub'],[1840,240,'weaponBoomerang']],
+      secretSpots: [{x:1110,y:442,rewards:['fruit','amber','bone']},{x:2260,y:442,rewards:['weaponBoomerang','amber','bone']}],
       enemies: [{x:390,min:300,max:570,speed:1.25,type:'bat'},{x:850,min:790,max:980,speed:1.4,type:'crawler'},{x:1220,min:1100,max:1320,speed:1.3,type:'bat'},{x:1650,min:1510,max:1870,speed:1.5,type:'crawler'},{x:2310,min:2220,max:2520,speed:1.35,type:'bat'},{x:1980,min:1925,max:2060,speed:0.72,type:'armored'}],
       secret: {x:950,y:380,w:110,h:80,message:'KOMNATA KRYSZTAŁÓW! Sekret odkryty.'},
       boss: {x:2790,hp:4,speed:0.9,attackStyle:'crystalVolley'}, springPads: [{x:1460,w:66,theme:'crystal'}],
@@ -94,6 +97,7 @@
       platforms: [[250,360,160,18],[500,300,150,18],[990,360,180,18],[1240,292,160,18],[1500,355,150,18],[1870,330,170,18],[2110,270,180,18],[2650,350,170,18],[2900,290,150,18]],
       breakables: [{x:1180,y:420,w:52,h:46,secret:true},{x:2290,y:420,w:52,h:46}],
       items: [[160,420,'amber'],[290,315,'amber'],[560,260,'bone'],[690,420,'amber'],[1040,315,'amber'],[1130,420,'bone'],[1280,250,'amber'],[1430,420,'amber'],[1570,310,'amber'],[1920,285,'amber'],[2050,420,'bone'],[2150,230,'amber'],[2390,420,'amber'],[2700,310,'amber'],[2840,420,'egg'],[3000,250,'bone'],[3150,420,'amber'],[1000,420,'weaponClub'],[2200,225,'weaponBoomerang']],
+      secretSpots: [{x:1470,y:442,rewards:['fruit','amber','bone']},{x:2370,y:442,rewards:['weaponBoomerang','amber','bone']}],
       enemies: [{x:390,min:280,max:570,speed:1.4,type:'hopper'},{x:1100,min:990,max:1320,speed:1.5,type:'crawler'},{x:1550,min:1450,max:1700,speed:1.35,type:'hopper'},{x:2040,min:1900,max:2300,speed:1.6,type:'crawler'},{x:2700,min:2640,max:2960,speed:1.4,type:'hopper'},{x:2380,min:2330,max:2460,speed:0.72,type:'spitter'}],
       secret: {x:1210,y:380,w:110,h:80,message:'BAGIENNA KRYJÓWKA! Znalazłaś coś rzadkiego.'},
       boss: {x:2960,hp:4,speed:1.0,attackStyle:'bubbleVolley'}, springPads: [{x:1840,w:70,theme:'mushroom'}],
@@ -110,6 +114,7 @@
         totalAmber: Number(parsed.totalAmber) || 0,
         totalBones: Number(parsed.totalBones) || 0,
         secrets: Array.isArray(parsed.secrets) ? parsed.secrets : [],
+        cacheFinds: Array.isArray(parsed.cacheFinds) ? parsed.cacheFinds.filter(function (value) { return typeof value === 'string'; }) : [],
         eggs: Array.isArray(parsed.eggs) ? parsed.eggs : [],
         easterEggs: Array.isArray(parsed.easterEggs) ? parsed.easterEggs : [],
         sound: parsed.sound !== false,
@@ -117,14 +122,14 @@
         controlScale: Math.max(85, Math.min(125, Number(parsed.controlScale) || 100))
       };
     } catch (e) {
-      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], eggs: [], easterEggs: [], sound: true, leftHanded: false, controlScale: 100 };
+      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], cacheFinds: [], eggs: [], easterEggs: [], sound: true, leftHanded: false, controlScale: 100 };
     }
   }
   function persist() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saveData)); } catch (e) { showToast('Pamięć urządzenia jest niedostępna.'); }
   }
   function createPlayer() {
-    return { x: 70, y: 390, w: 35, h: 60, vx: 0, vy: 0, facing: 1, grounded: false, stomping: false, primed: false, stompTimer: 0, dashTimer: 0, dashCooldown: 0, dashHitIds: [], landTimer: 0, landPower: 0, attackTimer: 0, attackCooldown: 0, attackSerial: 0, attackWeapon: 'pan', attackFacing: 1, weapon: 'pan', weaponAmmo: 0, invuln: 0, hearts: 3, amber: 0, bones: 0, eggs: 0, secrets: 0, anim: 0, hurtFlash: 0 };
+    return { x: 70, y: 390, w: 35, h: 60, vx: 0, vy: 0, facing: 1, grounded: false, stomping: false, primed: false, stompTimer: 0, dashTimer: 0, dashCooldown: 0, dashHitIds: [], landTimer: 0, landPower: 0, attackTimer: 0, attackCooldown: 0, attackSerial: 0, attackWeapon: 'pan', attackFacing: 1, attackVertical: 0, weapon: 'pan', weaponAmmo: 0, invuln: 0, hearts: 3, amber: 0, bones: 0, eggs: 0, secrets: 0, anim: 0, hurtFlash: 0 };
   }
   function rects(a, b) {
     return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
@@ -137,6 +142,8 @@
       playerProjectiles: [], hostileProjectiles: [],
       springPads: (def.springPads || []).map(function (pad) { return Object.assign({}, pad, { phase: Math.random() * 6 }); }),
       breakables: def.breakables.map(function (b) { return Object.assign({}, b, { broken: false }); }),
+      secretSpots: (def.secretSpots || []).map(function (spot, id) { var key = index + ':' + id; return Object.assign({}, spot, { id: id, key: key, found: saveData.cacheFinds.indexOf(key) !== -1 }); }),
+      kills: 0, combo: 0, comboTimer: 0,
       boss: Object.assign({}, def.boss, { origin: def.boss.x, dir: -1, alive: true, hitFlash: 0, attack: 0, attackCooldown: 1.5, windup: 0, attackDir: -1, phase: 1 }),
       secretFound: saveData.secrets.indexOf(index) >= 0,
       checkpointX: 65, checkpointReached: false,
@@ -374,6 +381,7 @@
     joystick.setAttribute('aria-label', input.horizontal < -.01 ? 'Joystick: w lewo' : input.horizontal > .01 ? 'Joystick: w prawo' : 'Joystick: pozycja neutralna');
   }
   function releaseInputs() {
+    attackHeld = false; attackPointerId = null;
     resetMoveJoystick(true);
     Object.keys(keys).forEach(function (key) { keys[key] = false; });
     document.querySelectorAll('.control-button.active').forEach(function (button) { button.classList.remove('active'); });
@@ -442,6 +450,19 @@
     if (!active || paused || player.attackCooldown > 0) return;
     var p = player;
     p.attackFacing = p.facing > 0 ? 1 : -1;
+    p.attackVertical = keys.KeyI ? -1 : (keys.KeyK ? 1 : 0);
+    if (!p.attackVertical && world && world.enemies) {
+      var attackCenterX = p.x + p.w / 2, attackCenterY = p.y + p.h / 2, nearestBat = Infinity;
+      world.enemies.forEach(function (enemy) {
+        if (!enemy.alive || enemy.type !== 'bat') return;
+        var enemyBox = combatBoxForEnemy(enemy);
+        var dx = Math.abs(enemyBox.x + enemyBox.w / 2 - attackCenterX);
+        var dy = enemyBox.y + enemyBox.h / 2 - attackCenterY;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (dx < 110 && dy < -30 && distance < nearestBat) nearestBat = distance;
+      });
+      if (nearestBat < 150) p.attackVertical = -1;
+    }
     if (p.weapon === 'boomerang') {
       world.playerProjectiles.push({ x: p.x + (p.attackFacing > 0 ? p.w + 7 : -7), y: p.y + 28, originX: p.x + p.w / 2, vx: p.attackFacing * 8.2, vy: -0.35, life: 4.2, returning: false, spin: 0, hitIds: [], bossHit: false });
       p.weaponAmmo -= 1; p.attackCooldown = .48; p.attackWeapon = 'boomerang';
@@ -487,6 +508,7 @@
     p.dashTimer = Math.max(0, p.dashTimer - dt);
     p.attackTimer = Math.max(0, p.attackTimer - dt);
     p.attackCooldown = Math.max(0, p.attackCooldown - dt);
+    if (attackHeld && p.attackCooldown <= 0) doAttack();
     if (p.stompTimer > 0) {
       p.stompTimer -= dt;
       if (p.stompTimer <= 0 && !p.grounded) { p.stomping = true; p.vy = 16; }
@@ -605,8 +627,17 @@
     shake = Math.max(shake, enemy.hp > 0 ? 2.8 : 1.8);
     if (source === 'melee') haptic(11);
     if (enemy.hp <= 0) {
-      enemy.alive = false; player.amber += source === 'stomp' ? 2 : 1;
-      showToast(enemy.type === 'armored' ? 'PANCERZ ROZŁUPANY!' : 'TRAFIENIE! +1 BURSZTYN');
+      enemy.alive = false;
+      world.kills = (world.kills || 0) + 1;
+      world.combo = world.comboTimer > 0 ? Math.min(5, (world.combo || 0) + 1) : 1;
+      world.comboTimer = 2.65;
+      var comboBonus = Math.max(0, world.combo - 1);
+      player.amber += (source === 'stomp' ? 2 : 1) + comboBonus;
+      var lootX = Math.max(24, Math.min(world.def.width - 24, enemy.x + 18));
+      var lootY = Math.max(200, Math.min(FLOOR - 24, impactY || FLOOR - 36));
+      world.items.push({ x: lootX, y: lootY, type: 'bone', id: 'enemy-bone-' + world.kills, taken: false, phase: world.kills * .7 });
+      if (world.kills % 3 === 0) world.items.push({ x: lootX + 17, y: lootY - 16, type: 'fruit', id: 'enemy-fruit-' + world.kills, taken: false, phase: world.kills * .9 });
+      showToast(world.combo > 1 ? 'SERIA ' + world.combo + '! +' + comboBonus + ' BURSZTYNÓW' : (enemy.type === 'armored' ? 'PANCERZ ROZŁUPANY! +KOŚĆ' : 'TRAFIENIE! +1 BURSZTYN +KOŚĆ'));
       playTone(enemy.type === 'armored' ? 115 : 220, .13, 'square'); updateHUD();
     } else { enemy.stun = .48; showToast('PANCERZ TRZESZCZY! Jeszcze jedno trafienie.'); playTone(150, .1, 'triangle'); }
   }
@@ -631,11 +662,37 @@
     }
     burst(impactX, impactY, '#f6d57b', 21, 1.28);
     if (boss.hp <= 0) {
-      boss.alive = false; player.amber += 10; showToast('BOSS POKONANY! +10 bursztynów');
+      boss.alive = false; player.amber += 10;
+      for (var bossBone = 0; bossBone < 6; bossBone++) world.items.push({ x: boss.x + 8 + bossBone * 15, y: FLOOR - 34 - (bossBone % 2) * 18, type: 'bone', id: 'boss-bone-' + bossBone, taken: false, phase: bossBone * .65 });
+      world.items.push({ x: boss.x + 45, y: FLOOR - 72, type: 'fruit', id: 'boss-feast', taken: false, phase: 1.7 });
+      showToast('BOSS POKONANY! +10 bursztynów • SKARBY BOSS'A');
       burst(boss.x + 30, FLOOR - 50, '#f8ce70', 28, 1.6); updateHUD(); playTone(95, .22, 'sawtooth');
     } else { showToast(source === 'melee' ? 'Cios dosięgnął bossa!' : 'DOBRE TRAFIENIE! Jeszcze trochę!'); playTone(125, .15, 'sawtooth'); }
   }
 
+  function playerAttackBox() {
+    var p = player, reach = p.attackWeapon === 'club' ? 128 : 106;
+    if (p.attackVertical < 0) return { x: p.x - 15, y: p.y - 61, w: p.w + 30, h: 88 };
+    if (p.attackVertical > 0) return { x: p.x - 15, y: p.y + p.h - 5, w: p.w + 30, h: 60 };
+    return { x: p.attackFacing > 0 ? p.x + p.w - 2 : p.x - reach + 2, y: p.y + 7, w: reach, h: 58 };
+  }
+  function revealSecretSpot(spot) {
+    if (spot.found) return;
+    spot.found = true;
+    if (saveData.cacheFinds.indexOf(spot.key) === -1) saveData.cacheFinds.push(spot.key);
+    player.secrets += 1; persist();
+    var rewards = spot.rewards || ['fruit', 'amber', 'bone'];
+    rewards.forEach(function (type, index) {
+      world.items.push({
+        x: spot.x + (index - (rewards.length - 1) / 2) * 22,
+        y: FLOOR - 35 - (index % 2) * 14,
+        type: type, id: 'cache-' + spot.key + '-' + index, taken: false, phase: index * .75
+      });
+    });
+    burst(spot.x, FLOOR - 18, '#f5d47d', 20, 1.3);
+    showToast('TAJNA SKRYTKA! Ukryte jedzenie i skarby!');
+    playTone(760, .2, 'triangle'); haptic(20); updateHUD();
+  }
   function handleInteractions(stompImpact) {
     var p = player, box = { x: p.x, y: p.y, w: p.w, h: p.h };
     world.items.forEach(function (item) {
@@ -645,7 +702,18 @@
       if (rects(box, itemBox)) {
         item.taken = true;
         if (item.type === 'amber') { p.amber += 1; burst(item.x, item.y, '#ffd66c', 8, .8); showToast('+1 bursztyn'); playTone(620, .07, 'sine'); }
-        if (item.type === 'bone') { p.bones += 1; burst(item.x, item.y, '#eee4bd', 9, .8); showToast('Fragment skamieliny!'); playTone(760, .09, 'sine'); }
+        if (item.type === 'bone') {
+          p.bones += 1; burst(item.x, item.y, '#eee4bd', 9, .8);
+          if (p.bones % 6 === 0) {
+            if (p.hearts < 3) { p.hearts += 1; showToast('KOMPLET 6 KOŚCI! +1 SERCE'); playTone(880, .18, 'triangle'); haptic(24); }
+            else { p.amber += 5; showToast('KOMPLET 6 KOŚCI! +5 BURSZTYNÓW'); playTone(690, .14, 'sine'); }
+          } else { showToast('Fragment skamieliny! ' + (6 - (p.bones % 6)) + ' do dodatkowego serca.'); playTone(760, .09, 'sine'); }
+        }
+        if (item.type === 'fruit') {
+          if (p.hearts < 3) { p.hearts += 1; showToast('PREHISTORYCZNA PRZEKĄSKA! +1 SERCE'); playTone(710, .16, 'sine'); }
+          else { p.amber += 2; showToast('PEŁNY BRZUCH! +2 BURSZTYNÓW'); playTone(590, .1, 'triangle'); }
+          burst(item.x, item.y, '#a8df82', 12, .9); haptic(12);
+        }
         if (item.type === 'egg') { p.eggs += 1; if (saveData.eggs.indexOf(currentLevelIndex) === -1) saveData.eggs.push(currentLevelIndex); persist(); renderMenuStats(); burst(item.x, item.y, '#fff1a5', 18, 1.2); showToast('ZŁOTE JAJO! Rzadki skarb.'); playTone(880, .2, 'triangle'); haptic(28); }
         if (item.type === 'weaponClub') { p.weapon = 'club'; p.weaponAmmo = 8; p.attackCooldown = 0; burst(item.x, item.y, '#d7b078', 15, 1.1); showToast('MACZUGA KAMIENNA! 8 mocnych uderzeń.'); playTone(185, .18, 'square'); haptic(22); }
         if (item.type === 'weaponBoomerang') { p.weapon = 'boomerang'; p.weaponAmmo = 6; p.attackCooldown = 0; burst(item.x, item.y, '#e7e2c9', 15, 1.1); showToast('KOŚCIANY BUMERANG! 6 rzutów.'); playTone(510, .16, 'triangle'); haptic(22); }
@@ -653,8 +721,10 @@
       }
     });
     if (p.attackTimer > 0 && p.attackWeapon !== 'boomerang') {
-      var reach = p.attackWeapon === 'club' ? 128 : 106;
-      var attackBox = { x: p.attackFacing > 0 ? p.x + p.w - 2 : p.x - reach + 2, y: p.y + 7, w: reach, h: 58 };
+      var attackBox = playerAttackBox();
+      world.secretSpots.forEach(function (spot) {
+        if (!spot.found && rects(attackBox, { x: spot.x - 24, y: spot.y - 18, w: 48, h: 38 })) revealSecretSpot(spot);
+      });
       world.enemies.forEach(function (enemy) {
         if (!enemy.alive || enemy.lastAttackSerial === p.attackSerial) return;
         if (rects(attackBox, combatBoxForEnemy(enemy))) {
@@ -662,7 +732,7 @@
           var meleeHitBox = combatBoxForEnemy(enemy); damageEnemy(enemy, p.attackWeapon === 'club' ? 2 : 1, meleeHitBox.x + meleeHitBox.w / 2, meleeHitBox.y + meleeHitBox.h / 2, 'melee');
         }
       });
-      var bossAttackBox = { x: p.attackFacing > 0 ? p.x + p.w - 2 : p.x - reach + 2, y: p.y + 5, w: reach, h: 70 };
+      var bossAttackBox = attackBox;
       var bossBoxForAttack = { x: world.boss.x - 20, y: FLOOR - 88, w: 105, h: 90 };
       if (world.boss.alive && world.boss.lastAttackSerial !== p.attackSerial && rects(bossAttackBox, bossBoxForAttack)) {
         damageBoss(p.attackWeapon === 'club' ? 2 : 1, world.boss.x + 24, FLOOR - 48, 'melee');
@@ -695,6 +765,7 @@
       }
     }
     if (stompImpact && p.grounded) {
+      world.secretSpots.forEach(function (spot) { if (!spot.found && Math.abs(spot.x - (p.x + p.w / 2)) < 112) revealSecretSpot(spot); });
       p.stomping = false; p.vy = -4; burst(p.x + p.w / 2, p.y + p.h, '#e8d29a', 16, 1.2); shake = 5; playTone(75, .22, 'triangle');
       world.enemies.forEach(function (e) {
         if (e.alive && Math.abs(e.x - p.x) < 112 && e.type !== 'bat') { e.stun = .9; e.x += (e.x < p.x ? -1 : 1) * 20; }
@@ -716,6 +787,8 @@
 
   function updateWorld(dt) {
     world.time += dt;
+    world.comboTimer = Math.max(0, (world.comboTimer || 0) - dt);
+    if (world.comboTimer <= 0) world.combo = 0;
     world.enemies.forEach(function (e) {
       if (!e.alive) return;
       e.stun = Math.max(0, e.stun - dt);
@@ -1251,6 +1324,12 @@
       } else if(it.type==='bone'){
         ctx.rotate(-.28);ctx.strokeStyle='#f4edcf';ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-8,0);ctx.lineTo(8,0);ctx.stroke();
         ctx.fillStyle='#f4edcf';ctx.beginPath();ctx.arc(-9,-3,4,0,Math.PI*2);ctx.arc(-9,3,4,0,Math.PI*2);ctx.arc(9,-3,4,0,Math.PI*2);ctx.arc(9,3,4,0,Math.PI*2);ctx.fill();
+      } else if (it.type === 'fruit') {
+        ctx.fillStyle = '#d94e43'; ctx.strokeStyle = '#713a31'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(-4, 1, 8, 0, Math.PI * 2); ctx.arc(4, 1, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#f6d28a'; ctx.beginPath(); ctx.arc(-6, -3, 2.3, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#6d8c4d'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, -6); ctx.quadraticCurveTo(1, -14, 8, -12); ctx.stroke();
+        ctx.fillStyle = '#83b66b'; ctx.beginPath(); ctx.ellipse(8, -11, 5, 2.8, -.3, 0, Math.PI * 2); ctx.fill();
       } else if (it.type === 'weaponClub') {
         ctx.rotate(-.55); ctx.strokeStyle = '#68452f'; ctx.lineWidth = 8; ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(0, 12); ctx.lineTo(0, -7); ctx.stroke();
@@ -1404,6 +1483,24 @@
     ctx.strokeStyle = '#f8e9b7'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x + 1, FLOOR - 58); ctx.lineTo(x + 1, FLOOR - 38); ctx.moveTo(x - 7, FLOOR - 48); ctx.lineTo(x + 10, FLOOR - 48); ctx.stroke();
     if (world.checkpointReached) { ctx.globalAlpha = .22 + Math.sin(world.time * 4) * .08; ctx.fillStyle = '#c5ed93'; ctx.beginPath(); ctx.arc(x + 2, FLOOR - 48, 29, 0, Math.PI * 2); ctx.fill(); }
     ctx.restore();
+  }
+
+  function drawSecretSpots() {
+    world.secretSpots.forEach(function (spot) {
+      if (spot.found) return;
+      var x = spot.x - cameraX;
+      if (x < -28 || x > W + 28) return;
+      var pulse = .12 + (Math.sin(world.time * 2.4 + spot.id) + 1) * .035;
+      ctx.save(); ctx.globalAlpha = pulse;
+      ctx.strokeStyle = world.def.theme === 'cave' ? '#a7e7d7' : world.def.theme === 'swamp' ? '#d7df97' : '#d9e7a3';
+      ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x - 13, FLOOR - 5); ctx.lineTo(x - 6, FLOOR - 9);
+      ctx.moveTo(x - 2, FLOOR - 4); ctx.lineTo(x + 5, FLOOR - 10);
+      ctx.moveTo(x + 8, FLOOR - 5); ctx.lineTo(x + 14, FLOOR - 8);
+      ctx.stroke();
+      ctx.restore();
+    });
   }
 
   function drawEasterProp() {
@@ -1679,8 +1776,11 @@
     if (player.attackTimer > 0 && player.attackWeapon !== 'boomerang') {
       var p = player, progress = Math.max(0, Math.min(1, 1 - p.attackTimer / .24));
       var attackDir = p.attackFacing || p.facing;
-      var px = p.x - cameraX + p.w / 2 + attackDir * (p.attackWeapon === 'club' ? 43 : 37), py = p.y + 30;
-      ctx.save(); ctx.translate(px, py); ctx.rotate(attackDir * (-.9 + progress * 1.55));
+      var verticalAim = p.attackVertical || 0;
+      var px = verticalAim ? p.x - cameraX + p.w / 2 : p.x - cameraX + p.w / 2 + attackDir * (p.attackWeapon === 'club' ? 43 : 37);
+      var py = verticalAim < 0 ? p.y + 4 : verticalAim > 0 ? p.y + p.h - 4 : p.y + 30;
+      var verticalAngle = verticalAim < 0 ? -Math.PI / 2 : verticalAim > 0 ? Math.PI / 2 : 0;
+      ctx.save(); ctx.translate(px, py); ctx.rotate(verticalAngle + attackDir * (-.9 + progress * 1.55));
       if (p.attackWeapon === 'club') {
         ctx.strokeStyle = '#65452f'; ctx.lineWidth = 10; ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(-2, 9); ctx.lineTo(0, -20); ctx.stroke();
@@ -1694,7 +1794,11 @@
         ctx.fillStyle = '#f2e7d0'; ctx.beginPath(); ctx.ellipse(-4, -25, 7, 3, -.2, 0, Math.PI * 2); ctx.fill();
       }
       ctx.restore(); ctx.strokeStyle = p.attackWeapon === 'club' ? 'rgba(255,215,143,.78)' : 'rgba(255,242,190,.88)'; ctx.lineWidth = p.attackWeapon === 'club' ? 4 : 3.5;
-      ctx.beginPath(); ctx.arc(px, py, p.attackWeapon === 'club' ? 60 : 49, attackDir > 0 ? -.86 : Math.PI + .86, attackDir > 0 ? .86 : Math.PI - .86); ctx.stroke();
+      if (!verticalAim) {
+        ctx.beginPath(); ctx.arc(px, py, p.attackWeapon === 'club' ? 60 : 49, attackDir > 0 ? -.86 : Math.PI + .86, attackDir > 0 ? .86 : Math.PI - .86); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.ellipse(px, py, 30, 54, 0, verticalAim < 0 ? Math.PI : 0, verticalAim < 0 ? Math.PI * 2 : Math.PI); ctx.stroke();
+      }
       ctx.fillStyle = 'rgba(255,245,204,' + (0.42 + Math.sin(progress * Math.PI) * .5) + ')';
       ctx.beginPath(); ctx.arc(px + attackDir * (p.attackWeapon === 'club' ? 53 : 44), py - 5, 3 + Math.sin(progress * Math.PI) * 2, 0, Math.PI * 2); ctx.fill();
     }
@@ -1771,7 +1875,7 @@
       var shakePhase = world.time * 48;
       ctx.translate(Math.sin(shakePhase) * shake * .48, Math.cos(shakePhase * 1.27) * shake * .28);
     }
-    drawBackground(world.def);drawBiomeDepth(world.def);drawAtmosphere(world.def);drawGround();drawGroundDetails();drawSpringPads();drawHazards();drawPlatforms();drawCheckpoint();drawEasterProp();drawCollectibles();
+    drawBackground(world.def);drawBiomeDepth(world.def);drawAtmosphere(world.def);drawGround();drawGroundDetails();drawSpringPads();drawHazards();drawPlatforms();drawCheckpoint();drawSecretSpots();drawEasterProp();drawCollectibles();
     world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayerShadow();drawPlayer();drawCombatEffects();
     if(world.boss.alive && world.boss.x-cameraX<W-30){
       ctx.fillStyle='rgba(20,42,29,.58)';rounded(16,15,150,28,10,'rgba(20,42,29,.58)');
@@ -1865,14 +1969,17 @@
   document.addEventListener('keydown',function(e){
     if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].indexOf(e.code)!==-1)e.preventDefault();
     keys[e.code]=true;
+    if(e.code==='KeyC'||e.code==='KeyJ'){attackHeld=true;doAttack();}
     if(e.repeat)return;
     if(e.code==='Space'||e.code==='ArrowUp'||e.code==='KeyW')doJump();
-    if(e.code==='KeyC'||e.code==='KeyJ')doAttack();
     if(e.code==='KeyX'||e.code==='ArrowDown'||e.code==='KeyS')doSmash();
     if(e.code==='KeyZ'||e.code==='ShiftLeft'||e.code==='ShiftRight')doDash();
     if(e.code==='Escape'){if(active&&!paused)pauseGame();else if(paused)resumeGame();}
   });
-  document.addEventListener('keyup',function(e){keys[e.code]=false;});
+  document.addEventListener('keyup',function(e){
+    keys[e.code]=false;
+    if(e.code==='KeyC'||e.code==='KeyJ') attackHeld = attackPointerId !== null || !!keys.KeyC || !!keys.KeyJ;
+  });
   var moveJoystick = $('moveJoystick');
   if (moveJoystick) {
     moveJoystick.addEventListener('pointerdown', function (event) {
@@ -1899,9 +2006,14 @@
   document.querySelectorAll('[data-action]').forEach(function(button){
     button.addEventListener('pointerdown',function(e){
       e.preventDefault();button.classList.add('active');try{button.setPointerCapture(e.pointerId);}catch(err){}
-      var action=button.getAttribute('data-action');if(action==='attack')doAttack();if(action==='jump')doJump();if(action==='smash')doSmash();if(action==='dash')doDash();
+      var action=button.getAttribute('data-action');
+      if(action==='attack'){attackHeld=true;attackPointerId=e.pointerId;doAttack();}
+      if(action==='jump')doJump();if(action==='smash')doSmash();if(action==='dash')doDash();
     });
-    ['pointerup','pointercancel','lostpointercapture'].forEach(function(evt){button.addEventListener(evt,function(){button.classList.remove('active');});});
+    ['pointerup','pointercancel','lostpointercapture'].forEach(function(evt){button.addEventListener(evt,function(event){
+      button.classList.remove('active');
+      if(button.getAttribute('data-action')==='attack' && event.pointerId===attackPointerId){attackPointerId=null;attackHeld=!!keys.KeyC||!!keys.KeyJ;}
+    });});
   });
   document.addEventListener('visibilitychange',function(){if(document.hidden&&active&&!paused)pauseGame();});
   window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();});

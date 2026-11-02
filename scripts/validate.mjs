@@ -84,7 +84,14 @@ const checks = [
   ['Premium player sprite sheet provides eight detailed animation poses at 96px per frame', readFileSync('assets/asia-sprites.svg', 'utf8').includes('width="768"') && readFileSync('assets/asia-sprites.svg', 'utf8').includes('id="armClub"') && game.includes('var drawW = 86, drawH = 94')],
   ['All three world panoramas use extended 3400px parallax canvases and distinct art palettes', ['jungle','cave','swamp'].every((biome) => readFileSync('assets/' + biome + '-bg.svg', 'utf8').includes('width="3400"')) && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
   ['Ground and platform materials receive biome-specific premium color grades', game.includes("palette = theme === 'cave'") && game.includes("theme === 'swamp' ? ['#dce2a0'") && game.includes("var topTint = theme === 'cave'")],
-  ['Ground enemies receive contact shadows and crawlers have animated legs', game.includes("var shadowLift = e.type === 'bat'") && game.includes('var crawlPhase = world.time * 11 + e.bob')]
+  ['Ground enemies receive contact shadows and crawlers have animated legs', game.includes("var shadowLift = e.type === 'bat'") && game.includes('var crawlPhase = world.time * 11 + e.bob')],
+  ['Hidden cache spots are loaded per level and can be discovered with melee or stomp', game.includes('secretSpots: (def.secretSpots || []).map') && game.includes('function revealSecretSpot(spot)') && game.includes('world.secretSpots.forEach(function (spot)') && game.includes('saveData.cacheFinds')],
+  ['Enemy and boss defeats release collectible bone and food loot', game.includes("type: 'bone', id: 'enemy-bone-'") && game.includes("type: 'fruit', id: 'enemy-fruit-'") && game.includes("type: 'fruit', id: 'boss-feast'")],
+  ['Six bone fragments restore one heart and food heals or converts to amber', game.includes('p.bones % 6 === 0') && game.includes("item.type === 'fruit'") && game.includes('p.hearts < 3')],
+  ['Rapid enemy defeats create a capped combo reward with a timed reset', game.includes('world.combo = world.comboTimer > 0') && game.includes('world.comboTimer = 2.65') && game.includes('world.combo = 0')],
+  ['Attack can be held for repeat strikes and input is released cleanly on pause', game.includes('if (attackHeld && p.attackCooldown <= 0) doAttack()') && game.includes('attackPointerId = null') && game.includes("attackHeld=true;attackPointerId=e.pointerId")],
+  ['Directional melee can hit airborne bats and has matching vertical hitboxes and visuals', game.includes('function playerAttackBox()') && game.includes('p.attackVertical < 0') && game.includes('nearestBat < 150') && game.includes('var verticalAngle =')],
+  ['Fruit and hidden-cache rewards are drawn and included in collision handling', game.includes("it.type === 'fruit'") && game.includes('drawSecretSpots();drawEasterProp()') && game.includes('rewards.forEach(function (type, index)')]
 ];
 
 let failed = false;

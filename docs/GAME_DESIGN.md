@@ -171,3 +171,16 @@ Postęp jest przechowywany w `localStorage` na urządzeniu. Prototyp nie wysyła
 - Panoramy Doliny Paproci, Jaskiń Echa i Bagien Bąbelków otrzymały szersze, bogatsze kompozycje z mocniejszą głębią i odrębną paletą. Dłuższe płótna pozwalają zachować parallax podczas większej części poziomu.
 - Podłoże i platformy mają osobne materiały dla każdego biomu; cienie kontaktowe poprawiają osadzenie przeciwników, a pełzające stworzenia otrzymały ruch nóg.
 - Cache offline podniesiono do v21. Mechanika walki, hitboxy, fizyka i rozmiar logicznego świata pozostają bez zmian.
+
+
+## Gameplay i nagrody za eksplorację — v22
+
+Inspiracją są sprawdzone rozwiązania klasycznych platformówek pokroju Prehistorik 2: eksploracja zamiast presji licznika jedzenia, sekrety odkrywane uderzeniem, nagrody za pokonanych przeciwników, zapas jedzenia, różne bronie i satysfakcjonujące serie trafień. Wdrożono własną wersję tych pomysłów w istniejącym świecie Asi:
+
+- Ukryte skrytki w każdym z trzech poziomów dają nagrody po uderzeniu w odpowiedni fragment podłoża albo po trafieniu falą miażdżenia. Odkryte skrytki są zapamiętywane lokalnie, więc nie można farmić ich przy każdym powtórzeniu etapu.
+- Pokonani przeciwnicy zostawiają fragmenty skamielin; co trzeci może upuścić jedzenie. Boss po pokonaniu rozsypuje większy zestaw kości i przekąskę.
+- Zebranie sześciu fragmentów kości przywraca serce. Jedzenie leczy, a przy pełnym zdrowiu zamienia się w bursztyn.
+- Szybkie pokonywanie kolejnych przeciwników buduje serię do pięciu eliminacji i zapewnia dodatkowy bursztyn. Seria wygasa po krótkiej przerwie.
+- Atak można przytrzymać, aby powtarzać zamachy. Strzałki góra/dół kierują ciosem; na dotyku gra automatycznie podnosi broń przy pobliskim nietoperzu.
+- Zachowano brak obowiązkowego limitu zebranego jedzenia i brak presji zegara. Jedzenie jest nagrodą za eksplorację i ryzyko, a nie blokadą przejścia etapu.
+- Zapis gry został rozszerzony kompatybilnie o listę odkrytych skrytek. Poprzednie zapisy nadal są poprawnie odczytywane.
