@@ -33,6 +33,8 @@ Na telefonie zalecana jest orientacja pozioma. Sterowanie dotykowe ma osobne prz
 - Automatyczny zapis ukończonych poziomów, sekretów i odnalezionych easter eggów w localStorage.
 - Podstawowe efekty dźwiękowe generowane lokalnie przez Web Audio.
 - Skalowanie canvas, dotykowe sterowanie i klawiatura.
+- Ustawienia dźwięku, układ dla lewej ręki i regulacja wielkości przycisków.
+- Oryginalne ilustracje SVG dla bohaterki, menu i trzech środowisk.
 - Pamięć podręczna Service Worker do ponownego uruchamiania offline.
 
 ## Architektura
@@ -43,10 +45,13 @@ Na telefonie zalecana jest orientacja pozioma. Sterowanie dotykowe ma osobne prz
 - `manifest.webmanifest` — konfiguracja aplikacji instalowalnej.
 - `sw.js` — cache aplikacji do trybu offline.
 - `icon.svg` — ikona aplikacji.
+- `assets/asia-sprites.svg` — autorski arkusz klatek animacji Asi.
+- `assets/title-art.svg` — ilustracja ekranu startowego.
+- `assets/*-bg.svg` — panoramiczne ilustracje trzech krain.
 
 ## Zakres i uczciwy status
 
-To pierwszy grywalny wycinek (vertical slice), a nie ukończona kampania 30 poziomów. Obecne trzy poziomy służą sprawdzeniu sterowania, fizyki, czytelności i pętli rozgrywki przed rozbudową kolejnych krain. Grafika postaci i świata jest na tym etapie rysowana proceduralnie w Canvas/CSS; docelowe ręcznie przygotowane sprite'y i pełne animacje są kolejnym etapem.
+To pierwszy grywalny wycinek (vertical slice), a nie ukończona kampania 30 poziomów. Obecne trzy poziomy służą sprawdzeniu sterowania, fizyki, czytelności i pętli rozgrywki przed rozbudową kolejnych krain. Asia i panoramy trzech krain mają już oryginalną grafikę wektorową SVG. Animacje bohaterki korzystają z arkusza sprite'ów; przeciwnicy i bossowie są rysowani w Canvas. Dalsze prace obejmują dopracowanie klatek animacji, dodatkowe typy wrogów i pułapki.
 
 ## Następne etapy
 
