@@ -30,7 +30,7 @@ const checks = [
   ['Each starter level has a checkpoint and safe respawn support', (game.match(/checkpoint: \{x:/g) || []).length === 3 && game.includes('world.checkpointX || 65')],
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
-  ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',releaseInputs)")],
+  ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
   ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v10")],
   ['Canvas adapts logical world width to the live game frame', game.includes('function resizeCanvas()') && game.includes('Math.round(H * aspect)')],
   ['Canvas renders at a capped high-DPI backing resolution', game.includes('var dprLimit = memory > 0 && memory <= 4 ? 1.6 : 2.2') && game.includes('ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0)')],
