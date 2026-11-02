@@ -1097,26 +1097,44 @@
     ctx.globalAlpha = 1;
   }
   function drawGround() {
+    var theme = world.def.theme;
+    var palette = theme === 'cave'
+      ? { deep:'#142b36', mid:'#203f49', top:'#3b6668', rim0:'#c2e5cf', rim1:'#5b9c91', rim2:'#244d50', mark:'rgba(190,238,216,.17)', crack:'rgba(10,30,39,.55)', pit:'#0a1924', pitEdge:'rgba(116,203,191,.48)' }
+      : theme === 'swamp'
+        ? { deep:'#172923', mid:'#263e34', top:'#49644a', rim0:'#d0d991', rim1:'#829b60', rim2:'#405b43', mark:'rgba(217,222,146,.16)', crack:'rgba(9,31,23,.52)', pit:'#0b1c19', pitEdge:'rgba(172,205,130,.42)' }
+        : { deep:'#102c25', mid:'#1f4634', top:'#3e6843', rim0:'#d9e7a0', rim1:'#8bad65', rim2:'#416b48', mark:'rgba(220,235,161,.16)', crack:'rgba(8,34,23,.5)', pit:'#081d18', pitEdge:'rgba(186,218,137,.4)' };
     var ground = ctx.createLinearGradient(0, FLOOR, 0, H);
-    ground.addColorStop(0, '#456e45'); ground.addColorStop(.12, '#315b3d'); ground.addColorStop(1, '#172f27');
+    ground.addColorStop(0, palette.top); ground.addColorStop(.16, palette.mid); ground.addColorStop(1, palette.deep);
     ctx.fillStyle = ground; ctx.fillRect(0, FLOOR, W, H - FLOOR);
-    var rim = ctx.createLinearGradient(0, FLOOR - 2, 0, FLOOR + 9);
-    rim.addColorStop(0, '#d1d78a'); rim.addColorStop(.42, '#87a957'); rim.addColorStop(1, '#456a43');
-    ctx.fillStyle = rim; ctx.fillRect(0, FLOOR - 2, W, 10);
-    ctx.fillStyle = 'rgba(229,239,164,.32)'; ctx.fillRect(0, FLOOR, W, 1);
+    var underlight = ctx.createLinearGradient(0, FLOOR + 10, 0, H);
+    underlight.addColorStop(0, 'rgba(225,239,197,.045)'); underlight.addColorStop(1, 'rgba(0,0,0,.17)');
+    ctx.fillStyle = underlight; ctx.fillRect(0, FLOOR + 10, W, H - FLOOR - 10);
+    var rim = ctx.createLinearGradient(0, FLOOR - 3, 0, FLOOR + 10);
+    rim.addColorStop(0, palette.rim0); rim.addColorStop(.38, palette.rim1); rim.addColorStop(1, palette.rim2);
+    ctx.fillStyle = rim; ctx.fillRect(0, FLOOR - 3, W, 11);
+    ctx.fillStyle = 'rgba(255,249,214,.33)'; ctx.fillRect(0, FLOOR - 3, W, 1.2);
     for (var i = 0; i < Math.ceil(W / 48) + 1; i++) {
       var x = i * 48 - (cameraX % 48);
-      ctx.fillStyle = i % 2 ? 'rgba(14,48,30,.23)' : 'rgba(207,215,130,.16)';
-      ctx.fillRect(x, FLOOR + 12, 24, 5);
-      ctx.strokeStyle = 'rgba(18,54,32,.32)'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(x + 10, FLOOR + 28); ctx.lineTo(x + 4, FLOOR + 38); ctx.stroke();
+      ctx.fillStyle = palette.mark; ctx.fillRect(x + 3, FLOOR + 13 + (i % 2) * 4, 18 + (i % 3) * 5, 2);
+      ctx.strokeStyle = palette.crack; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x + 30, FLOOR + 20); ctx.lineTo(x + 24, FLOOR + 29); ctx.lineTo(x + 35, FLOOR + 36); ctx.stroke();
+      if (theme === 'cave' && i % 3 === 0) {
+        ctx.fillStyle = 'rgba(128,221,198,.26)'; ctx.beginPath(); ctx.arc(x + 12, FLOOR + 39, 2.1, 0, Math.PI * 2); ctx.fill();
+      } else if (theme === 'swamp' && i % 4 === 1) {
+        ctx.fillStyle = 'rgba(211,224,145,.26)'; ctx.beginPath(); ctx.ellipse(x + 38, FLOOR + 31, 8, 2.5, -.12, 0, Math.PI * 2); ctx.fill();
+      } else if (theme === 'jungle' && i % 3 === 1) {
+        ctx.strokeStyle = 'rgba(148,190,104,.45)'; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(x + 9, FLOOR + 14); ctx.quadraticCurveTo(x + 5, FLOOR + 4, x + 15, FLOOR + 7); ctx.stroke();
+      }
     }
     world.def.gaps.forEach(function (g) {
       var x = g[0] - cameraX, w = g[1] - g[0];
       if (x < W && x + w > 0) {
-        ctx.fillStyle = '#172d25'; ctx.fillRect(x, FLOOR, w, H - FLOOR);
-        ctx.fillStyle = '#0c211b'; ctx.beginPath(); ctx.moveTo(x, FLOOR); ctx.lineTo(x + 12, FLOOR + 64); ctx.lineTo(x + w - 10, FLOOR + 64); ctx.lineTo(x + w, FLOOR); ctx.fill();
-        ctx.strokeStyle = 'rgba(168,196,120,.4)'; ctx.lineWidth = 2;
+        var pit = ctx.createLinearGradient(0, FLOOR, 0, H);
+        pit.addColorStop(0, palette.pit); pit.addColorStop(1, 'rgba(2,9,11,.98)');
+        ctx.fillStyle = pit; ctx.fillRect(x, FLOOR, w, H - FLOOR);
+        ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.moveTo(x, FLOOR); ctx.lineTo(x + 12, FLOOR + 64); ctx.lineTo(x + w - 10, FLOOR + 64); ctx.lineTo(x + w, FLOOR); ctx.fill();
+        ctx.strokeStyle = palette.pitEdge; ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(x, FLOOR + 1); ctx.lineTo(x + 8, FLOOR + 15); ctx.moveTo(x + w, FLOOR + 1); ctx.lineTo(x + w - 8, FLOOR + 15); ctx.stroke();
       }
     });
@@ -1139,9 +1157,9 @@
   function drawPlatforms() {
     var theme = world.def.theme;
     var topStops = theme === 'cave'
-      ? ['#d0dec0', '#789e87', '#395d55']
-      : theme === 'swamp' ? ['#d4d18b', '#8b9e5d', '#456b49'] : ['#d6df9a', '#8aaf69', '#426d4a'];
-    var edge = theme === 'cave' ? '#304b48' : theme === 'swamp' ? '#3d5b3d' : '#345b3d';
+      ? ['#c9e9db', '#5d9b90', '#274f59']
+      : theme === 'swamp' ? ['#dce2a0', '#78965d', '#354f3e'] : ['#e0eaa8', '#82ac68', '#315c43'];
+    var edge = theme === 'cave' ? '#1f414a' : theme === 'swamp' ? '#344b3a' : '#294e39';
     world.def.platforms.forEach(function (p, index) {
       var x = p[0] - cameraX, y = p[1], w = p[2], h = p[3];
       if (x + w < -30 || x > W + 30) return;
@@ -1254,6 +1272,12 @@
     if (!e.alive) return;
     var x = e.x - cameraX, y = enemyRenderY(e);
     if (x < -75 || x > W + 75) return;
+    var shadowLift = e.type === 'bat' ? Math.max(0, 1 - Math.max(0, FLOOR - y) / 210) : Math.max(.24, 1 - Math.max(0, FLOOR - y) / 190);
+    ctx.save();
+    ctx.globalAlpha = .22 * shadowLift; ctx.fillStyle = '#07150f';
+    ctx.beginPath();
+    ctx.ellipse(x + 19, FLOOR + 2, (e.type === 'armored' ? 31 : e.type === 'bat' ? 17 : 23) * (1 + (1 - shadowLift) * .35), e.type === 'bat' ? 4 : 5.5, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.restore();
     ctx.save(); ctx.translate(x, y);
     if (e.dir < 0) ctx.scale(-1, 1);
     if (e.stun > 0) { ctx.shadowColor = '#fff0a3'; ctx.shadowBlur = 14; }
@@ -1321,6 +1345,20 @@
       ctx.fillStyle = '#2d3d29'; ctx.beginPath(); ctx.arc(40, 9, 2, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = '#4a6338'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(7, 34); ctx.lineTo(2, 41); ctx.moveTo(29, 34); ctx.lineTo(34, 41); ctx.stroke();
       ctx.strokeStyle = '#e8d5a4'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(39, 23); ctx.lineTo(45, 24); ctx.stroke();
+    }
+    if (e.type === 'crawler') {
+      var crawlPhase = world.time * 11 + e.bob;
+      ctx.strokeStyle = '#385b39'; ctx.lineWidth = 3.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      for (var crawlLeg = 0; crawlLeg < 4; crawlLeg++) {
+        var legX = -1 + crawlLeg * 12;
+        var legSwing = Math.sin(crawlPhase + crawlLeg * 1.45) * 4;
+        ctx.beginPath(); ctx.moveTo(legX + 5, 29 + (crawlLeg % 2) * 2);
+        ctx.quadraticCurveTo(legX - 1 + legSwing, 35, legX - 4 + legSwing, 42); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(legX + 23, 28 + (crawlLeg % 2) * 2);
+        ctx.quadraticCurveTo(legX + 27 - legSwing, 35, legX + 31 - legSwing, 41); ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(226,239,166,.4)'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(9, 16); ctx.quadraticCurveTo(22, 9 + Math.sin(crawlPhase) * 1.5, 34, 14); ctx.stroke();
     }
     if (e.type === 'hopper' && e.hopWindup > 0) {
       var hopWarn = .55 + Math.sin(world.time * 27) * .3;
@@ -1595,7 +1633,7 @@
     if (p.hurtFlash > 0 && Math.floor(performance.now() / 70) % 2 === 0) return;
     if (art.asia && art.asia.complete && art.asia.naturalWidth >= 768) {
       var frame = p.hurtFlash > 0 ? 5 : (p.attackTimer > 0 ? (p.attackWeapon === 'club' ? 7 : 6) : (p.stomping ? 4 : (!p.grounded ? 3 : (Math.abs(p.vx) > .55 ? (Math.floor(p.anim / 3) % 2 ? 1 : 2) : 0))));
-      var drawW = 78, drawH = 88;
+      var drawW = 86, drawH = 94;
       var landing = p.landTimer > 0 ? Math.sin(Math.PI * p.landTimer / .17) * p.landPower : 0;
       var dashLean = p.dashTimer > 0 ? 1 : 0;
       var airRise = !p.grounded && !p.stomping && p.vy < -1 ? 1 : 0;
@@ -1609,7 +1647,9 @@
       ctx.scale(scaleX, scaleY);
       if (p.facing < 0) ctx.scale(-1, 1);
       // Anchor at the feet so jumps, landings and dashes do not make Asia drift.
-      ctx.drawImage(art.asia, frame * 96, 0, 96, 96, -drawW / 2, -85, drawW, drawH);
+      ctx.shadowColor = 'rgba(5,19,14,.48)'; ctx.shadowBlur = 7; ctx.shadowOffsetY = 2;
+      ctx.drawImage(art.asia, frame * 96, 0, 96, 96, -drawW / 2, -93, drawW, drawH);
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
       if (p.stomping) {
         ctx.globalAlpha = .65; ctx.strokeStyle = '#fff0a8'; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.ellipse(0, 3, 27 + Math.sin(world.time * 24) * 5, 8, 0, 0, Math.PI * 2); ctx.stroke();
@@ -1702,10 +1742,12 @@
   }
   function drawColorGrade() {
     ctx.save();
+    var theme = world.def.theme;
+    var topTint = theme === 'cave' ? 'rgba(166,235,220,.075)' : theme === 'swamp' ? 'rgba(214,224,155,.06)' : 'rgba(255,239,190,.075)';
     var light = ctx.createLinearGradient(0, 0, 0, H);
-    light.addColorStop(0, 'rgba(255,239,190,.075)');
+    light.addColorStop(0, topTint);
     light.addColorStop(.52, 'rgba(255,255,255,0)');
-    light.addColorStop(1, 'rgba(8,23,16,.24)');
+    light.addColorStop(1, theme === 'cave' ? 'rgba(4,17,26,.3)' : 'rgba(8,23,16,.24)');
     ctx.fillStyle = light; ctx.fillRect(0, 0, W, H);
     var radius = Math.min(W, H) * .26;
     var vignette = ctx.createRadialGradient(W * .5, H * .46, radius, W * .5, H * .46, Math.max(W, H) * .78);

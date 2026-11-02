@@ -1,28 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="540" viewBox="0 0 1920 540">
+<svg xmlns="http://www.w3.org/2000/svg" width="3400" height="540" viewBox="0 0 3400 540">
 <defs>
- <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#7ec89b"/><stop offset=".7" stop-color="#d9d890"/><stop offset="1" stop-color="#a8c16e"/></linearGradient>
- <linearGradient id="far" x2="0" y2="1"><stop stop-color="#9bbd78"/><stop offset="1" stop-color="#527e55"/></linearGradient>
- <linearGradient id="land" x2="0" y2="1"><stop stop-color="#6ea25d"/><stop offset="1" stop-color="#254f3b"/></linearGradient>
- <linearGradient id="fall" x2="0" y2="1"><stop stop-color="#ecffe0"/><stop offset="1" stop-color="#4baf9a"/></linearGradient>
- <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="5" cy="9" r="1.2" fill="#eff6b2" opacity=".35"/></pattern>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#153e45"/><stop offset=".42" stop-color="#4f9587"/><stop offset=".78" stop-color="#e2c58a"/><stop offset="1" stop-color="#7d9d62"/></linearGradient>
+ <linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7ab5a0"/><stop offset="1" stop-color="#315f54"/></linearGradient>
+ <linearGradient id="canopy" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4c8e62"/><stop offset="1" stop-color="#173f35"/></linearGradient>
+ <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c2f1d4"/><stop offset=".52" stop-color="#5db6aa"/><stop offset="1" stop-color="#214f4e"/></linearGradient>
+ <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7b88a"/><stop offset=".5" stop-color="#817b5d"/><stop offset="1" stop-color="#3b5948"/></linearGradient>
+ <radialGradient id="sun"><stop stop-color="#fff4c4" stop-opacity=".95"/><stop offset=".42" stop-color="#ffdf9b" stop-opacity=".42"/><stop offset="1" stop-color="#ffdf9b" stop-opacity="0"/></radialGradient>
+ <pattern id="grain" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="5" cy="7" r="1" fill="#fff5cf" opacity=".16"/><circle cx="22" cy="21" r=".8" fill="#0d3328" opacity=".12"/></pattern>
 </defs>
-<rect width="1920" height="540" fill="url(#sky)"/>
-<circle cx="1390" cy="90" r="47" fill="#fff0b4" opacity=".8"/><circle cx="1390" cy="90" r="83" fill="#fff0b4" opacity=".2"/>
-<path d="M0 310L120 168l95 87 133-153 123 172 128-121 115 140 119-164 114 156 137-120 130 118 117-142 145 146 130-91v240H0Z" fill="url(#far)" opacity=".72"/>
-<path d="M0 354q170-130 315-10t280-16q160-107 310 5t290-9q170-88 310 1t415-24v239H0Z" fill="url(#land)"/>
-<!-- distant ruins -->
-<g fill="#8f8660" stroke="#5f6549" stroke-width="8" opacity=".78"><path d="M250 269h260v18H250zM286 175h190v17H286zM306 190h18v91h-18zM434 190h18v91h-18zM271 270l-30 35h310l-31-35" /><path d="M1040 302h230v16h-230zM1070 221h160v15h-160zM1093 237h17v65h-17zM1190 237h17v65h-17z"/></g>
-<path d="M376 288q-22 48-3 110h67q19-60-4-110" fill="url(#fall)" opacity=".86"/>
-<path d="M398 300q-7 44 5 85" stroke="#fff" stroke-width="6" opacity=".6" fill="none"/>
-<path d="M0 434q130-68 270-5t270-8q190-93 340 5t320-8q190-70 350 8t370-15v129H0Z" fill="#315f43"/>
-<path d="M0 484q220-65 410-3t410-4q220-68 400 4t390-8v67H0Z" fill="#204b38"/>
-<!-- ferns and palms -->
-<g stroke-linecap="round" fill="none">
- <g stroke="#296b49" stroke-width="10"><path d="M80 500Q100 353 33 267M80 435Q25 357 10 360M85 420Q143 343 176 340M94 380Q42 295 68 245M95 355Q150 260 215 255"/>
- <path d="M1820 500Q1814 337 1891 250M1820 420Q1748 328 1706 336M1825 393Q1896 319 1915 302M1820 360Q1764 266 1735 236"/>
- <path d="M1450 505Q1440 392 1500 330M1450 445Q1396 375 1350 380M1450 417Q1510 353 1550 348"/></g>
- <g stroke="#9cbd69" stroke-width="4"><path d="M80 435L10 360M83 415l93-75M91 380l-23-135M95 355l120-100M1820 420l-114-84M1825 393l90-91M1820 360l-85-124"/></g>
+<rect width="3400" height="540" fill="url(#sky)"/><circle cx="2730" cy="104" r="155" fill="url(#sun)"/><circle cx="2730" cy="104" r="51" fill="#fff0bb" opacity=".78"/>
+<g fill="#f5e8c4" opacity=".25"><path d="M390 118q48-37 92-4 47-39 94 3 38 33-12 35H410q-47-3-20-34Z"/><path d="M1920 93q46-35 90-4 43-33 83 5 29 27-10 31h-154q-43-3-9-32Z"/><path d="M3010 182q42-32 78-4 39-31 75 4 27 25-10 29h-132q-39-2-11-29Z"/></g>
+<path d="M0 340L140 229 244 281 390 142 514 272 655 175 802 302 940 165 1074 295 1205 177 1350 292 1496 158 1660 295 1808 201 1958 312 2100 156 2248 296 2393 184 2534 288 2670 164 2818 290 2950 180 3098 303 3245 196 3400 275V540H0Z" fill="url(#mountain)" opacity=".76"/>
+<path d="M0 371q175-108 365-17t362-20q188-108 375 0t373-8q180-94 365 5t370-14q180-92 365 5t425-13v231H0Z" fill="#3d755c" opacity=".74"/>
+<g fill="url(#stone)" stroke="#465b46" stroke-width="8" opacity=".8"><path d="M330 312h286v18H330zM365 220h210v20H365zM389 240h20v73h-20zM528 240h20v73h-20zM351 307l-30 35h330l-31-35z"/><path d="M1320 328h238v16h-238zM1350 248h180v17h-180zM1372 265h18v61h-18zM1490 265h18v61h-18z"/><path d="M2460 322h260v18h-260zM2497 230h184v18h-184zM2520 248h19v70h-19zM2641 248h19v70h-19z"/></g>
+<path d="M477 239q-18 51-3 119h75q17-69-6-119Z" fill="url(#water)" opacity=".9"/><path d="M495 247q-6 46 6 92M521 252q-2 42 5 73" fill="none" stroke="#edfff0" stroke-width="5" opacity=".58"/>
+<path d="M1420 270q-12 48 1 90h57q13-50-4-90Z" fill="url(#water)" opacity=".83"/>
+<path d="M0 380Q130 247 285 320T565 306Q760 191 946 303T1250 291Q1435 188 1625 302T1940 285Q2140 177 2330 294T2630 292Q2820 181 3008 298T3400 264V540H0Z" fill="url(#canopy)"/>
+<path d="M0 415Q190 322 370 387T730 355Q920 278 1104 370T1480 360Q1660 273 1850 371T2220 350Q2410 274 2590 368T2970 358Q3180 278 3400 360V540H0Z" fill="#204f3d"/>
+<g opacity=".94" stroke-linecap="round">
+ <g fill="#345d42" stroke="#214a37" stroke-width="13"><path d="M84 510Q102 354 52 217Q160 271 153 394L178 510Z"/><path d="M735 520Q765 334 686 185Q815 256 821 390L844 520Z"/><path d="M1622 520Q1654 340 1593 198Q1713 265 1718 403L1744 520Z"/><path d="M2390 520Q2420 347 2361 180Q2500 252 2496 397L2523 520Z"/><path d="M3224 520Q3260 330 3201 187Q3328 258 3335 404L3360 520Z"/></g>
+ <g fill="none" stroke="#8dbb73" stroke-width="5" opacity=".75"><path d="M150 363Q53 264 17 255M153 340Q245 235 306 241M807 345Q710 242 680 203M814 319Q921 221 986 231M1697 340Q1587 228 1560 218M1696 312Q1790 224 1850 236M2470 335Q2370 229 2332 215M2472 309Q2588 218 2650 226M3300 342Q3220 247 3196 216M3300 314Q3370 240 3396 238"/></g>
 </g>
-<g fill="#f2d58b" opacity=".8"><circle cx="610" cy="212" r="4"/><circle cx="630" cy="190" r="3"/><circle cx="890" cy="236" r="4"/><circle cx="1610" cy="205" r="3"/></g>
-<rect width="1920" height="540" fill="url(#dots)" opacity=".5"/>
+<g fill="#397b50" stroke="#1f563c" stroke-width="7"><path d="M0 377Q70 218 204 205Q169 342 0 377Z"/><path d="M130 330Q187 183 317 159Q279 293 130 330Z"/><path d="M575 348Q605 189 742 151Q726 285 575 348Z"/><path d="M830 353Q915 191 1040 187Q1002 318 830 353Z"/><path d="M1468 350Q1513 195 1654 165Q1626 300 1468 350Z"/><path d="M1770 362Q1871 205 2000 204Q1950 328 1770 362Z"/><path d="M2228 353Q2300 196 2431 166Q2402 300 2228 353Z"/><path d="M2574 359Q2680 211 2804 211Q2743 340 2574 359Z"/><path d="M3040 362Q3112 203 3249 172Q3222 307 3040 362Z"/></g>
+<g fill="none" stroke="#a2ce7d" stroke-width="4" opacity=".68"><path d="M30 365Q105 277 192 215M154 322Q220 242 297 169M606 337Q663 245 734 168M864 343Q946 255 1025 202M1500 338Q1580 238 1640 179M1802 349Q1890 252 1980 222M2260 343Q2350 246 2415 180M2603 348Q2697 256 2792 225M3072 348Q3158 247 3230 188"/></g>
+<path d="M0 434Q210 387 390 430T780 432Q1010 388 1230 432T1620 430Q1840 392 2050 435T2460 430Q2660 388 2870 432T3400 418V540H0Z" fill="url(#water)" opacity=".88"/>
+<path d="M0 477Q250 425 490 481T980 476Q1210 430 1450 480T1940 474Q2180 432 2400 480T2900 474Q3150 426 3400 476" fill="none" stroke="#d0f5d9" stroke-width="6" opacity=".43"/>
+<path d="M0 507Q210 462 450 509T930 505Q1190 468 1435 507T1930 505Q2180 462 2400 507T2900 504Q3160 467 3400 510V540H0Z" fill="#1b4b40" opacity=".78"/>
+<g fill="none" stroke-linecap="round"><g stroke="#215a3c" stroke-width="8"><path d="M220 520Q225 418 129 365M220 488Q120 425 100 411M222 468Q308 394 359 392M220 448Q170 360 190 326M790 523Q800 435 718 377M790 490Q704 420 674 415M790 468Q880 395 923 388M1710 522Q1717 427 1644 369M1710 484Q1635 416 1600 407M1713 455Q1795 382 1835 380M2608 523Q2610 425 2540 369M2608 485Q2525 409 2490 405M2612 455Q2690 383 2738 383M3220 522Q3225 435 3152 376M3220 483Q3134 411 3104 406M3225 457Q3300 383 3358 382"/></g><g stroke="#91bd6b" stroke-width="3.2"><path d="M220 488L100 411M222 468L359 392M220 448L190 326M790 490L674 415M790 468L923 388M1710 484L1600 407M1713 455L1835 380M2608 485L2490 405M2612 455L2738 383M3220 483L3104 406M3225 457L3358 382"/></g></g>
+<g fill="#f4d98e" opacity=".88"><circle cx="642" cy="249" r="4"/><circle cx="655" cy="229" r="2.5"/><circle cx="1105" cy="284" r="3"/><circle cx="2040" cy="238" r="4"/><circle cx="2860" cy="260" r="3"/></g>
+<rect width="3400" height="540" fill="url(#grain)" opacity=".55"/>
 </svg>

@@ -80,7 +80,11 @@ const checks = [
   ['Level cards expose chapter, biome, availability, objective and boss metadata', game.includes('level-card-meta') && game.includes('level-card-status') && game.includes('level-card-boss') && game.includes("card.setAttribute('aria-label'")],
   ['Premium UI system styles menu, map cards, settings and gameplay HUD', css.includes('PREMIUM VISUAL SYSTEM v20') && css.includes('.hero-art:after') && css.includes('.level-card-status.is-complete') && css.includes('.game-stats span') && css.includes('.settings-row')],
   ['Responsive premium layout preserves mobile map cards and compact game HUD', css.includes('@media(max-width:520px)') && css.includes('grid-template-columns:112px minmax(0,1fr)') && css.includes('@media(orientation:landscape) and (max-height:620px)')],
-  ['Reduced-motion preference disables added UI transitions', css.includes('@media(prefers-reduced-motion:reduce)') && css.includes('.level-card,.hero-illustration')]
+  ['Reduced-motion preference disables added UI transitions', css.includes('@media(prefers-reduced-motion:reduce)') && css.includes('.level-card,.hero-illustration')],
+  ['Premium player sprite sheet provides eight detailed animation poses at 96px per frame', readFileSync('assets/asia-sprites.svg', 'utf8').includes('width="768"') && readFileSync('assets/asia-sprites.svg', 'utf8').includes('id="armClub"') && game.includes('var drawW = 86, drawH = 94')],
+  ['All three world panoramas use extended 3400px parallax canvases and distinct art palettes', ['jungle','cave','swamp'].every((biome) => readFileSync('assets/' + biome + '-bg.svg', 'utf8').includes('width="3400"')) && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
+  ['Ground and platform materials receive biome-specific premium color grades', game.includes("palette = theme === 'cave'") && game.includes("theme === 'swamp' ? ['#dce2a0'") && game.includes("var topTint = theme === 'cave'")],
+  ['Ground enemies receive contact shadows and crawlers have animated legs', game.includes("var shadowLift = e.type === 'bat'") && game.includes('var crawlPhase = world.time * 11 + e.bob')]
 ];
 
 let failed = false;

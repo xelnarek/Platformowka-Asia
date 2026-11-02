@@ -162,3 +162,12 @@ Postęp jest przechowywany w `localStorage` na urządzeniu. Prototyp nie wysyła
 - HUD rozgrywki i kontrolki korzystają z jednego systemu powierzchni, obramowań i kontrastu; ustawienia i panele pauzy są stylistycznie spójne z menu.
 - Układ mapy, menu i HUD ma osobne punkty dostosowania na telefonach, wąskich ekranach oraz w poziomym trybie gry. Zachowano istniejące zachowanie kontrolek, zapis postępu i silnik Canvas 2D.
 - Zmieniono nazwę pamięci podręcznej Service Workera na v20, aby przeglądarka pobrała nowy interfejs po wdrożeniu.
+
+
+## Aktualizacja oprawy postaci i biomów — v21
+
+- Arkusz Asi zachowuje osiem pozycji wymaganych przez silnik (bez zmian indeksów): bezczynność, dwa kroki biegu, skok, miażdżenie, trafienie oraz dwa ataki. Nowy rysunek ma spójne kontury, wielowarstwowe cieniowanie, materiał ubrania, czytelniejszą twarz, włosy, pas i chustę.
+- Widoczną postać nieznacznie powiększono i dodano delikatny cień, nie zmieniając hitboxów ani fizyki ruchu.
+- Panoramy Doliny Paproci, Jaskiń Echa i Bagien Bąbelków otrzymały szersze, bogatsze kompozycje z mocniejszą głębią i odrębną paletą. Dłuższe płótna pozwalają zachować parallax podczas większej części poziomu.
+- Podłoże i platformy mają osobne materiały dla każdego biomu; cienie kontaktowe poprawiają osadzenie przeciwników, a pełzające stworzenia otrzymały ruch nóg.
+- Cache offline podniesiono do v21. Mechanika walki, hitboxy, fizyka i rozmiar logicznego świata pozostają bez zmian.
