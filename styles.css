@@ -251,3 +251,103 @@ h1 em{font-size:.94em;color:#f3c96e;text-shadow:0 5px 0 #9e633b,0 12px 25px rgba
   .controls-reversed .touch-controls{flex-direction:row}
   .settings-card{padding:23px 17px}
 }
+
+
+/* IMMERSIVE QUALITY PASS — dynamic viewport, clearer game framing and richer menu */
+:root{--touch-scale:1;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+html,body{width:100%;min-height:100%;background:#0a2018}
+body{background:radial-gradient(ellipse at 14% 12%,rgba(117,173,91,.22),transparent 38%),radial-gradient(ellipse at 86% 85%,rgba(202,126,71,.14),transparent 34%),linear-gradient(132deg,#0b2119 0%,#173c2a 48%,#0a2018 100%)}
+#app{width:min(1600px,100%);max-width:1600px}
+.brand-mark{background:linear-gradient(145deg,#ffdf91,#dd8249);box-shadow:0 5px 0 #87462e,0 0 24px rgba(245,194,105,.14)}
+.menu-screen:before{background:radial-gradient(ellipse at 5% 45%,rgba(150,210,114,.16),transparent 52%),radial-gradient(ellipse at 93% 10%,rgba(240,188,106,.11),transparent 42%)}
+.hero-copy .eyebrow{color:#d6ed9a;border-color:rgba(214,237,154,.32);background:rgba(9,31,21,.48)}
+h1{filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))}
+h1 em{color:#ffd47c;text-shadow:0 5px 0 #995b37,0 12px 24px rgba(0,0,0,.24)}
+.intro{color:#e5eddc}
+.menu-actions .button-primary{background:linear-gradient(135deg,#ffe08f 0%,#f1bd60 48%,#e28c4f 100%);box-shadow:0 5px 0 #99552f,0 10px 24px rgba(232,167,83,.16)}
+.menu-actions .button-secondary{background:rgba(235,246,222,.12);border-color:rgba(235,246,222,.28);backdrop-filter:blur(10px)}
+.hero-art{border-color:rgba(255,235,177,.44);box-shadow:0 28px 80px rgba(0,0,0,.42),0 0 0 1px rgba(255,245,205,.09),inset 0 0 0 6px rgba(255,244,191,.1)}
+.hero-illustration{filter:saturate(1.12) contrast(1.035)}
+.menu-achievements>div{border-color:rgba(240,223,169,.22);background:linear-gradient(145deg,rgba(237,239,204,.13),rgba(7,31,20,.42));backdrop-filter:blur(8px)}
+.level-card{border-color:rgba(240,228,178,.22);box-shadow:0 16px 36px rgba(0,0,0,.28)}
+.level-card:not(:disabled):hover{border-color:rgba(255,220,137,.8);box-shadow:0 20px 42px rgba(0,0,0,.34),0 0 0 1px rgba(255,220,137,.12)}
+.game-screen{gap:9px}
+.game-stage{width:100%;max-width:1450px;max-height:calc(100svh - 205px);aspect-ratio:16/9;border:2px solid rgba(255,231,174,.5);border-radius:20px;background:#193d2a;box-shadow:0 24px 70px rgba(0,0,0,.46),0 0 0 5px rgba(229,218,165,.055),inset 0 0 0 1px rgba(255,255,255,.1)}
+#gameCanvas{display:block;width:100%;height:100%;object-fit:fill;image-rendering:auto;touch-action:none}
+.game-topbar{max-width:1450px;width:100%;margin-left:auto;margin-right:auto}
+.game-tools{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.game-tool-button{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(255,231,174,.34);border-radius:12px;color:#ffe2a0;background:rgba(9,29,19,.78);box-shadow:0 5px 14px rgba(0,0,0,.23),inset 0 1px rgba(255,255,255,.12);font-size:20px;font-weight:900;line-height:1;backdrop-filter:blur(8px)}
+.game-tool-button:active{transform:translateY(2px);filter:brightness(1.2)}
+.game-stats,.game-menu-button{backdrop-filter:blur(8px)}
+.game-audio-note{color:#c6d8ac;font-size:8px;font-weight:900;letter-spacing:1.1px}
+.control-button{backdrop-filter:blur(8px);background-color:rgba(20,48,33,.76)}
+.direction{background:linear-gradient(145deg,rgba(93,126,77,.94),rgba(36,72,48,.96))}
+.action-jump{background:linear-gradient(145deg,#ffd77d,#d98b48)}
+.action-dash{background:linear-gradient(145deg,#91bd75,#416b45)}
+.action-smash{background:linear-gradient(145deg,#f3a16a,#aa4e3a)}
+.toast{z-index:14;max-width:min(88%,680px);white-space:normal;text-align:center;line-height:1.35;box-shadow:0 8px 28px rgba(0,0,0,.32);backdrop-filter:blur(10px)}
+.overlay-panel{z-index:20;backdrop-filter:blur(12px)}
+@media(max-width:760px){
+  #app{padding:12px 14px 10px}
+  .game-stage{width:100%;max-width:100%;max-height:calc(100svh - 205px);border-radius:14px}
+  .game-tool-button{width:34px;height:34px;border-radius:10px}
+  .game-topbar{gap:7px}
+  .game-stats{gap:8px;padding:7px 8px;font-size:10px}
+  .level-label{padding:5px 7px}
+}
+@media(orientation:portrait) and (max-width:760px){
+  .game-screen{justify-content:flex-start;gap:6px}
+  .game-stage{width:100%;height:auto;max-height:none;aspect-ratio:16/9;flex:none}
+  .orientation-hint{display:block}
+  .touch-controls{margin-top:6px}
+  .game-topbar{min-height:40px}
+}
+@media(orientation:landscape) and (max-height:620px){
+  #app{width:100%;max-width:none;height:100svh;min-height:100svh;padding:0;overflow:hidden}
+  #app:has(.game-screen:not(.hidden))>.topbar{display:none}
+  .game-screen:not(.hidden){position:relative;display:flex;flex:1 1 auto;width:100%;height:100svh;min-height:0;padding:0;margin:0;overflow:hidden;gap:0}
+  #gameStage{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;flex:none;margin:0;border:0;border-radius:0;box-shadow:none}
+  #gameCanvas{width:100%;height:100%;object-fit:fill}
+  .game-topbar{position:absolute;z-index:15;top:max(5px,var(--safe-top));left:50%;transform:translateX(-50%);display:flex;width:100%;max-width:none;min-height:36px;margin:0;padding:0 clamp(8px,2vw,26px);gap:clamp(5px,1vw,12px);pointer-events:none}
+  .game-menu-button,.game-tool-button{pointer-events:auto}
+  .game-menu-button{width:34px;height:34px;border-radius:11px}
+  .level-label{flex:1;min-width:0;padding:4px 8px;border:1px solid rgba(255,239,190,.2);border-radius:10px;background:rgba(8,26,17,.54);backdrop-filter:blur(9px)}
+  .level-label small{font-size:8px;line-height:1.05}
+  .level-label b{font-size:10px;line-height:1.1}
+  .game-stats{gap:clamp(5px,1.2vw,13px);padding:5px 8px;border-radius:10px;font-size:10px;background:rgba(8,26,17,.57)}
+  .game-tools{gap:5px}
+  .game-tool-button{width:34px;height:34px;border-radius:10px;font-size:18px}
+  .touch-controls{position:absolute;z-index:15;left:0;right:0;bottom:max(7px,var(--safe-bottom));width:100%;margin:0;padding:0 clamp(10px,2.2vw,28px);display:flex;justify-content:space-between;align-items:flex-end;transform:none;pointer-events:none}
+  .move-controls,.action-controls{gap:clamp(7px,1.25vw,16px);pointer-events:none}
+  .control-button{width:clamp(46px,7.2vw,70px);height:clamp(46px,7.2vw,70px);border-radius:17px;pointer-events:auto;font-size:24px}
+  .direction{width:clamp(46px,7vw,66px);height:clamp(46px,7vw,66px)}
+  .action-smash,.action-dash{width:clamp(52px,7.8vw,72px);height:clamp(48px,7.2vw,66px)}
+  .action-jump{width:clamp(58px,8.6vw,80px);height:clamp(54px,8vw,74px)}
+  .control-button span{font-size:clamp(19px,2.5vw,27px)}
+  .control-button small{font-size:clamp(6px,.8vw,8px)}
+  .game-bottom,.orientation-hint{display:none!important}
+  .toast{top:15%;font-size:clamp(10px,1.2vw,13px)}
+  .overlay-panel{max-height:84svh;overflow:auto}
+}
+@media(orientation:landscape) and (max-height:620px) and (min-width:761px){
+  #app:has(.menu-screen:not(.hidden)){padding:5px 20px 8px}
+  #app:has(.menu-screen:not(.hidden))>.topbar{height:42px}
+  .menu-screen{grid-template-columns:1.08fr .92fr;gap:14px;padding:4px 2px}
+  .hero-copy{padding:0 4px}
+  .hero-copy .eyebrow{margin-bottom:8px;padding:6px 9px;font-size:8px;letter-spacing:1.4px}
+  .hero-copy h1{font-size:clamp(44px,7.5vw,78px);line-height:.86}
+  .intro{margin:10px 0 12px;font-size:clamp(10px,1.35vw,13px);line-height:1.42}
+  .menu-actions{gap:8px}
+  .menu-actions .button-primary,.menu-actions .button-secondary{min-height:42px;padding:10px 14px;font-size:9px}
+  .feature-row{gap:6px;margin-top:11px;font-size:8px}
+  .feature-row span{padding:5px 7px}
+  .menu-achievements{gap:6px;margin-top:11px}
+  .menu-achievements>div{padding:7px 8px}
+  .menu-achievements b{font-size:19px}
+  .menu-achievements small{font-size:7px}
+  .hero-art{height:min(68svh,330px);min-height:170px;border-radius:22px}
+  .hero-caption{font-size:10px;bottom:10px}
+  .menu-footer{padding-top:4px;font-size:8px}
+}
+@media(max-width:430px){.game-tool-button{width:32px;height:32px}}
+@media(prefers-reduced-motion:reduce){.hero-illustration,.level-card,.button{transition:none}}

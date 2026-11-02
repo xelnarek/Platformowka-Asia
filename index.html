@@ -57,8 +57,9 @@
         <button class="icon-button game-menu-button" id="pauseButton" aria-label="Pauza">Ⅱ</button>
         <div class="level-label"><small id="worldLabel">DOLINA PAPROCI</small><b id="levelLabel">01 • Pobudka pod paprocią</b></div>
         <div class="game-stats"><span>♥ <b id="hearts">3</b></span><span>✦ <b id="amberCount">0</b></span><span>🦴 <b id="boneCount">0</b></span></div>
+        <div class="game-tools"><button id="soundButton" class="game-tool-button" aria-label="Wyłącz muzykę i efekty" title="Muzyka i efekty">♫</button><button id="fullscreenButton" class="game-tool-button" aria-label="Włącz pełny ekran" title="Pełny ekran">⛶</button></div>
       </div>
-      <div class="game-stage">
+      <div class="game-stage" id="gameStage">
         <canvas id="gameCanvas" width="960" height="540" aria-label="Pole gry"></canvas>
         <div id="toast" class="toast" role="status"></div>
         <div id="orientationHint" class="orientation-hint">Obróć telefon poziomo, aby wygodniej grać.</div>
@@ -78,7 +79,7 @@
         <div class="move-controls"><button class="control-button direction" data-control="left" aria-label="W lewo">◀</button><button class="control-button direction" data-control="right" aria-label="W prawo">▶</button></div>
         <div class="action-controls"><button class="control-button action-smash" data-action="smash" aria-label="Miażdżenie"><span>▼</span><small>MIAŻDŻ</small></button><button class="control-button action-jump" data-action="jump" aria-label="Skok"><span>↑</span><small>SKOK</small></button><button class="control-button action-dash" data-action="dash" aria-label="Szarża"><span>»</span><small>TARAN</small></button></div>
       </div>
-      <div class="game-bottom"><span>DOTKNIJ I PRZYTRZYMAJ • MOŻESZ TEŻ UŻYĆ KLAWIATURY</span><button id="soundButton" class="text-button">DŹWIĘK: WŁ.</button></div>
+      <div class="game-bottom"><span>DOTKNIJ I PRZYTRZYMAJ • MOŻESZ TEŻ UŻYĆ KLAWIATURY</span><span class="game-audio-note">MUZYKA + EFEKTY</span></div>
     </section>
 
     <section id="settingsPanel" class="help-panel hidden">
@@ -86,7 +87,7 @@
         <button id="closeSettings" class="icon-button close-help" aria-label="Zamknij">✕</button>
         <p class="eyebrow">DOPASUJ ROZGRYWKĘ</p><h2>Ustawienia</h2>
         <div class="settings-list">
-          <div class="settings-row"><div><b>Dźwięki</b><small>Efekty zbierania i uderzeń</small></div><button id="settingsSound" class="setting-toggle" aria-pressed="true">WŁĄCZONE</button></div>
+          <div class="settings-row"><div><b>Muzyka i dźwięki</b><small>Melodia świata, skoki, skarby i uderzenia</small></div><button id="settingsSound" class="setting-toggle" aria-pressed="true">WŁĄCZONE</button></div>
           <div class="settings-row"><div><b>Układ sterowania</b><small>Przenieś akcje na lewą stronę</small></div><button id="settingsHand" class="setting-toggle" aria-pressed="false">PRAWA RĘKA</button></div>
           <div class="settings-row settings-range"><div><b>Wielkość przycisków</b><small>Ustaw wygodny rozmiar dotyku</small></div><input id="controlScale" type="range" min="85" max="125" step="5" value="100" aria-label="Wielkość przycisków"></div>
         </div>

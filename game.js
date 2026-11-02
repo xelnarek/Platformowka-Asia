@@ -7,8 +7,10 @@
   var canvas = $('gameCanvas');
   var ctx = canvas.getContext('2d', { alpha: false });
   var W = 960, H = 540, FLOOR = 466;
+  var canvasPixelRatio = 1, resizeObserver = null;
   var STORAGE_KEY = 'asia-epoka-miazdzenia-v1';
   var soundOn = true, audioContext = null, lastTime = 0, toastTimer = 0;
+  var musicTimer = null, musicStep = 0;
   var active = false, paused = false, currentLevelIndex = 0;
   var keys = Object.create(null);
   var input = { left: false, right: false };
@@ -28,6 +30,30 @@
       image.src = sources[key];
     });
   }
+  function resizeCanvas() {
+    var stage = canvas.parentElement;
+    if (!stage) return;
+    var rect = stage.getBoundingClientRect();
+    if (rect.width < 120 || rect.height < 120) return;
+    var aspect = rect.width / rect.height;
+    var nextW = Math.max(960, Math.min(1440, Math.round(H * aspect)));
+    var memory = Number(navigator.deviceMemory) || 0;
+    var dprLimit = memory > 0 && memory <= 4 ? 1.6 : 2.2;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) dprLimit = Math.min(dprLimit, 1.5);
+    var nextDpr = Math.max(1, Math.min(dprLimit, window.devicePixelRatio || 1));
+    var pixelWidth = Math.round(nextW * nextDpr);
+    var pixelHeight = Math.round(H * nextDpr);
+    if (W === nextW && canvasPixelRatio === nextDpr && canvas.width === pixelWidth && canvas.height === pixelHeight) return;
+    W = nextW; canvasPixelRatio = nextDpr;
+    canvas.width = pixelWidth; canvas.height = pixelHeight;
+    ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    if (world) {
+      cameraX = Math.max(0, Math.min(Math.max(0, world.def.width - W), cameraX));
+      drawWorld();
+    }
+  }
+
   function haptic(duration) {
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
       try { navigator.vibrate(duration || 16); } catch (e) {}
@@ -121,19 +147,108 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { el.classList.remove('show'); }, 1900);
   }
+  function ensureAudioContext() {
+    try {
+      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return null;
+      if (!audioContext) audioContext = new AudioCtx();
+      if (audioContext.state === 'suspended') {
+        var resumed = audioContext.resume();
+        if (resumed && typeof resumed.catch === 'function') resumed.catch(function () {});
+      }
+      return audioContext;
+    } catch (e) { return null; }
+  }
   function playTone(freq, duration, type) {
     if (!soundOn) return;
     try {
-      var AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      if (!audioContext) audioContext = new AudioCtx();
-      if (audioContext.state === 'suspended') audioContext.resume();
-      var osc = audioContext.createOscillator(), gain = audioContext.createGain();
-      osc.type = type || 'sine'; osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-      gain.gain.setValueAtTime(0.035, audioContext.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-      osc.connect(gain); gain.connect(audioContext.destination); osc.start(); osc.stop(audioContext.currentTime + duration);
+      var audio = ensureAudioContext();
+      if (!audio) return;
+      var now = audio.currentTime;
+      var osc = audio.createOscillator(), gain = audio.createGain();
+      osc.type = type || 'sine'; osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.035, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(gain); gain.connect(audio.destination);
+      osc.start(now); osc.stop(now + duration + 0.025);
     } catch (e) {}
+  }
+  function playMusicNote(freq, when, duration, volume, type) {
+    if (!audioContext) return;
+    try {
+      var osc = audioContext.createOscillator(), gain = audioContext.createGain();
+      osc.type = type || 'triangle'; osc.frequency.setValueAtTime(freq, when);
+      gain.gain.setValueAtTime(0.0001, when);
+      gain.gain.exponentialRampToValueAtTime(volume, when + 0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+      osc.connect(gain); gain.connect(audioContext.destination);
+      osc.start(when); osc.stop(when + duration + 0.035);
+    } catch (e) {}
+  }
+  function stopMusic() {
+    if (musicTimer !== null) { clearInterval(musicTimer); musicTimer = null; }
+  }
+  function playMusicBeat() {
+    if (!soundOn || !active || paused || !audioContext) return;
+    var patterns = [
+      [392,494,587,659,587,494,440,523],
+      [330,392,440,494,440,392,349,392],
+      [349,440,523,587,523,440,392,440]
+    ];
+    var pattern = patterns[currentLevelIndex] || patterns[0];
+    var note = pattern[musicStep % pattern.length], now = audioContext.currentTime + 0.018;
+    playMusicNote(note, now, 0.29, 0.0105, 'triangle');
+    if (musicStep % 4 === 0) playMusicNote(note / 2, now, 0.42, 0.008, 'sine');
+    if (musicStep % 8 === 4) playMusicNote(note * 1.25, now + 0.025, 0.22, 0.0045, 'sine');
+    musicStep += 1;
+  }
+  function startMusic() {
+    if (!soundOn || !active || paused) return;
+    stopMusic();
+    if (!ensureAudioContext()) return;
+    musicStep = 0; playMusicBeat();
+    musicTimer = setInterval(playMusicBeat, 430);
+  }
+  function syncSoundButton() {
+    var button = $('soundButton');
+    if (!button) return;
+    button.textContent = soundOn ? '♫' : '♪';
+    button.setAttribute('aria-label', soundOn ? 'Wyłącz muzykę i efekty' : 'Włącz muzykę i efekty');
+    button.title = soundOn ? 'Muzyka i efekty: włączone' : 'Muzyka i efekty: wyłączone';
+  }
+  function toggleFullscreen() {
+    var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (isFullscreen) {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        var result = exit.call(document);
+        if (result && typeof result.catch === 'function') result.catch(function () {});
+      }
+      return;
+    }
+    var target = document.documentElement;
+    var request = target.requestFullscreen || target.webkitRequestFullscreen;
+    if (request) {
+      var requested = request.call(target);
+      if (requested && typeof requested.then === 'function') {
+        requested.then(function () {
+          if (screen.orientation && screen.orientation.lock) {
+            var lockResult = screen.orientation.lock('landscape');
+            if (lockResult && typeof lockResult.catch === 'function') lockResult.catch(function () {});
+          }
+        }).catch(function () {});
+      }
+    }
+  }
+  function syncFullscreenButton() {
+    var button = $('fullscreenButton');
+    if (!button) return;
+    var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    button.textContent = isFullscreen ? '×' : '⛶';
+    button.setAttribute('aria-label', isFullscreen ? 'Wyjdź z pełnego ekranu' : 'Włącz pełny ekran');
+    button.title = isFullscreen ? 'Wyjdź z pełnego ekranu' : 'Pełny ekran';
+    requestAnimationFrame(resizeCanvas);
   }
   function switchScreen(name) {
     ['menuScreen', 'mapScreen', 'gameScreen'].forEach(function (id) { $(id).classList.toggle('hidden', id !== name); });
@@ -149,6 +264,7 @@
     document.documentElement.style.setProperty('--touch-scale', String((saveData.controlScale || 100) / 100));
     $('settingsSound').textContent = soundOn ? 'WŁĄCZONE' : 'WYŁĄCZONE';
     $('settingsSound').setAttribute('aria-pressed', String(soundOn));
+    syncSoundButton();
     $('settingsHand').textContent = saveData.leftHanded ? 'LEWA RĘKA' : 'PRAWA RĘKA';
     $('settingsHand').setAttribute('aria-pressed', String(!!saveData.leftHanded));
     $('controlScale').value = String(saveData.controlScale || 100);
@@ -181,8 +297,9 @@
     $('worldLabel').textContent = levelDefinitions[index].world.toUpperCase();
     $('levelLabel').textContent = '0' + (index + 1) + ' • ' + levelDefinitions[index].name;
     $('pausePanel').classList.add('hidden'); $('resultPanel').classList.add('hidden');
-    switchScreen('gameScreen'); updateHUD();
+    switchScreen('gameScreen'); resizeCanvas(); updateHUD();
     showToast(levelDefinitions[index].subtitle);
+    startMusic();
     if (index === 0) playTone(460, .09, 'triangle');
   }
   function updateHUD() {
@@ -197,16 +314,16 @@
   }
   function pauseGame() {
     if (!active) return;
-    releaseInputs();
+    releaseInputs(); stopMusic();
     paused = true; $('pausePanel').classList.remove('hidden');
   }
   function resumeGame() {
     paused = false; $('pausePanel').classList.add('hidden');
-    lastTime = performance.now();
+    lastTime = performance.now(); startMusic();
   }
   function completeLevel() {
     if (world.finished) return;
-    world.finished = true; active = false; paused = false;
+    world.finished = true; active = false; paused = false; stopMusic();
     if (saveData.completed.indexOf(currentLevelIndex) === -1) saveData.completed.push(currentLevelIndex);
     saveData.totalAmber += player.amber; saveData.totalBones += player.bones;
     saveData.best[currentLevelIndex] = Math.max(Number(saveData.best[currentLevelIndex]) || 0, player.amber + player.bones * 5 + player.secrets * 25);
@@ -733,11 +850,34 @@
     particles.forEach(function(p){ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x-cameraX,p.y,p.size,0,Math.PI*2);ctx.fill();});
     ctx.globalAlpha=1;
   }
+  function drawColorGrade() {
+    ctx.save();
+    var light = ctx.createLinearGradient(0, 0, 0, H);
+    light.addColorStop(0, 'rgba(255,239,190,.075)');
+    light.addColorStop(.52, 'rgba(255,255,255,0)');
+    light.addColorStop(1, 'rgba(8,23,16,.24)');
+    ctx.fillStyle = light; ctx.fillRect(0, 0, W, H);
+    var radius = Math.min(W, H) * .26;
+    var vignette = ctx.createRadialGradient(W * .5, H * .46, radius, W * .5, H * .46, Math.max(W, H) * .78);
+    vignette.addColorStop(0, 'rgba(4,18,12,0)');
+    vignette.addColorStop(1, 'rgba(4,18,12,.22)');
+    ctx.fillStyle = vignette; ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+  function drawPlayerShadow() {
+    if (player.y > H) return;
+    var lift = Math.max(0, FLOOR - (player.y + player.h));
+    var alpha = Math.max(.07, .24 - lift / 900);
+    ctx.fillStyle = 'rgba(9,25,17,' + alpha + ')';
+    ctx.beginPath();
+    ctx.ellipse(player.x - cameraX + player.w / 2, Math.min(FLOOR + 6, player.y + player.h + 9), Math.max(10, 25 - lift * .035), 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
   function drawWorld() {
     ctx.save();
     if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
     drawBackground(world.def);drawGround();drawHazards();drawPlatforms();drawCheckpoint();drawEasterProp();drawCollectibles();
-    world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayer();
+    world.enemies.forEach(drawEnemy);drawBoss();drawParticles();drawPlayerShadow();drawPlayer();
     if(world.boss.alive && world.boss.x-cameraX<W-30){
       ctx.fillStyle='rgba(20,42,29,.58)';rounded(16,15,150,28,10,'rgba(20,42,29,.58)');
       ctx.fillStyle='#f7df9b';ctx.font='900 11px Nunito';ctx.fillText('BOSS: ' + world.def.bossName,27,33);
@@ -749,6 +889,7 @@
       rounded(gateX,FLOOR-90,48,90,12,world.boss.alive?'#777d60':'#d8a858','#51432e');
       ctx.fillStyle='#fff1c7';ctx.font='900 22px Nunito';ctx.fillText(world.boss.alive?'?':'→',gateX+14,FLOOR-38);
     }
+    drawColorGrade();
     ctx.restore();
   }
   function update(dt) {
@@ -765,7 +906,8 @@
   $('closeSettings').addEventListener('click', function () { $('settingsPanel').classList.add('hidden'); });
   $('settingsSound').addEventListener('click', function () {
     soundOn = !soundOn; saveData.sound = soundOn; persist(); applyPreferences();
-    $('soundButton').textContent = 'DŹWIĘK: ' + (soundOn ? 'WŁ.' : 'WYŁ.');
+    if (soundOn && active && !paused) startMusic(); else if (!soundOn) stopMusic();
+    if (soundOn) playTone(660, .07, 'triangle');
   });
   $('settingsHand').addEventListener('click', function () {
     saveData.leftHanded = !saveData.leftHanded; persist(); applyPreferences();
@@ -793,9 +935,21 @@
     if(currentLevelIndex<levelDefinitions.length-1)startLevel(currentLevelIndex+1);
     else{renderMap();switchScreen('mapScreen');}
   });
-  $('soundButton').addEventListener('click',function(){soundOn=!soundOn;saveData.sound=soundOn;persist();this.textContent='DŹWIĘK: '+(soundOn?'WŁ.':'WYŁ.');});
-  soundOn=saveData.sound;$('soundButton').textContent='DŹWIĘK: '+(soundOn?'WŁ.':'WYŁ.');
+  $('soundButton').addEventListener('click',function(){
+    soundOn=!soundOn;saveData.sound=soundOn;persist();applyPreferences();
+    if(soundOn){if(active&&!paused)startMusic();playTone(660,.07,'triangle');}else stopMusic();
+  });
+  $('fullscreenButton').addEventListener('click',toggleFullscreen);
+  document.addEventListener('fullscreenchange',syncFullscreenButton);
+  document.addEventListener('webkitfullscreenchange',syncFullscreenButton);
+  soundOn=saveData.sound; syncSoundButton(); syncFullscreenButton();
   preloadArt(); applyPreferences();
+  if ('ResizeObserver' in window) {
+    resizeObserver = new ResizeObserver(resizeCanvas);
+    resizeObserver.observe(canvas.parentElement);
+  }
+  window.addEventListener('resize',resizeCanvas,{passive:true});
+  window.addEventListener('orientationchange',function(){requestAnimationFrame(resizeCanvas);});
 
   document.addEventListener('keydown',function(e){
     if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].indexOf(e.code)!==-1)e.preventDefault();
@@ -821,7 +975,7 @@
   });
   document.addEventListener('visibilitychange',function(){if(document.hidden&&active&&!paused)pauseGame();});
   window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();});
-  window.addEventListener('pagehide',releaseInputs);
+  window.addEventListener('pagehide',function(){releaseInputs();stopMusic();});
   window.addEventListener('resize',function(){if(active&&world)drawWorld();});
   canvas.addEventListener('contextmenu',function(e){e.preventDefault();});
   renderMap();

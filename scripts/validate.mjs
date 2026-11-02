@@ -31,7 +31,13 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',releaseInputs)")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v9")]
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v10")],
+  ['Canvas adapts logical world width to the live game frame', game.includes('function resizeCanvas()') && game.includes('Math.round(H * aspect)')],
+  ['Canvas renders at a capped high-DPI backing resolution', game.includes('var dprLimit = memory > 0 && memory <= 4 ? 1.6 : 2.2') && game.includes('ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0)')],
+  ['Music sequencer starts and stops with gameplay state', game.includes('function startMusic()') && game.includes('function stopMusic()') && game.includes('startMusic();') && game.includes('stopMusic();')],
+  ['Fullscreen and audio controls are available in the gameplay HUD', html.includes('id="fullscreenButton"') && html.includes('id="soundButton"') && game.includes("addEventListener('click',toggleFullscreen)")],
+  ['Landscape play mode expands the frame to the full viewport', css.includes('#gameStage{') && css.includes('height:100svh') && css.includes('aspect-ratio:auto')],
+  ['Color grading and player grounding visuals are rendered', game.includes('function drawColorGrade()') && game.includes('function drawPlayerShadow()')]
 ];
 
 let failed = false;
