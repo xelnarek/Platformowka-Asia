@@ -103,7 +103,6 @@
       boss: {x:2960,hp:4,speed:1.0,attackStyle:'bubbleVolley'}, springPads: [{x:1840,w:70,theme:'mushroom'}],
       easter: {x:720,kind:'capybara',message:'KAPIBARSKA MAFIA: „Nic tu nie widziałaś.”'}, checkpoint: {x:1650,message:'Bezpieczna kępa zapisana. Możesz odetchnąć.'}
     },
-    },
     {
       name: 'Szlak Zapomnianych Olbrzymów', world: 'Kanion Kości', subtitle: 'Wiatr wygrywa tu z rozsądkiem. Kości olbrzymów nie są dekoracją.',
       width: 3600, theme: 'bones', symbol: '💀', regionLabel: 'SKAMIENIAŁE PUSTKOWIE', victory: 'Olbrzym poszedł w drzazgi!',
