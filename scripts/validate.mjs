@@ -33,7 +33,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v16")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v17")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("var reach = p.attackWeapon === 'club' ? 128 : 106") && game.includes('p.attackTimer = .24') && game.includes('p.attackTimer / .24')],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
@@ -62,6 +62,13 @@ const checks = [
   ['Camera shake is smoothly phase-based instead of random per frame', game.includes('var shakePhase = world.time * 48') && game.includes('Math.cos(shakePhase * 1.27)')],
   ['Landscape play mode expands the frame to the full viewport', css.includes('#gameStage{') && css.includes('height:100svh') && css.includes('aspect-ratio:auto')],
   ['Color grading and player grounding visuals are rendered', game.includes('function drawColorGrade()') && game.includes('function drawPlayerShadow()')]
+
+  ['Three bosses use distinct biome-specific visual silhouettes', game.includes('TRZASKACZ — szybki, kolczasty drapieżnik') && game.includes('KRÓL GŁAZÓW — szeroki kamienny golem') && game.includes('BŁOTNY BULGOT — ciężka bagienna ropucha')],
+  ['Biome depth layers add distinct jungle, cave and swamp silhouettes', game.includes('function drawBiomeDepth(def)') && game.includes('drawBiomeDepth(world.def)') && game.includes('stalactites') === false],
+  ['Platforms have biome-specific materials, facets and decorative details', game.includes('function drawPlatforms()') && game.includes('topStops') && game.includes('theme === \\'cave\\'') && game.includes('theme === \\'swamp\\'')],
+  ['Ground patrol enemies turn back instead of walking across pits', game.includes('var enemyCenter = e.x + 18') && game.includes('e.chargeTimer = 0; e.chargeWindup = 0;')],
+  ['Thrown and hostile gravity projectiles collide with platforms and safe ground', game.includes('function projectileSurfaceY(') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, 9)') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, shot.radius)')],
+  ['Particle effects are capped for predictable mobile performance', game.includes('if (particles.length > 220) particles.splice(0, particles.length - 220)')];
 ];
 
 let failed = false;

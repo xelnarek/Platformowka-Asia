@@ -533,3 +533,15 @@ h1 em{color:#ffd47c;text-shadow:0 5px 0 #995b37,0 12px 24px rgba(0,0,0,.24)}
 @media(prefers-reduced-motion:reduce){
   .intro-world-art,.intro-light,.intro-fog,.intro-frame,.intro-frame h2 span,.intro-frame h2 em,.intro-frame h2 strong,.intro-subtitle,.intro-progress i{animation:none!important}
 }
+
+
+/* ART PASS 03 — clearer playfield hierarchy and biome-specific contrast. */
+.game-topbar .game-stats{gap:clamp(5px,1vw,12px)}
+.game-topbar .weapon-status{border-color:rgba(255,221,145,.58);background:rgba(7,25,18,.82);box-shadow:0 3px 12px rgba(0,0,0,.2)}
+.game-stage{background:#172f27}
+#gameCanvas{image-rendering:auto}
+.toast{max-width:calc(100% - 28px);white-space:normal;text-align:center;line-height:1.35}
+@media(orientation:landscape) and (max-height:620px){
+  .game-topbar .game-stats{padding:5px 7px;gap:clamp(4px,.8vw,10px)}
+  .game-topbar .weapon-status{max-width:clamp(58px,8.5vw,92px);font-size:clamp(6px,.68vw,8px)}
+}
