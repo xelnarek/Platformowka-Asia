@@ -33,7 +33,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v17")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v18")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("var reach = p.attackWeapon === 'club' ? 128 : 106") && game.includes('p.attackTimer = .24') && game.includes('p.attackTimer / .24')],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
@@ -67,7 +67,13 @@ const checks = [
   ['Platforms have biome-specific materials, facets and decorative details', game.includes('function drawPlatforms()') && game.includes('topStops') && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
   ['Ground patrol enemies turn back instead of walking across pits', game.includes('var enemyCenter = e.x + 18') && game.includes('e.chargeTimer = 0; e.chargeWindup = 0;')],
   ['Thrown and hostile gravity projectiles collide with platforms and safe ground', game.includes('function projectileSurfaceY(') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, 9)') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, shot.radius)')],
-  ['Particle effects are capped for predictable mobile performance', game.includes('if (particles.length > 220) particles.splice(0, particles.length - 220)')]
+  ['Particle effects are capped for predictable mobile performance', game.includes('if (particles.length > 220) particles.splice(0, particles.length - 220)')],
+  ['Bat telegraphs and performs a swoop with a shared render and collision trajectory', game.includes('function enemyRenderY(enemy)') && game.includes("e.diveWindup = .34") && game.includes("enemyRenderY(e)") && game.includes("var y = enemyRenderY(e)")],
+  ['Spitter telegraphs an aimed projectile before firing', game.includes("e.spitWindup = .48") && game.includes("if (e.spitWindup === 0)") && game.includes("e.spitTargetX = player.x + player.w / 2") && game.includes("e.spitCooldown = 2.4")],
+  ['Player landing, jump and dash have restrained sprite squash and stretch', game.includes("p.landTimer = .17") && game.includes("var landing = p.landTimer > 0") && game.includes("var airRise = !p.grounded")],
+  ['Dash can damage each enemy only once per dash and does not bypass armour', game.includes("player.dashHitIds = []") && game.includes("p.dashHitIds.indexOf(dashEnemyId) === -1") && game.includes("e.type === 'armored' ? 1")],
+  ['Death respawn clears transient combat states', game.includes("player.dashHitIds = [];") && game.includes("player.stomping = false; player.primed = false;")],
+  ['Enemy hit effects are placed at the matching collision box', game.includes("hitBox.x + hitBox.w / 2, hitBox.y + hitBox.h / 2") && game.includes("meleeHitBox.x + meleeHitBox.w / 2")]
 ];
 
 let failed = false;
