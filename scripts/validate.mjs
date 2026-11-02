@@ -52,7 +52,7 @@ const checks = [
   ['Boss warning marks the ground path before its shockwave', game.includes('var waveStart = x + (b.attackDir > 0 ? 88 : -24)') && game.includes('ctx.setLineDash([12, 8])')],
   ['Falling into a pit safely restores the player at the last checkpoint', game.includes('function respawnFromPit()') && game.includes('respawnFromPit();') && game.includes('player.x = world.checkpointX || 65') && !game.includes('p.x = Math.max(40, p.x - 130)')],
   ['New charger, armored and spitter enemy types have distinct AI', game.includes("e.type === 'charger'") && game.includes("e.type === 'spitter'") && game.includes("e.type === 'armored'")],
-  ['World spring pads are drawn and trigger a bounce', game.includes('function drawSpringPads()') && game.includes('SPRĘŻYSTA GRZYBOWA PODBITKA') && (game.match(/springPads: \[\{/g) || []).length === 3],
+  ['World spring pads are drawn and trigger a bounce', game.includes('function drawSpringPads()') && game.includes('SPRĘŻYSTA GRZYBOWA PODBITKA') && (game.match(/springPads: \[\{/g) || []).length === 5],
   ['Weapon HUD and gameplay help explain the combat controls', html.includes('id="weaponLabel"') && html.includes('ATAK — C / J') && css.includes('.action-attack')],
   ['Canvas adapts logical world width to the live game frame', game.includes('function resizeCanvas()') && game.includes('Math.round(H * aspect)')],
   ['Canvas renders at a capped high-DPI backing resolution', game.includes('var dprLimit = memory > 0 && memory <= 4 ? 1.6 : 2.2') && game.includes('ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0)')],
