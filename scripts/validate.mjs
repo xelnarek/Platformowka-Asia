@@ -33,7 +33,7 @@ const checks = [
   ['Breakable rocks resolve collisions from the previous player position', game.includes('prevX + p.w <= b.x + 8')],
   ['Each starter world contains spike hazards with collision handling', (game.match(/hazards: \[\{x:/g) || []).length === 3 && game.includes('var spikeBox = { x: hazard.x')],
   ['Pause and browser focus loss release held touch/keyboard input', game.includes('function releaseInputs()') && game.includes("window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();})") && game.includes("window.addEventListener('pagehide',function(){releaseInputs();stopMusic();})")],
-  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v18")],
+  ['Offline cache version is bumped for the current release', sw.includes("asia-epoka-v19")],
   ['Basic frying-pan attack is available by touch and keyboard', html.includes('data-action="attack"') && game.includes('function doAttack()') && game.includes("e.code==='KeyC'||e.code==='KeyJ'")],
   ['Primary melee range and active hit window are extended and match the swing animation', game.includes("var reach = p.attackWeapon === 'club' ? 128 : 106") && game.includes('p.attackTimer = .24') && game.includes('p.attackTimer / .24')],
   ['Melee hitboxes and swing effects use the facing direction captured at attack start', game.includes('attackFacing: 1') && game.includes('p.attackFacing = p.facing > 0 ? 1 : -1') && game.includes('p.attackFacing > 0 ? p.x + p.w - 2') && game.includes('var attackDir = p.attackFacing || p.facing')],
@@ -73,7 +73,10 @@ const checks = [
   ['Player landing, jump and dash have restrained sprite squash and stretch', game.includes("p.landTimer = .17") && game.includes("var landing = p.landTimer > 0") && game.includes("var airRise = !p.grounded")],
   ['Dash can damage each enemy only once per dash and does not bypass armour', game.includes("player.dashHitIds = []") && game.includes("p.dashHitIds.indexOf(dashEnemyId) === -1") && game.includes("e.type === 'armored' ? 1")],
   ['Death respawn clears transient combat states', game.includes("player.dashHitIds = [];") && game.includes("player.stomping = false; player.primed = false;")],
-  ['Enemy hit effects are placed at the matching collision box', game.includes("hitBox.x + hitBox.w / 2, hitBox.y + hitBox.h / 2") && game.includes("meleeHitBox.x + meleeHitBox.w / 2")]
+  ['Enemy hit effects are placed at the matching collision box', game.includes("hitBox.x + hitBox.w / 2, hitBox.y + hitBox.h / 2") && game.includes("meleeHitBox.x + meleeHitBox.w / 2")],
+  ['Hopper jump has a warning, movement burst and shared render/collision trajectory', game.includes("e.hopWindup = .3") && game.includes("e.hopTimer = .72") && game.includes("var baseY = FLOOR - 39") && game.includes("var y = enemyRenderY(e)")],
+  ['Bosses transition once into a clearly marked second phase at half health', game.includes("boss.phase === 1 && boss.hp > 0 && boss.hp <= Math.ceil(bossMaxHp / 2)") && game.includes("boss.phase = 2; boss.speed *= 1.18") && game.includes("FAZA II • FURIA")],
+  ['Boss phase two increases pressure without shortening attack warnings', game.includes("boss.phase === 2 ? .78 : 1") && game.includes("boss.phase === 2 ? 5.35 : 4.9") && game.includes("boss.windup = boss.attackStyle === 'shockwave' ? .68 : .82")]
 ];
 
 let failed = false;

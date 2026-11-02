@@ -146,3 +146,10 @@ Postęp jest przechowywany w `localStorage` na urządzeniu. Prototyp nie wysyła
 - Taran zadaje obrażenia przeciwnikowi tylko raz na jedno użycie. Przeciwnicy opancerzeni wymagają dwóch trafień taranem zamiast znikać natychmiast.
 - Po utracie ostatniego serca respawn czyści aktywne stany ataku, miażdżenia i tarana.
 - Efekty trafień przeciwników powietrznych pojawiają się przy ich rzeczywistym hitboxie, a nie przy ziemi.
+
+
+## Aktualizacja AI przeciwników i faz bossów — v19
+
+- Hopper otrzymuje własny cykl: przygotowanie, wyskok z ruchem poziomym i powrót do patrolu. Wskaźnik przygotowania jest widoczny, a hitbox używa tej samej wysokości co rysowana postać.
+- Faza druga bossów rozpoczyna się przy połowie zdrowia. Zmiana jest jednorazowa, wyraźnie sygnalizowana i zwiększa tempo kolejnych ataków oraz prędkość pocisków, nie skracając czasu ostrzeżenia.
+- Aura oraz podpis FAZA II pomagają rozpoznać zmianę zachowania bossa.

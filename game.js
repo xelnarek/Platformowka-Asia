@@ -133,11 +133,11 @@
     var items = def.items.map(function (it, id) { return { x: it[0], y: it[1], type: it[2], id: id, taken: false, phase: id * 0.8 }; });
     return {
       def: def, index: index, items: items,
-      enemies: def.enemies.map(function (e) { return Object.assign({}, e, { x: e.x, origin: e.x, dir: 1, stun: 0, alive: true, hp: e.hp || (e.type === 'armored' ? 2 : 1), hitFlash: 0, spitCooldown: 1.1 + Math.random() * 1.2, chargeCooldown: 1 + Math.random(), chargeTimer: 0, chargeWindup: 0, spitWindup: 0, spitTargetX: 0, spitTargetY: 0, diveWindup: 0, diveTimer: 0, diveCooldown: 2.2 + Math.random() * 1.2, diveDir: 1, bob: Math.random() * 6 }); }),
+      enemies: def.enemies.map(function (e) { return Object.assign({}, e, { x: e.x, origin: e.x, dir: 1, stun: 0, alive: true, hp: e.hp || (e.type === 'armored' ? 2 : 1), hitFlash: 0, spitCooldown: 1.1 + Math.random() * 1.2, chargeCooldown: 1 + Math.random(), chargeTimer: 0, chargeWindup: 0, spitWindup: 0, spitTargetX: 0, spitTargetY: 0, hopWindup: 0, hopTimer: 0, hopCooldown: 1.1 + Math.random() * 1.4, hopDir: 1, diveWindup: 0, diveTimer: 0, diveCooldown: 2.2 + Math.random() * 1.2, diveDir: 1, bob: Math.random() * 6 }); }),
       playerProjectiles: [], hostileProjectiles: [],
       springPads: (def.springPads || []).map(function (pad) { return Object.assign({}, pad, { phase: Math.random() * 6 }); }),
       breakables: def.breakables.map(function (b) { return Object.assign({}, b, { broken: false }); }),
-      boss: Object.assign({}, def.boss, { origin: def.boss.x, dir: -1, alive: true, hitFlash: 0, attack: 0, attackCooldown: 1.5, windup: 0, attackDir: -1 }),
+      boss: Object.assign({}, def.boss, { origin: def.boss.x, dir: -1, alive: true, hitFlash: 0, attack: 0, attackCooldown: 1.5, windup: 0, attackDir: -1, phase: 1 }),
       secretFound: saveData.secrets.indexOf(index) >= 0,
       checkpointX: 65, checkpointReached: false,
       easterFound: saveData.easterEggs.indexOf(index) >= 0, easterTimer: 0,
@@ -552,14 +552,24 @@
     burst(sx, sy, '#f7d478', 22, 1.4); showToast(world.def.secret.message); playTone(720, .24, 'triangle');
   }
   function enemyRenderY(enemy) {
-      if (enemy.type !== 'bat') return FLOOR - 39;
-      var y = FLOOR - 112 + Math.sin(world.time * 4 + enemy.bob) * 12;
+    if (enemy.type === 'bat') {
+      var batY = FLOOR - 112 + Math.sin(world.time * 4 + enemy.bob) * 12;
       if (enemy.diveTimer > 0) {
-        var progress = Math.max(0, Math.min(1, 1 - enemy.diveTimer / .72));
-        y += Math.sin(progress * Math.PI) * 72;
+        var diveProgress = Math.max(0, Math.min(1, 1 - enemy.diveTimer / .72));
+        batY += Math.sin(diveProgress * Math.PI) * 72;
       }
-      return y;
+      return batY;
     }
+    if (enemy.type === 'hopper') {
+      var baseY = FLOOR - 39;
+      if (enemy.hopTimer > 0) {
+        var hopProgress = Math.max(0, Math.min(1, 1 - enemy.hopTimer / .72));
+        baseY -= Math.sin(hopProgress * Math.PI) * 66;
+      }
+      return baseY;
+    }
+    return FLOOR - 39;
+  }
 
   function combatBoxForEnemy(e) {
     var y = enemyRenderY(e);
@@ -587,6 +597,15 @@
     if (!boss.alive || (source === 'melee' && boss.lastAttackSerial === player.attackSerial)) return;
     if (source === 'melee') boss.lastAttackSerial = player.attackSerial;
     boss.hp = Math.max(0, boss.hp - damage); boss.hitFlash = .3; shake = Math.max(shake, source === 'melee' ? 6.5 : 5);
+    var bossMaxHp = currentLevelIndex === 0 ? 3 : 4;
+    if (boss.phase === 1 && boss.hp > 0 && boss.hp <= Math.ceil(bossMaxHp / 2)) {
+      boss.phase = 2; boss.speed *= 1.18;
+      boss.attackCooldown = Math.min(boss.attackCooldown, 1.35);
+      burst(boss.x + 28, FLOOR - 54, currentLevelIndex === 1 ? '#8fe1d1' : currentLevelIndex === 2 ? '#b6d985' : '#f3a46c', 26, 1.35);
+      shake = Math.max(shake, 8); haptic(24);
+      showToast('DRUGA FAZA! BOSS WPADA W FURIĘ!');
+      playTone(82, .24, 'sawtooth');
+    }
     if (source === 'melee') {
       var recoil = player.attackFacing || player.facing;
       boss.x = Math.max(boss.origin - 70, Math.min(boss.origin + 70, boss.x + recoil * 9));
@@ -688,6 +707,23 @@
       e.chargeTimer = Math.max(0, (e.chargeTimer || 0) - dt);
       e.chargeWindup = Math.max(0, e.chargeWindup || 0);
       e.diveCooldown = Math.max(0, (e.diveCooldown || 0) - dt);
+      e.hopCooldown = Math.max(0, (e.hopCooldown || 0) - dt);
+      if (e.type === 'hopper' && e.stun <= 0) {
+        if (e.hopWindup > 0) {
+          e.hopWindup = Math.max(0, e.hopWindup - dt);
+          if (e.hopWindup === 0) {
+            e.hopTimer = .72;
+            e.dir = e.hopDir = player.x + player.w / 2 < e.x + 18 ? -1 : 1;
+            playTone(270, .08, 'triangle'); haptic(6);
+          }
+        } else if (e.hopTimer > 0) {
+          e.hopTimer = Math.max(0, e.hopTimer - dt);
+        } else if (e.hopCooldown <= 0 && Math.abs(player.x + player.w / 2 - (e.x + 18)) < 245) {
+          e.hopDir = player.x + player.w / 2 < e.x + 18 ? -1 : 1;
+          e.dir = e.hopDir; e.hopWindup = .3; e.hopCooldown = 3.25;
+          playTone(185, .08, 'sine');
+        }
+      }
       if (e.type === 'bat' && e.stun <= 0) {
         if (e.diveWindup > 0) {
           e.diveWindup = Math.max(0, e.diveWindup - dt);
@@ -728,8 +764,8 @@
           e.dir = player.x < e.x ? -1 : 1; e.chargeWindup = .44; e.chargeCooldown = 3.15;
           playTone(155, .1, 'triangle');
         }
-        if (e.chargeWindup <= 0 && !(e.type === 'bat' && e.diveWindup > 0) && !(e.type === 'spitter' && e.spitWindup > 0)) {
-          var speedFactor = e.type === 'charger' && e.chargeTimer > 0 ? 3.1 : (e.type === 'bat' && e.diveTimer > 0 ? 1.9 : 1);
+        if (e.chargeWindup <= 0 && !(e.type === 'bat' && e.diveWindup > 0) && !(e.type === 'spitter' && e.spitWindup > 0) && !(e.type === 'hopper' && e.hopWindup > 0)) {
+          var speedFactor = e.type === 'charger' && e.chargeTimer > 0 ? 3.1 : (e.type === 'bat' && e.diveTimer > 0 ? 1.9 : (e.type === 'hopper' && e.hopTimer > 0 ? 1.55 : 1));
           e.x += e.dir * e.speed * speedFactor * dt * 60;
           if (e.x < e.min || e.x > e.max) { e.x = Math.max(e.min, Math.min(e.max, e.x)); e.dir *= -1; }
           if (e.type !== 'bat') {
@@ -814,8 +850,8 @@
             for (var crystalIndex = -1; crystalIndex <= 1; crystalIndex++) {
               world.hostileProjectiles.push({
                 x: bossSpawnX, y: FLOOR - 58,
-                vx: boss.attackDir * (4.05 - Math.abs(crystalIndex) * .35),
-                vy: crystalIndex === 0 ? -5.8 : -4.25,
+                vx: boss.attackDir * (4.05 - Math.abs(crystalIndex) * .35 + (boss.phase === 2 ? .4 : 0)),
+                vy: crystalIndex === 0 ? (boss.phase === 2 ? -6.1 : -5.8) : (boss.phase === 2 ? -4.55 : -4.25),
                 gravity: .17, life: 2.8, radius: 9, bossCrystal: true
               });
             }
@@ -824,21 +860,21 @@
             for (var bubbleIndex = -1; bubbleIndex <= 1; bubbleIndex++) {
               world.hostileProjectiles.push({
                 x: bossSpawnX, y: FLOOR - 48,
-                vx: boss.attackDir * (3.5 + bubbleIndex * .65),
-                vy: bubbleIndex === 0 ? -6.1 : -4.65,
+                vx: boss.attackDir * (3.5 + bubbleIndex * .65 + (boss.phase === 2 ? .28 : 0)),
+                vy: bubbleIndex === 0 ? (boss.phase === 2 ? -6.4 : -6.1) : -4.65,
                 gravity: .145, life: 2.7, radius: 10, bossBubble: true
               });
             }
             burst(bossSpawnX, FLOOR - 48, '#9de2ba', 13, .8); playTone(285, .16, 'sine');
           } else {
-            world.hostileProjectiles.push({ x: bossSpawnX + (boss.attackDir > 0 ? 9 : -19), y: FLOOR - 13, vx: boss.attackDir * 4.9, vy: 0, life: 2.5, radius: 11, bossWave: true });
+            world.hostileProjectiles.push({ x: bossSpawnX + (boss.attackDir > 0 ? 9 : -19), y: FLOOR - 13, vx: boss.attackDir * (boss.phase === 2 ? 5.35 : 4.9), vy: 0, life: 2.5, radius: 11, bossWave: true });
             burst(bossSpawnX, FLOOR - 13, '#e69b59', 9, .65); playTone(105, .16, 'sawtooth');
           }
         }
       } else if (boss.attackCooldown <= 0 && Math.abs(player.x + player.w / 2 - (boss.x + 30)) < 390) {
         boss.attackDir = player.x + player.w / 2 < boss.x + 30 ? -1 : 1;
         boss.windup = boss.attackStyle === 'shockwave' ? .68 : .82;
-        boss.attackCooldown = boss.attackStyle === 'crystalVolley' ? 3.8 : 3.55;
+        boss.attackCooldown = (boss.attackStyle === 'crystalVolley' ? 3.8 : 3.55) * (boss.phase === 2 ? .78 : 1);
         playTone(boss.attackStyle === 'bubbleVolley' ? 245 : 180, .12, 'square');
       }
     }
@@ -1216,8 +1252,10 @@
       ctx.strokeStyle = '#263d37'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(28, 9); ctx.lineTo(36, 11); ctx.stroke();
       ctx.fillStyle = '#f0d6ac'; ctx.beginPath(); ctx.moveTo(18, 29); ctx.lineTo(22, 36); ctx.lineTo(25, 29); ctx.fill();
     } else if (e.type === 'hopper') {
-      var hop = Math.max(0, Math.sin(world.time * 7 + e.bob)) * 3;
-      ctx.translate(0, -hop);
+      var hopProgress = e.hopTimer > 0 ? Math.max(0, Math.min(1, 1 - e.hopTimer / .72)) : 0;
+      var hop = e.hopTimer > 0 ? 0 : Math.max(0, Math.sin(world.time * 7 + e.bob)) * 2;
+      var crouch = e.hopWindup > 0 ? Math.sin((e.hopWindup / .3) * Math.PI / 2) * 5 : 0;
+      ctx.translate(0, -hop + crouch);
       var hg = ctx.createLinearGradient(0, 0, 0, 44); hg.addColorStop(0, '#f3b56d'); hg.addColorStop(1, '#b96646');
       ctx.fillStyle = hg; ctx.strokeStyle = '#704532'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.ellipse(20, 25, 23, 15, -.08, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
@@ -1265,6 +1303,12 @@
       ctx.fillStyle = '#2d3d29'; ctx.beginPath(); ctx.arc(40, 9, 2, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = '#4a6338'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(7, 34); ctx.lineTo(2, 41); ctx.moveTo(29, 34); ctx.lineTo(34, 41); ctx.stroke();
       ctx.strokeStyle = '#e8d5a4'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(39, 23); ctx.lineTo(45, 24); ctx.stroke();
+    }
+    if (e.type === 'hopper' && e.hopWindup > 0) {
+      var hopWarn = .55 + Math.sin(world.time * 27) * .3;
+      ctx.globalAlpha = hopWarn; ctx.strokeStyle = '#ffe2a0'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(22, -7, 10 + Math.sin(world.time * 16) * 2, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#fff0bd'; ctx.font = '900 13px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('↑', 22, -22); ctx.textAlign = 'left'; ctx.globalAlpha = 1;
     }
     if (e.type === 'bat' && e.diveWindup > 0) {
       var diveWarn = .58 + Math.sin(world.time * 25) * .3;
@@ -1347,6 +1391,14 @@
     var bob = Math.sin(world.time * 3.2) * 2.2;
     ctx.fillStyle = 'rgba(9,25,19,.34)';
     ctx.beginPath(); ctx.ellipse(27, 86, 65, 10, 0, 0, Math.PI * 2); ctx.fill();
+    if (b.phase === 2) {
+      var ragePulse = .26 + (Math.sin(world.time * 8) + 1) * .12;
+      ctx.save(); ctx.globalAlpha = ragePulse; ctx.globalCompositeOperation = 'screen';
+      ctx.strokeStyle = currentLevelIndex === 1 ? '#8fe1d1' : currentLevelIndex === 2 ? '#b6d985' : '#f3a46c';
+      ctx.lineWidth = 3; ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 17;
+      ctx.beginPath(); ctx.ellipse(27, 45, 75 + Math.sin(world.time * 4) * 3, 47, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
 
     if (currentLevelIndex === 0) {
       // TRZASKACZ — szybki, kolczasty drapieżnik z ciężką szczęką.
@@ -1481,6 +1533,7 @@
       ctx.fillStyle = '#fff1cc'; ctx.font = '900 10px sans-serif'; ctx.textAlign = 'center';
       ctx.shadowColor = 'rgba(0,0,0,.75)'; ctx.shadowBlur = 5;
       ctx.fillText(world.def.bossName, x + 33, y - 39);
+      if (b.phase === 2) { ctx.fillStyle = '#ffd58a'; ctx.font = '900 8px sans-serif'; ctx.fillText('FAZA II • FURIA', x + 34, y - 20); }
       ctx.shadowBlur = 0; ctx.textAlign = 'left';
       if (b.windup > 0) {
         var warningPulse = .55 + Math.sin(world.time * 24) * .35;
