@@ -190,8 +190,14 @@
     $('amberCount').textContent = player.amber;
     $('boneCount').textContent = player.bones;
   }
+  function releaseInputs() {
+    input.left = false; input.right = false;
+    Object.keys(keys).forEach(function (key) { keys[key] = false; });
+    document.querySelectorAll('.control-button.active').forEach(function (button) { button.classList.remove('active'); });
+  }
   function pauseGame() {
     if (!active) return;
+    releaseInputs();
     paused = true; $('pausePanel').classList.remove('hidden');
   }
   function resumeGame() {
@@ -814,6 +820,8 @@
     ['pointerup','pointercancel','lostpointercapture'].forEach(function(evt){button.addEventListener(evt,function(){button.classList.remove('active');});});
   });
   document.addEventListener('visibilitychange',function(){if(document.hidden&&active&&!paused)pauseGame();});
+  window.addEventListener('blur',function(){releaseInputs();if(active&&!paused)pauseGame();});
+  window.addEventListener('pagehide',releaseInputs);
   window.addEventListener('resize',function(){if(active&&world)drawWorld();});
   canvas.addEventListener('contextmenu',function(e){e.preventDefault();});
   renderMap();
