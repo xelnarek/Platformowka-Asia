@@ -143,6 +143,6 @@ Postęp jest przechowywany w `localStorage` na urządzeniu. Prototyp nie wysyła
 - Nietoperz zapowiada nurkowanie krótkim sygnałem wizualnym i dźwiękowym. Tor nurkowania jest wspólny dla rysowania oraz hitboxa, więc trafienie odpowiada temu, co gracz widzi.
 - Plujak zatrzymuje się, ustawia w stronę bohaterki i zapowiada pocisk przed wystrzałem. Kieruje pocisk w miejsce, w którym Asia była w chwili ostrzeżenia, dzięki czemu ruch i skok pozwalają uniknąć trafienia.
 - Asia otrzymuje delikatne rozciągnięcie podczas wznoszenia, pochylony profil w szarży oraz krótkie ściśnięcie po mocniejszym lądowaniu. Transformacja jest zakotwiczona przy stopach, aby nie przesuwać postaci po platformie.
-- Taran zadaje obrażenia przeciwnikom tylko raz na jedno użycie. Przeciwnicy opancerzeni wymagają dwóch trafień zamiast znikać natychmiast.
+- Taran zadaje obrażenia przeciwnikowi tylko raz na jedno użycie. Przeciwnicy opancerzeni wymagają dwóch trafień taranem zamiast znikać natychmiast.
 - Po utracie ostatniego serca respawn czyści aktywne stany ataku, miażdżenia i tarana.
 - Efekty trafień przeciwników powietrznych pojawiają się przy ich rzeczywistym hitboxie, a nie przy ziemi.
