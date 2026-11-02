@@ -61,14 +61,13 @@ const checks = [
   ['Canvas receives biome atmosphere, textured ground and detailed platform materials', game.includes('function drawAtmosphere(def)') && game.includes('function drawGroundDetails()') && game.includes('var material = ctx.createLinearGradient')],
   ['Camera shake is smoothly phase-based instead of random per frame', game.includes('var shakePhase = world.time * 48') && game.includes('Math.cos(shakePhase * 1.27)')],
   ['Landscape play mode expands the frame to the full viewport', css.includes('#gameStage{') && css.includes('height:100svh') && css.includes('aspect-ratio:auto')],
-  ['Color grading and player grounding visuals are rendered', game.includes('function drawColorGrade()') && game.includes('function drawPlayerShadow()')]
-
+  ['Color grading and player grounding visuals are rendered', game.includes('function drawColorGrade()') && game.includes('function drawPlayerShadow()')],
   ['Three bosses use distinct biome-specific visual silhouettes', game.includes('TRZASKACZ — szybki, kolczasty drapieżnik') && game.includes('KRÓL GŁAZÓW — szeroki kamienny golem') && game.includes('BŁOTNY BULGOT — ciężka bagienna ropucha')],
   ['Biome depth layers add distinct jungle, cave and swamp silhouettes', game.includes('function drawBiomeDepth(def)') && game.includes('drawBiomeDepth(world.def)') && game.includes('stalactites') === false],
-  ['Platforms have biome-specific materials, facets and decorative details', game.includes('function drawPlatforms()') && game.includes('topStops') && game.includes('theme === \\'cave\\'') && game.includes('theme === \\'swamp\\'')],
+  ['Platforms have biome-specific materials, facets and decorative details', game.includes('function drawPlatforms()') && game.includes('topStops') && game.includes("theme === 'cave'") && game.includes("theme === 'swamp'")],
   ['Ground patrol enemies turn back instead of walking across pits', game.includes('var enemyCenter = e.x + 18') && game.includes('e.chargeTimer = 0; e.chargeWindup = 0;')],
   ['Thrown and hostile gravity projectiles collide with platforms and safe ground', game.includes('function projectileSurfaceY(') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, 9)') && game.includes('projectileSurfaceY(shot.x, previousShotY, shot.y, shot.radius)')],
-  ['Particle effects are capped for predictable mobile performance', game.includes('if (particles.length > 220) particles.splice(0, particles.length - 220)')];
+  ['Particle effects are capped for predictable mobile performance', game.includes('if (particles.length > 220) particles.splice(0, particles.length - 220)')]
 ];
 
 let failed = false;
