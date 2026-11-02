@@ -643,12 +643,11 @@
       var frame = p.hurtFlash > 0 ? 5 : (p.stomping ? 4 : (!p.grounded ? 3 : (Math.abs(p.vx) > .55 ? (Math.floor(p.anim / 3) % 2 ? 1 : 2) : 0)));
       var drawW = 78, drawH = 88;
       ctx.save();
+      var drawX = x - 21;
       if (p.facing < 0) {
-        ctx.translate(x + p.w + 21, 0); ctx.scale(-1, 1);
-        ctx.drawImage(art.asia, frame * 96, 0, 96, 96, -19, y - 25, drawW, drawH);
-      } else {
-        ctx.drawImage(art.asia, frame * 96, 0, 96, 96, x - 21, y - 25, drawW, drawH);
+        ctx.translate(drawX * 2 + drawW, 0); ctx.scale(-1, 1);
       }
+      ctx.drawImage(art.asia, frame * 96, 0, 96, 96, drawX, y - 25, drawW, drawH);
       if (p.stomping) {
         ctx.globalAlpha = .65; ctx.strokeStyle = '#fff0a8'; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.ellipse(x + p.w / 2, y + p.h + 3, 27 + Math.sin(world.time * 24) * 5, 8, 0, 0, Math.PI * 2); ctx.stroke();
