@@ -19,6 +19,20 @@
   var shake = 0;
   var saveData = loadSave();
   var player = createPlayer();
+  var art = { asia: null, jungle: null, cave: null, swamp: null };
+  function preloadArt() {
+    var sources = { asia: './assets/asia-sprites.svg', jungle: './assets/jungle-bg.svg', cave: './assets/cave-bg.svg', swamp: './assets/swamp-bg.svg' };
+    Object.keys(sources).forEach(function (key) {
+      var image = new Image();
+      image.onload = function () { art[key] = image; };
+      image.src = sources[key];
+    });
+  }
+  function haptic(duration) {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try { navigator.vibrate(duration || 16); } catch (e) {}
+    }
+  }
 
   var levelDefinitions = [
     {
@@ -70,10 +84,12 @@
         secrets: Array.isArray(parsed.secrets) ? parsed.secrets : [],
         eggs: Array.isArray(parsed.eggs) ? parsed.eggs : [],
         easterEggs: Array.isArray(parsed.easterEggs) ? parsed.easterEggs : [],
-        sound: parsed.sound !== false
+        sound: parsed.sound !== false,
+        leftHanded: parsed.leftHanded === true,
+        controlScale: Math.max(85, Math.min(125, Number(parsed.controlScale) || 100))
       };
     } catch (e) {
-      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], eggs: [], easterEggs: [], sound: true };
+      return { completed: [], best: {}, totalAmber: 0, totalBones: 0, secrets: [], eggs: [], easterEggs: [], sound: true, leftHanded: false, controlScale: 100 };
     }
   }
   function persist() {
@@ -122,6 +138,20 @@
     ['menuScreen', 'mapScreen', 'gameScreen'].forEach(function (id) { $(id).classList.toggle('hidden', id !== name); });
   }
   function unlocked(index) { return index === 0 || saveData.completed.indexOf(index - 1) !== -1; }
+  function renderMenuStats() {
+    $('menuComplete').textContent = saveData.completed.length + '/3';
+    $('menuAmber').textContent = saveData.totalAmber;
+    $('menuEggs').textContent = saveData.eggs.length + '/3';
+  }
+  function applyPreferences() {
+    document.body.classList.toggle('controls-reversed', !!saveData.leftHanded);
+    document.documentElement.style.setProperty('--touch-scale', String((saveData.controlScale || 100) / 100));
+    $('settingsSound').textContent = soundOn ? 'WŁĄCZONE' : 'WYŁĄCZONE';
+    $('settingsSound').setAttribute('aria-pressed', String(soundOn));
+    $('settingsHand').textContent = saveData.leftHanded ? 'LEWA RĘKA' : 'PRAWA RĘKA';
+    $('settingsHand').setAttribute('aria-pressed', String(!!saveData.leftHanded));
+    $('controlScale').value = String(saveData.controlScale || 100);
+  }
   function renderMap() {
     var host = $('levelCards');
     host.innerHTML = '';
@@ -131,7 +161,7 @@
       var card = document.createElement('button');
       card.className = 'level-card';
       card.disabled = !open;
-      var artClass = index === 1 ? 'cave' : (index === 2 ? 'swamp' : '');
+      var artClass = index === 1 ? 'cave' : (index === 2 ? 'swamp' : 'jungle');
       card.innerHTML = '<div class="level-art ' + artClass + '"><span class="level-number">0' + (index + 1) + '</span><span class="level-symbol">' + def.symbol + '</span></div>' +
         '<div class="level-card-copy"><strong>' + def.world + '</strong><small>' + def.name + '</small><em>' + (done ? '✓ UKOŃCZONO' : (open ? 'ZAGRAJ  →' : '🔒 ZABLOKOWANE')) + '</em></div>';
       card.addEventListener('click', function () { startLevel(index); });
@@ -139,6 +169,7 @@
     });
     $('progressText').textContent = saveData.completed.length + ' / ' + levelDefinitions.length + ' ukończone';
     $('progressFill').style.width = (saveData.completed.length / levelDefinitions.length * 100) + '%';
+    renderMenuStats();
   }
   function startLevel(index) {
     if (!unlocked(index)) return;
@@ -182,7 +213,7 @@
     $('resultSecrets').textContent = player.secrets;
     $('nextButton').textContent = currentLevelIndex < levelDefinitions.length - 1 ? 'NASTĘPNY POZIOM' : 'WRÓĆ NA MAPĘ';
     $('resultPanel').classList.remove('hidden');
-    playTone(660, .18, 'triangle');
+    playTone(660, .18, 'triangle'); haptic(35);
     renderMap();
   }
   function hurtPlayer() {
@@ -216,13 +247,13 @@
     } else {
       player.primed = false; player.stomping = true; player.vy = 17;
     }
-    playTone(180, .08, 'square');
+    playTone(180, .08, 'square'); haptic(20);
   }
   function doDash() {
     if (!active || paused || player.dashCooldown > 0) return;
     player.dashTimer = .2; player.dashCooldown = 1.2; player.vx = player.facing * 13;
     burst(player.x + player.w / 2, player.y + player.h / 2, '#d4e7a0', 7, .7);
-    playTone(240, .08, 'sawtooth');
+    playTone(240, .08, 'sawtooth'); haptic(12);
   }
   function updatePlayer(dt) {
     var p = player, d = dt * 60, prevBottom = p.y + p.h, stompImpact = false;
@@ -303,7 +334,7 @@
         item.taken = true;
         if (item.type === 'amber') { p.amber += 1; burst(item.x, item.y, '#ffd66c', 8, .8); showToast('+1 bursztyn'); playTone(620, .07, 'sine'); }
         if (item.type === 'bone') { p.bones += 1; burst(item.x, item.y, '#eee4bd', 9, .8); showToast('Fragment skamieliny!'); playTone(760, .09, 'sine'); }
-        if (item.type === 'egg') { p.eggs += 1; if (saveData.eggs.indexOf(currentLevelIndex) === -1) saveData.eggs.push(currentLevelIndex); persist(); burst(item.x, item.y, '#fff1a5', 18, 1.2); showToast('ZŁOTE JAJO! Rzadki skarb.'); playTone(880, .2, 'triangle'); }
+        if (item.type === 'egg') { p.eggs += 1; if (saveData.eggs.indexOf(currentLevelIndex) === -1) saveData.eggs.push(currentLevelIndex); persist(); renderMenuStats(); burst(item.x, item.y, '#fff1a5', 18, 1.2); showToast('ZŁOTE JAJO! Rzadki skarb.'); playTone(880, .2, 'triangle'); haptic(28); }
         updateHUD();
       }
     });
@@ -381,6 +412,18 @@
     ctx.beginPath(); ctx.roundRect(x, y, w, h, r); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 3; ctx.stroke(); }
   }
   function drawBackground(def) {
+    var backgroundImage = art[def.theme === 'jungle' ? 'jungle' : def.theme];
+    if (backgroundImage && backgroundImage.complete && backgroundImage.naturalWidth > 0) {
+      var sourceX = Math.max(0, Math.min(backgroundImage.naturalWidth - W, cameraX * .43));
+      ctx.drawImage(backgroundImage, sourceX, 0, W, H, 0, 0, W, H);
+      for (var mote = 0; mote < 16; mote++) {
+        var mx = ((mote * 71 + world.time * (7 + mote % 4)) % (W + 20)) - 10;
+        var my = 90 + ((mote * 47 + Math.sin(world.time + mote) * 14) % 275);
+        ctx.fillStyle = def.theme === 'cave' ? 'rgba(177,247,226,.5)' : 'rgba(255,237,171,.38)';
+        ctx.beginPath(); ctx.arc(mx, my, mote % 3 === 0 ? 2.1 : 1.2, 0, Math.PI * 2); ctx.fill();
+      }
+      return;
+    }
     var pal = def.theme === 'cave'
       ? ['#344d50','#718b7b','#344b3a','#1b392d']
       : def.theme === 'swamp' ? ['#78a88b','#c4c67d','#507b50','#244c3a'] : ['#74b47b','#d3cf82','#618d50','#28563b'];
@@ -543,6 +586,26 @@
     }
   }
   function drawPlayer() {
+    var p = player, x = p.x - cameraX, y = p.y;
+    if (p.hurtFlash > 0 && Math.floor(performance.now() / 70) % 2 === 0) return;
+    if (art.asia && art.asia.complete && art.asia.naturalWidth >= 576) {
+      var frame = p.hurtFlash > 0 ? 5 : (p.stomping ? 4 : (!p.grounded ? 3 : (Math.abs(p.vx) > .55 ? (Math.floor(p.anim / 3) % 2 ? 1 : 2) : 0)));
+      var drawW = 78, drawH = 88;
+      ctx.save();
+      if (p.facing < 0) {
+        ctx.translate(x + p.w + 21, 0); ctx.scale(-1, 1);
+        ctx.drawImage(art.asia, frame * 96, 0, 96, 96, -19, y - 25, drawW, drawH);
+      } else {
+        ctx.drawImage(art.asia, frame * 96, 0, 96, 96, x - 21, y - 25, drawW, drawH);
+      }
+      if (p.stomping) {
+        ctx.globalAlpha = .65; ctx.strokeStyle = '#fff0a8'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.ellipse(x + p.w / 2, y + p.h + 3, 27 + Math.sin(world.time * 24) * 5, 8, 0, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.restore();
+      return;
+    }
+
     var p=player,x=p.x-cameraX,y=p.y;
     if(p.hurtFlash>0 && Math.floor(performance.now()/70)%2===0)return;
     ctx.save();ctx.translate(x+p.w/2,y+p.h/2);if(p.facing<0)ctx.scale(-1,1);
@@ -601,6 +664,21 @@
     requestAnimationFrame(frame);
   }
 
+  $('settingsButton').addEventListener('click', function () { applyPreferences(); $('settingsPanel').classList.remove('hidden'); });
+  $('closeSettings').addEventListener('click', function () { $('settingsPanel').classList.add('hidden'); });
+  $('settingsSound').addEventListener('click', function () {
+    soundOn = !soundOn; saveData.sound = soundOn; persist(); applyPreferences();
+    $('soundButton').textContent = 'DŹWIĘK: ' + (soundOn ? 'WŁ.' : 'WYŁ.');
+  });
+  $('settingsHand').addEventListener('click', function () {
+    saveData.leftHanded = !saveData.leftHanded; persist(); applyPreferences();
+  });
+  $('controlScale').addEventListener('input', function () {
+    saveData.controlScale = Number(this.value) || 100;
+    document.documentElement.style.setProperty('--touch-scale', String(saveData.controlScale / 100));
+    persist();
+  });
+
   $('continueButton').addEventListener('click',function(){
     var next=0;for(var i=0;i<levelDefinitions.length;i++){if(unlocked(i)&&saveData.completed.indexOf(i)===-1){next=i;break;}if(i===levelDefinitions.length-1)next=0;}
     startLevel(next);
@@ -620,6 +698,7 @@
   });
   $('soundButton').addEventListener('click',function(){soundOn=!soundOn;saveData.sound=soundOn;persist();this.textContent='DŹWIĘK: '+(soundOn?'WŁ.':'WYŁ.');});
   soundOn=saveData.sound;$('soundButton').textContent='DŹWIĘK: '+(soundOn?'WŁ.':'WYŁ.');
+  preloadArt(); applyPreferences();
 
   document.addEventListener('keydown',function(e){
     if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].indexOf(e.code)!==-1)e.preventDefault();
