@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="540" viewBox="0 0 1920 540">
+<defs>
+ <linearGradient id="cave" x2="0" y2="1"><stop stop-color="#263f4a"/><stop offset=".6" stop-color="#52766e"/><stop offset="1" stop-color="#283f36"/></linearGradient>
+ <linearGradient id="crystal" x2="0" y2="1"><stop stop-color="#b7f4dc"/><stop offset=".5" stop-color="#58bdad"/><stop offset="1" stop-color="#28677a"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#59745f"/><stop offset="1" stop-color="#1b342d"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#a6f5df" stop-opacity=".5"/><stop offset="1" stop-color="#a6f5df" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1920" height="540" fill="url(#cave)"/>
+<path d="M0 0h1920v130q-115 70-210 18t-190 10q-130-74-250 4t-240-5q-140 90-260 0t-220 14Q110 125 0 190Z" fill="#162e32" opacity=".8"/>
+<g fill="#213a3b"><path d="M0 0h105l-29 155-20-54-20 95-36-98zM250 0h100l-30 178-18-62-24 100-35-100zM650 0h110l-39 183-21-68-25 104-25-117zM1050 0h85l-20 172-25-67-23 100-24-96zM1440 0h130l-45 190-24-80-27 105-35-115zM1780 0h140v175l-42-60-30 90-38-93z"/></g>
+<g opacity=".85">
+ <ellipse cx="450" cy="300" rx="230" ry="180" fill="url(#glow)"/><ellipse cx="1350" cy="285" rx="250" ry="180" fill="url(#glow)"/>
+ <g fill="url(#crystal)" stroke="#8ee4d0" stroke-width="5"><path d="M340 405l-13-98 38-124 34 117-15 105z"/><path d="M388 408l8-72 39-99 20 109-23 62z"/><path d="M1230 412l-17-130 42-145 39 132-22 143z"/><path d="M1300 410l8-92 46-119 20 126-29 91z"/><path d="M1685 410l-17-95 39-122 31 119-14 98z"/></g>
+ <g fill="none" stroke="#d4fff0" stroke-width="7" opacity=".65"><path d="M365 197l5 115M415 259l4 78M1255 167l10 142M1350 209l7 107M1705 214l4 115"/></g>
+</g>
+<path d="M0 380q140-70 290 5t300-8q145-78 290 8t290-3q170-90 320 3t430-13v168H0Z" fill="url(#floor)"/>
+<g fill="#769d7d" stroke="#344d45" stroke-width="7"><path d="M150 374l-15-115 35-60 38 91-8 84z"/><path d="M840 380l-13-122 38-70 39 105-15 86z"/><path d="M1530 380l-16-118 40-75 43 117-14 76z"/></g>
+<g fill="#81d4be" opacity=".52"><circle cx="200" cy="218" r="5"/><circle cx="755" cy="265" r="4"/><circle cx="1100" cy="196" r="5"/><circle cx="1620" cy="247" r="4"/></g>
+<path d="M0 483q250-58 500 0t500-4q260-70 490 7t430-6v60H0Z" fill="#1b342b"/>
+</svg>
