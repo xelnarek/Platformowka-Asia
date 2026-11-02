@@ -17,7 +17,7 @@
         <span class="brand-mark">A!</span>
         <span><b>ASIA</b><small>EPOKA MIAŻDŻENIA</small></span>
       </a>
-      <div class="top-meta"><span class="status-dot"></span><span>PRZYGODA OFFLINE</span></div>
+      <div class="top-actions"><div class="top-meta"><span class="status-dot"></span><span>PRZYGODA OFFLINE</span></div><button id="settingsButton" class="icon-button settings-trigger" aria-label="Ustawienia">⚙</button></div>
     </header>
 
     <section id="menuScreen" class="screen menu-screen">
@@ -30,15 +30,14 @@
           <button id="mapButton" class="button button-secondary">WYBIERZ POZIOM</button>
         </div>
         <div class="feature-row">
-          <span>✦ 3 poziomy na start</span><span>✦ sekrety i skarby</span><span>✦ zapis na urządzeniu</span>
+          <span>✦ 3 grywalne poziomy</span><span>✦ ukryte skarby</span><span>✦ działa offline</span>
         </div>
+        <div class="menu-achievements"><div><b id="menuComplete">0/3</b><small>UKOŃCZONE</small></div><div><b id="menuAmber">0</b><small>BUR S Z T Y N Y</small></div><div><b id="menuEggs">0/3</b><small>ZŁOTE JAJA</small></div></div>
       </div>
-      <div class="hero-art" aria-label="Ilustracja bohaterki i prehistorycznego świata">
-        <div class="sun"></div><div class="hero-leaf leaf-a"></div><div class="hero-leaf leaf-b"></div>
-        <div class="hero-stone stone-a"></div><div class="hero-stone stone-b"></div>
-        <div class="hero-asia"><span class="hair"></span><span class="face"></span><span class="body"></span><span class="arm"></span><span class="leg leg-a"></span><span class="leg leg-b"></span><span class="boot"></span></div>
-        <div class="hero-dino">✦</div>
-        <div class="hero-caption">GOTOWA NA PRZYGODĘ?</div>
+      <div class="hero-art" aria-label="Asia w prehistorycznej Dolinie Paproci">
+        <img class="hero-illustration" src="./assets/title-art.svg" alt="Ilustracja Asi i małego dinozaura w zielonej prehistorycznej dolinie">
+        <div class="hero-art-shade"></div>
+        <div class="hero-caption"><span class="caption-mark">✦</span> GOTOWA NA PRZYGODĘ? <span class="caption-mark">✦</span></div>
       </div>
       <div class="menu-footer"><span>WERSJA 0.1 • PIERWSZY ROZDZIAŁ</span><button id="howButton" class="text-button">JAK GRAĆ?</button></div>
     </section>
@@ -78,6 +77,18 @@
       <div class="game-bottom"><span>DOTKNIJ I PRZYTRZYMAJ • MOŻESZ TEŻ UŻYĆ KLAWIATURY</span><button id="soundButton" class="text-button">DŹWIĘK: WŁ.</button></div>
     </section>
 
+    <section id="settingsPanel" class="help-panel hidden">
+      <div class="help-card settings-card">
+        <button id="closeSettings" class="icon-button close-help" aria-label="Zamknij">✕</button>
+        <p class="eyebrow">DOPASUJ ROZGRYWKĘ</p><h2>Ustawienia</h2>
+        <div class="settings-list">
+          <div class="settings-row"><div><b>Dźwięki</b><small>Efekty zbierania i uderzeń</small></div><button id="settingsSound" class="setting-toggle" aria-pressed="true">WŁĄCZONE</button></div>
+          <div class="settings-row"><div><b>Układ sterowania</b><small>Przenieś akcje na lewą stronę</small></div><button id="settingsHand" class="setting-toggle" aria-pressed="false">PRAWA RĘKA</button></div>
+          <div class="settings-row settings-range"><div><b>Wielkość przycisków</b><small>Ustaw wygodny rozmiar dotyku</small></div><input id="controlScale" type="range" min="85" max="125" step="5" value="100" aria-label="Wielkość przycisków"></div>
+        </div>
+        <p class="help-note">Ustawienia i postęp są przechowywane lokalnie na tym urządzeniu.</p>
+      </div>
+    </section>
     <section id="howPanel" class="help-panel hidden">
       <div class="help-card"><button id="closeHelp" class="icon-button close-help" aria-label="Zamknij">✕</button><p class="eyebrow">KRÓTKA INSTRUKCJA</p><h2>Jak grać?</h2>
         <div class="help-grid"><div><b>◀ ▶ RUCH</b><p>Przytrzymaj kierunek, aby iść lub biec.</p></div><div><b>↑ SKOK</b><p>Przeskakuj szczeliny, pułapki i przeciwników.</p></div><div><b>▼ MIAŻDŻENIE</b><p>W powietrzu uderz w ziemię. Rozbijaj kruche skały i ogłuszaj wrogów.</p></div><div><b>» TARAN</b><p>Krótka szarża. Używaj do szybkiego przemieszczania i rozbijania słabych przeszkód.</p></div></div>
