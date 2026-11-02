@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="576" height="96" viewBox="0 0 576 96">
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="96" viewBox="0 0 768 96">
 <defs>
   <linearGradient id="skin" x2="0" y2="1"><stop stop-color="#ffd6a5"/><stop offset="1" stop-color="#d99469"/></linearGradient>
   <linearGradient id="tunic" x2="0" y2="1"><stop stop-color="#55a58a"/><stop offset="1" stop-color="#286b61"/></linearGradient>
@@ -91,4 +91,38 @@
  <path d="M30 46l-10 3 11 8 9-3z" fill="#df805c"/><path d="M40 10l7-5 6 5-4 5z" fill="#eec56f" stroke="#825b36" stroke-width="1.4"/>
  <path d="M71 8l7-8 2 9 9 2-8 5 2 9-8-6-8 5 3-9-6-6z" fill="#f3d87d" stroke="#bc8648" stroke-width="1.5"/>
 </g>
+  <!-- pan attack: forward lean, braced feet and an extended striking arm -->
+  <g transform="translate(576 0)">
+    <ellipse cx="48" cy="89" rx="28" ry="4" fill="#203b2a" opacity=".25" filter="url(#soft)"/>
+    <path d="M35 62l-6 16 8 4 10-16M55 62l7 15 10 2 2 6-17-1-12-13" fill="url(#skin)" stroke="#754a35" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 78q-2 6 2 8l17 1q4-4-2-8zM58 79q-1 6 4 8l15 1q2-5-3-8z" fill="url(#boot)" stroke="#573a2a" stroke-width="2"/>
+    <path d="M31 40q4-6 11-6h17q9 3 10 12l-4 21q-16 8-34-1l-4-17z" fill="url(#tunic)" stroke="#214f49" stroke-width="2.5"/>
+    <path d="M34 57q15 7 31-1" fill="none" stroke="#e8bd69" stroke-width="4"/>
+    <path d="M31 18q3-13 20-13 20 1 22 20l-5 17q-6-9-12-12-15 9-27 1z" fill="url(#hair)" stroke="#38251f" stroke-width="2"/>
+    <path d="M31 23q-3 20 6 27 5 4 7-2l-3-21M65 20q7 20-3 37-4 6-9 0l5-26" fill="url(#hair)" stroke="#38251f" stroke-width="2"/>
+    <path d="M39 24q1-8 11-8 13 0 14 12l-3 15q-7 10-19 3-7-5-6-15z" fill="url(#skin)" stroke="#9b6249" stroke-width="1.8"/>
+    <path d="M39 25q10-13 22-2l5 8q-13-7-25 1z" fill="#563327"/>
+    <circle cx="57" cy="31" r="1.8" fill="#34261f"/><path d="M57 39q3 2 6-1" stroke="#a45f50" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M30 46l-10 3 11 8 9-3z" fill="#df805c"/><path d="M40 10l7-5 6 5-4 5z" fill="#eec56f" stroke="#825b36" stroke-width="1.4"/>
+    <path d="M57 43q12-10 23-9l10-7 5 5-12 12-20 9" fill="none" stroke="url(#skin)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M33 46q-8 8-14 18" fill="none" stroke="url(#skin)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M47 43l9 8-9 5-7-9" fill="#72c1a3" opacity=".65"/>
+  </g>
+  <!-- club attack: raised shoulder and a stronger, two-handed overhead swing pose -->
+  <g transform="translate(672 0)">
+    <ellipse cx="48" cy="89" rx="28" ry="4" fill="#203b2a" opacity=".25" filter="url(#soft)"/>
+    <path d="M34 62l-5 16 8 4 9-16M55 62l7 15 10 2 2 6-17-1-12-13" fill="url(#skin)" stroke="#754a35" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M25 78q-2 6 2 8l17 1q4-4-2-8zM58 79q-1 6 4 8l15 1q2-5-3-8z" fill="url(#boot)" stroke="#573a2a" stroke-width="2"/>
+    <path d="M31 40q4-6 11-6h17q9 3 10 12l-4 21q-16 8-34-1l-4-17z" fill="url(#tunic)" stroke="#214f49" stroke-width="2.5"/>
+    <path d="M34 57q15 7 31-1" fill="none" stroke="#e8bd69" stroke-width="4"/>
+    <path d="M29 18q3-13 20-13 20 1 22 20l-5 17q-6-9-12-12-15 9-27 1z" fill="url(#hair)" stroke="#38251f" stroke-width="2"/>
+    <path d="M31 23q-3 20 6 27 5 4 7-2l-3-21M65 20q7 20-3 37-4 6-9 0l5-26" fill="url(#hair)" stroke="#38251f" stroke-width="2"/>
+    <path d="M39 24q1-8 11-8 13 0 14 12l-3 15q-7 10-19 3-7-5-6-15z" fill="url(#skin)" stroke="#9b6249" stroke-width="1.8"/>
+    <path d="M39 25q10-13 22-2l5 8q-13-7-25 1z" fill="#563327"/>
+    <circle cx="57" cy="31" r="1.8" fill="#34261f"/><path d="M57 39q3 2 6-1" stroke="#a45f50" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M30 46l-10 3 11 8 9-3z" fill="#df805c"/><path d="M40 10l7-5 6 5-4 5z" fill="#eec56f" stroke="#825b36" stroke-width="1.4"/>
+    <path d="M57 42q4-18 17-24l4-11 7 1-1 17-17 24" fill="none" stroke="url(#skin)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M40 43q-5-13 4-21" fill="none" stroke="url(#skin)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M47 43l9 8-9 5-7-9" fill="#72c1a3" opacity=".65"/>
+  </g>
 </svg>

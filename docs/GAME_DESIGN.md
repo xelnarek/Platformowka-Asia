@@ -85,7 +85,9 @@ W aktualnym wycinku znajdują się trzy specjalne spotkania: dinozaur naśladowc
 
 ## Przeciwnicy i bossowie
 
-Rodzaje przeciwników powinny różnić się ruchem i reakcją na umiejętności, a nie tylko kolorem. Przeciwnik naziemny może patrolować lub skakać; powietrzny wymusza obserwację i zmianę pozycji; ciężki przeciwnik wymaga przerwania osłony albo ataku z góry. Szarżujący wróg i boss zapowiadają atak czytelnym sygnałem; ostrzeżenie bossa wskazuje również kierunek fali przy ziemi, którą można ominąć skokiem.
+Rodzaje przeciwników powinny różnić się ruchem i reakcją na umiejętności, a nie tylko kolorem. Trafienia powodują wyraźny odrzut, błysk i krótkie ogłuszenie przeciwnika, jeśli przeżyje cios. Przeciwnik naziemny może patrolować lub skakać; powietrzny wymusza obserwację i zmianę pozycji; ciężki przeciwnik wymaga przerwania osłony albo ataku z góry. Szarżujący wróg i boss zapowiadają atak czytelnym sygnałem; ostrzeżenie bossa wskazuje również kierunek fali przy ziemi, którą można ominąć skokiem.
+
+Bossowie mają różne wzorce ataków: Trzaskacz wysyła falę przy ziemi, Król Głazów wystrzeliwuje wachlarz odłamków, a Błotny Bulgot wyrzuca trzy łuki bąbelków. Każdy wzorzec otrzymuje osobny sygnał ostrzegawczy i czytelny efekt trafienia.
 
 Każdy boss:
 - ma własną sylwetkę i zestaw animacji,
@@ -105,7 +107,7 @@ Warstwy atmosfery, parallaxu, materiałów platform, poświat znajdziek i detali
 - Docelowa orientacja: pozioma.
 - Duże przyciski kierunkowe i akcji; możliwa regulacja ich rozmiaru i przezroczystości.
 - Po wejściu/wyjściu z pełnego ekranu kontrolki dotykowe resetują przechwycony wskaźnik, a rozmiar canvasu i układ sterowania przeliczają się ponownie.
-- Podstawowy atak ma czytelny, szerszy zasięg; hitbox i animacja zamachu muszą mieć tę samą długość.
+- Podstawowy atak ma czytelny, szerszy zasięg; hitbox i animacja zamachu muszą mieć tę samą długość. Kierunek zamachu zostaje zapamiętany w momencie naciśnięcia ataku, a animacje postaci mają osobne pozy dla patelni i maczugi.
 - Lewa/prawa ręka: docelowo alternatywne rozmieszczenie kontrolek.
 - Pauza jednym dotknięciem; po powrocie z aplikacji gra nie rusza bez zgody.
 - HUD pokazuje tylko serca, bursztyny i skamieliny; reszta informacji jest kontekstowa.
