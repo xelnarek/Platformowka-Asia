@@ -242,3 +242,12 @@ h1 em{font-size:.94em;color:#f3c96e;text-shadow:0 5px 0 #9e633b,0 12px 25px rgba
 @media(orientation:landscape) and (max-height:560px) and (max-width:1024px){
   .settings-card{max-height:94svh;overflow:auto}
 }
+
+/* Left-handed layout mirrors the two control groups without changing game input semantics. */
+.controls-reversed .move-controls{order:2;flex-direction:row-reverse}
+.controls-reversed .action-controls{order:1;flex-direction:row-reverse}
+.settings-trigger:hover{color:#fff0b7;transform:rotate(12deg)}
+@media(max-width:760px){
+  .controls-reversed .touch-controls{flex-direction:row}
+  .settings-card{padding:23px 17px}
+}
