@@ -56,7 +56,7 @@
       <div class="game-topbar">
         <button class="icon-button game-menu-button" id="pauseButton" aria-label="Pauza">Ⅱ</button>
         <div class="level-label"><small id="worldLabel">DOLINA PAPROCI</small><b id="levelLabel">01 • Pobudka pod paprocią</b></div>
-        <div class="game-stats"><span>♥ <b id="hearts">3</b></span><span>✦ <b id="amberCount">0</b></span><span>🦴 <b id="boneCount">0</b></span></div>
+        <div class="game-stats"><span>♥ <b id="hearts">3</b></span><span>✦ <b id="amberCount">0</b></span><span>🦴 <b id="boneCount">0</b></span><span class="weapon-status" id="weaponLabel" aria-label="Broń: patelnia">🍳 PATELNIA</span></div>
         <div class="game-tools"><button id="soundButton" class="game-tool-button" aria-label="Wyłącz muzykę i efekty" title="Muzyka i efekty">♫</button><button id="fullscreenButton" class="game-tool-button" aria-label="Włącz pełny ekran" title="Pełny ekran">⛶</button></div>
       </div>
       <div class="game-stage" id="gameStage">
@@ -85,9 +85,9 @@
             <span class="joystick-caption" aria-hidden="true">RUCH</span>
           </div>
         </div>
-        <div class="action-controls"><button class="control-button action-smash" data-action="smash" aria-label="Miażdżenie"><span>▼</span><small>MIAŻDŻ</small></button><button class="control-button action-jump" data-action="jump" aria-label="Skok"><span>↑</span><small>SKOK</small></button><button class="control-button action-dash" data-action="dash" aria-label="Szarża"><span>»</span><small>TARAN</small></button></div>
+        <div class="action-controls"><button class="control-button action-attack" data-action="attack" aria-label="Atak patelnią" title="Atak podstawowy — C / J"><span>🍳</span><small>ATAK</small></button><button class="control-button action-smash" data-action="smash" aria-label="Miażdżenie"><span>▼</span><small>MIAŻDŻ</small></button><button class="control-button action-jump" data-action="jump" aria-label="Skok"><span>↑</span><small>SKOK</small></button><button class="control-button action-dash" data-action="dash" aria-label="Szarża"><span>»</span><small>TARAN</small></button></div>
       </div>
-      <div class="game-bottom"><span>STERUJ JOYSTICKIEM • A / D LUB ← / → NA KLAWIATURZE</span><span class="game-audio-note">PRZYCISKI AKCJI PO PRAWEJ</span></div>
+      <div class="game-bottom"><span>ATAK: C / J • RUCH: JOYSTICK / A / D • ZNAJDUJ BRONIE</span><span class="game-audio-note">PATELNIA • MACZUGA • BUMERANG</span></div>
     </section>
 
     <section id="settingsPanel" class="help-panel hidden">
@@ -104,8 +104,8 @@
     </section>
     <section id="howPanel" class="help-panel hidden">
       <div class="help-card"><button id="closeHelp" class="icon-button close-help" aria-label="Zamknij">✕</button><p class="eyebrow">KRÓTKA INSTRUKCJA</p><h2>Jak grać?</h2>
-        <div class="help-grid"><div><b>JOYSTICK RUCHU</b><p>Przesuwaj drążek w lewo lub prawo. Im dalej od środka, tym szybciej biegniesz.</p></div><div><b>↑ SKOK</b><p>Przeskakuj szczeliny, pułapki i przeciwników.</p></div><div><b>▼ MIAŻDŻENIE</b><p>W powietrzu uderz w ziemię. Rozbijaj kruche skały i ogłuszaj wrogów.</p></div><div><b>» TARAN</b><p>Krótka szarża. Używaj do szybkiego przemieszczania i rozbijania słabych przeszkód.</p></div></div>
-        <p class="help-note">Zbieraj bursztyny i skamieliny. Szukaj pękniętych ścian, podejrzanych miejsc i ukrytych przełączników. Nie wszystko, co wygląda jak dekoracja, jest dekoracją.</p>
+        <div class="help-grid"><div><b>JOYSTICK RUCHU</b><p>Przesuwaj drążek w lewo lub prawo. Im dalej od środka, tym szybciej biegniesz.</p></div><div><b>🍳 ATAK — C / J</b><p>Uderzaj patelnią przed sobą. Trafiaj z odpowiedniej odległości i nie czekaj, aż wróg podejdzie.</p></div><div><b>↑ SKOK</b><p>Przeskakuj szczeliny, pułapki i przeciwników.</p></div><div><b>▼ MIAŻDŻENIE</b><p>W powietrzu uderz w ziemię. Rozbijaj kruche skały i ogłuszaj wrogów.</p></div><div><b>» TARAN</b><p>Krótka szarża. Używaj do szybkiego przemieszczania i rozbijania słabych przeszkód.</p></div></div>
+        <p class="help-note">Zbieraj bursztyny, skamieliny i ukryte bronie. Maczuga zadaje mocniejsze obrażenia, a kościany bumerang razi przeciwników z dystansu. Grzybowe podbitki wystrzelą Asię wyżej — wykorzystuj je do sięgania po sekrety.</p>
       </div>
     </section>
   </main>
