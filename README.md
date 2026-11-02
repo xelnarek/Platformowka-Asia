@@ -60,3 +60,18 @@ To pierwszy grywalny wycinek (vertical slice), a nie ukończona kampania 30 pozi
 3. Oryginalne sprite'y Asi, przeciwników i animacje klatkowe.
 4. Rozbudowa do pięciu krain i docelowo 30 poziomów.
 5. Więcej sekretów, zagadek, strojów, encyklopedia i dodatkowe wyzwania.
+
+
+## Publikacja gry
+
+Repozytorium zawiera workflow `.github/workflows/deploy-pages.yml`, który po każdym pushu do `main` sprawdza składnię i kompletność zasobów, a następnie publikuje grę przez GitHub Pages.
+
+**Jednorazowe włączenie publikacji w repozytorium:**
+1. Otwórz `Settings → Pages`.
+2. W sekcji `Build and deployment` ustaw `Source: GitHub Actions`.
+3. Przejdź do zakładki `Actions` i uruchom `Build, validate and deploy Asia platformer to GitHub Pages` przyciskiem `Run workflow` (branch `main`).
+
+Po zakończeniu udanego wdrożenia adres gry to:
+`https://xelnarek.github.io/Platformowka-Asia/`
+
+Workflow jest już zapisany na `main`. Walidacja plików przechodzi; publikacja nie ruszy, dopóki źródło GitHub Pages nie zostanie jednorazowo włączone w ustawieniach repozytorium.
