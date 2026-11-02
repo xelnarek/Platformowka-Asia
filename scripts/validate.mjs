@@ -25,7 +25,8 @@ const checks = [
   ['Menu and game use local art assets', ['title-art.svg','asia-sprites.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => (html + game + css + sw).includes(v))],
   ['Service worker caches every art asset', ['asia-sprites.svg','title-art.svg','jungle-bg.svg','cave-bg.svg','swamp-bg.svg'].every((v) => sw.includes(v))],
   ['App is configured for landscape display', manifest.orientation === 'landscape'],
-  ['No remote font dependency breaks offline mode', !css.includes('@import url(')]
+  ['No remote font dependency breaks offline mode', !css.includes('@import url(')],
+  ['Ground-pound impact breaks cracked rocks', /p\\.stomping \\|\\| stompImpact \\|\\| p\\.dashTimer/.test(game)]
 ];
 
 let failed = false;
